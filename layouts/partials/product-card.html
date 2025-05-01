@@ -1,0 +1,35 @@
+{{ $product := . }}
+<div>
+	<h2 class="style5">{{ $product.title | markdownify }}</h2>
+	<div id="{{ $product.id }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
+		ondragstart="return false;">
+		<div class="content">
+			<div class="bg slideshow-background fade">
+				{{ range $imgIndex, $image := $product.images }}
+				<div role="img" aria-label="{{ $image.alt }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
+					style="background-image: url(&quot;{{ $image.src }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
+				</div>
+				{{ end }}
+			</div>
+			<div class="nav next"></div>
+			<div class="nav previous"></div>
+		</div>
+	</div>
+	<h2 class="style3"><strong>${{ $product.price }}</strong>* {{ $product.price_note }}</h2>
+	<ul class="style5 buttons">
+		{{ range $linkIndex, $link := $product.purchase_links }}
+		<li>
+			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}"
+				role="button"><svg aria-labelledby="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">
+					<title id="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">{{ $link.icon | title }}</title>
+					<use xlink:href="{{ "/icons.svg#" | relURL }}{{ $link.icon }}"></use>
+				</svg><span class="label">{{ if $link.primary }}*{{ end }} {{ $link.name }}</span></a>
+		</li>
+		{{ end }}
+	</ul>
+	<ul class="style2 links">
+		<li class="n01">
+			<a href="#{{ $product.id }}">More details</a>
+		</li>
+	</ul>
+</div>

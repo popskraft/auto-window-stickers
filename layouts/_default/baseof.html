@@ -73,8 +73,18 @@
 	</div>
 
 	{{/* --- JS --- */}}
+	{{ if resources.Get "js/error-fix.js" }}
+	{{ $errorFixJS := resources.Get "js/error-fix.js" | minify | fingerprint }}
+	<script src="{{ $errorFixJS.RelPermalink }}" integrity="{{ $errorFixJS.Data.Integrity }}"></script>
+	{{ end }}
+
 	{{ $mainJS := resources.Get "main.js" | minify | fingerprint }}
 	<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
+
+	{{ if resources.Get "js/simple-slideshow.js" }}
+	{{ $slideshowJS := resources.Get "js/simple-slideshow.js" | minify | fingerprint }}
+	<script src="{{ $slideshowJS.RelPermalink }}" integrity="{{ $slideshowJS.Data.Integrity }}"></script>
+	{{ end }}
 
 	{{ $customJS := resources.Get "js/theme.js" | minify | fingerprint }}
 	<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
