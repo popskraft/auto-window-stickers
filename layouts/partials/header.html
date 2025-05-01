@@ -1,0 +1,42 @@
+<header id="header">
+  <div id="container04" class="container columns">
+    <div class="wrapper">
+      <div class="inner">
+        <div>
+          <div id="image06" class="image full">
+            {{ if not $.IsHome }}
+            <a class="frame" href="{{ absURL .Site.BaseURL }}">
+              {{- else }}
+              <div class="frame">
+                {{- end }}
+                <img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo">
+                {{- if not $.IsHome }}
+            </a>
+            {{- else }}
+          </div>
+          {{- end }}
+        </div>
+      </div>
+      <div>
+        <ul id="links02" class="style1 main-nav links">
+          <li class="n01">
+            <a href="#exterior">Exterior Products</a>
+          </li>
+          <li class="n02">
+            <a href="#interior">Interior Products</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul id="buttons06" class="style9 buttons">
+          <li>
+            <a href="#about" class="button n01" role="button">About</a>
+          </li>
+          <li>
+            <a href="#contacts" class="button n02" role="button">Get in touch</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

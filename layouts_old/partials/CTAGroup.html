@@ -1,0 +1,22 @@
+{{ $productLink := partial "rawProductLink" . }}
+{{ $filename := .File.BaseFileName }}
+<ul id="buttons21" class="style2 buttons">
+  {{ if $productLink }}
+  <li>
+    <a href="{{ $productLink }}" class="button n01" role="button">
+      <svg aria-labelledby="buttons21-icon-1-title">
+        <title id="buttons21-icon-1-title">Cart (Alt)</title>
+        <use xlink:href="/icons.svg#cart-alt"></use>
+      </svg><span class="label">{{ or (index $.Site.Data.products $filename "buttonCartText") $.Page.Params.buttonCartText .Site.Params.products.defaultButtonCartText | markdownify }}</span></a>
+  </li>
+  {{ end }}
+  {{ if .Site.Params.formWholesaleUrl }}
+  <li>
+    <a href="{{ .Site.Params.formWholesaleUrl | relURL }}" class="button n02" role="button">
+      <svg aria-labelledby="buttons21-icon-2-title">
+        <title id="buttons21-icon-2-title">Form</title>
+        <use xlink:href="/icons.svg#form"></use>
+      </svg><span class="label">{{ or (index $.Site.Data.products $filename "buttonWholesaleText") $.Page.Params.buttonWholesaleText .Site.Params.products.defaultButtonWholesaleText | markdownify }}</span></a>
+  </li>
+  {{ end }}
+</ul>

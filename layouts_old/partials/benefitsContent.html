@@ -1,0 +1,62 @@
+{{ $productName := partial "productName" . | markdownify | plainify }}
+{{ $imageAlt := or $productName $.Page.Title | markdownify | plainify }}
+<div id="container38" class="style8 container columns">
+  <div class="wrapper">
+    <div class="inner">
+      <div>
+        {{ with .Page.Params.benefitsImages }}
+          {{ range . }}
+          {{ $item := . }}
+          <div class="style2 image">
+            {{ with resources.Get .image }}
+              {{ $image := . }}
+              {{ $filter := images.UnsharpMask .5 .5 0 }}
+              {{ $processed := $image.Filter $filter }}
+              {{ $final := $processed.Resize "756x webp picture Center" }}
+              <span class="frame">
+                <img 
+                  src="{{ $final.RelPermalink }}" 
+                  alt="{{ $item.alt }} {{ $imageAlt }} Benefits"
+                  title="{{ $item.alt }} {{ $imageAlt }} Benefits"  
+                  loading="lazy"
+                />
+              </span>
+            {{ end }}
+          </div>
+          {{ end }}
+        {{ end }}
+      </div>
+      {{ with .Page.Params.benefitsBlocks }}
+        {{ $total := len . }}
+        {{ $firstCol := add (div $total 2) (mod $total 2) }}
+        {{ $blocks := . }}
+        <div>
+          {{ range $index, $block := first $firstCol $blocks }}
+            <h2 class="style5">{{ $block.title }}</h2>
+            <p class="style3">{{ $block.text | markdownify }}</p>
+            <hr class="style1">
+          {{ end }}
+        </div>
+        <div>
+          {{ range $index, $block := after $firstCol $blocks }}
+            <h2 class="style5">{{ $block.title }}</h2>
+            <p class="style3">{{ $block.text | markdownify }}</p>
+            <hr class="style1">
+          {{ end }}
+        </div>
+      {{ else }}
+        {{ with .Site.Params.benefits.defaultColumns }}
+          {{ range $colIndex, $column := . }}
+            <div>
+              {{ range $blockIndex, $block := $column }}
+                <h2 class="style5">{{ $block.title }}</h2>
+                <p class="style3">{{ $block.content | markdownify }}</p>
+                <hr class="style1">
+              {{ end }}
+            </div>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</div>

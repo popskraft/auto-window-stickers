@@ -1,0 +1,32 @@
+{{ define "main" }}
+
+{{ partial "pageAboutIntro.html" . }}
+{{ partial "coverSlider.html" . }}
+<hr id="divider10" class="style4">
+{{ partial "benefitsHeader.html" . }}
+{{ partial "benefitsContent.html" . }}
+{{ partial "benefitsCTA.html" . }}
+
+{{ $filename := .File.BaseFileName }}
+{{ $gallery := or (index $.Site.Data.products $filename).gallery .Page.Params.gallery }}
+{{ if $gallery }}
+  {{ partial "gallery.html" (dict "context" . "items" $gallery.items) }}
+  <hr id="divider-gallery" class="style2">
+{{ end }}
+
+{{ partial "savingsHeader.html" . }}
+{{ partial "savingsPrice.html" . }}
+{{ $filename := .File.BaseFileName }}
+{{ $products := or (index $.Site.Data.products $filename).products .Page.Params.products }}
+{{ if $products }}
+  {{ $productCount := len $products }}
+  {{ if and (gt $productCount 0) (le $productCount 4) }}
+    {{ partial (printf "savingsFooter%dgoods" $productCount) . }}
+  {{ end }}
+{{ end }}
+{{ partial "testimonials.html" . }}
+
+{{ partial "faq" . }}
+{{ partial "contactBody" . }}
+
+{{ end }}

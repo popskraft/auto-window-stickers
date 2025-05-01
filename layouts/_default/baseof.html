@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>{{ .Title }} | {{ .Site.Title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{{/*
+	<meta name="color-scheme" content="light only" /> */}}
+	{{- $description := .Description | default (.Summary | plainify) | default .Site.Params.description -}}
+	<meta name="description" content="{{ $description | truncate 160 }}">
+
+	{{/* --- Open Graph Tags --- */}}
+	<meta property="og:site_name" content="{{ .Site.Title }}">
+	<meta property="og:title" content="{{ .Title }}">
+	<meta property="og:description" content="{{ $description | truncate 160 }}">
+	<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+	<meta property="og:url" content="{{ .Permalink }}">
+	{{ with .Params.ogImage | default .Site.Params.ogImage }}
+	{{ $ogImage := resources.Get . }}
+	{{ with $ogImage }}
+	<meta property="og:image" content="{{ $ogImage.Permalink }}">
+	{{ end }}
+	{{ end }}
+
+	{{/* --- Fonts --- */}}
+	<link
+		href="https://fonts.googleapis.com/css2?display=swap&family=Wix+Madefor+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800"
+		rel="stylesheet" type="text/css" />
+
+	{{/* --- Favicons --- */}}
+	{{ with resources.Get "images/favicon.png" }}
+	<link rel="icon" type="image/png" href="{{ .RelPermalink }}" />
+	{{ end }}
+	{{ with resources.Get "images/apple-touch-icon.png" }}
+	<link rel="apple-touch-icon" href="{{ .RelPermalink }}" />
+	{{ end }}
+
+	{{/* --- CSS --- */}}
+	{{ $mainCSS := resources.Get "main.css" | minify | fingerprint }}
+	<link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}">
+
+	{{ $noscriptCSS := resources.Get "noscript.css" | minify | fingerprint }}
+	<noscript>
+		<link rel="stylesheet" href="{{ $noscriptCSS.RelPermalink }}" integrity="{{ $noscriptCSS.Data.Integrity }}">
+	</noscript>
+
+	{{ $customCSS := resources.Get "custom.css" | minify | fingerprint }}
+	<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
+
+	{{ $tailwind := resources.Get "tailwindstyle.css" | minify | fingerprint }}
+	<link rel="stylesheet" href="{{ $tailwind.RelPermalink }}" integrity="{{ $tailwind.Data.Integrity }}">
+
+	{{/* {{ partialCached "schema-org.html" . .Permalink }} */}}
+
+</head>
+{{/* Added body classes similar to old theme for potential compatibility */}}
+
+<body class="is-loading type-{{ .Type }} {{ with .Layout }}layout-{{.}}{{end}} {{ with .Section }}section-{{.}}{{end}}">
+
+	<div id="wrapper">
+		<div id="main">
+			<div class="inner">
+				{{ partial "header.html" . }}
+				<main>
+					{{ block "main" . }}
+					<!-- Page specific content will go here -->
+					{{ end }}
+				</main>
+				{{ partial "footer.html" . }}
+			</div>
+		</div>
+	</div>
+
+	{{/* --- JS --- */}}
+	{{ $mainJS := resources.Get "main.js" | minify | fingerprint }}
+	<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
+
+	{{ $customJS := resources.Get "js/theme.js" | minify | fingerprint }}
+	<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
+
+	{{ template "_internal/google_analytics.html" . }}
+
+</body>
+</html>

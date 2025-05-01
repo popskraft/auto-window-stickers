@@ -1,0 +1,45 @@
+{{/* --- Reviews Section --- */}}
+{{ with .Params.reviews }}
+<hr class="style3">
+<div id="container08" class="style10 container default">
+  <div class="wrapper">
+    <div class="inner">
+      <hr class="style3" data-visibility="desktop">
+      <h2 class="style1">{{ .heading }}</h2>
+    </div>
+  </div>
+</div>
+<div id="container02" class="style1 container columns">
+  <div class="wrapper">
+    <div class="inner">
+      {{ $items := .items }}
+      {{ $total := len $items }}
+      {{ $perColumn := div (add $total 2) 3 }}
+      
+      {{ range $colIndex := (seq 3) }}
+        {{ $start := mul (sub $colIndex 1) $perColumn }}
+        {{ $nextEnd := mul $colIndex $perColumn }}
+        {{ $end := $nextEnd }}
+        {{ if gt $nextEnd $total }}
+          {{ $end = $total }}
+        {{ end }}
+        
+        <div>
+          {{ range $index, $review := (first (sub $end $start) (after $start $items)) }}
+            {{ if gt $index 0 }}
+            <hr class="style6 full">
+            {{ end }}
+            <div class="style1 image">
+              <span class="frame">
+                <img src="{{ "/stars.svg" | relURL }}" alt="Stars" loading="lazy">
+              </span>
+            </div>
+            <h2 class="style2">{{ $review.heading | safeHTML }}</h2>
+            <p class="style3">{{ $review.text | safeHTML }}</p>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

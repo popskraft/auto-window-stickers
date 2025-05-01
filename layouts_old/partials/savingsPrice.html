@@ -1,0 +1,34 @@
+{{ $filename := .Page.File.BaseFileName }}
+{{ $dataPrice := or (index $.Site.Data.products $filename "priceWholesale") (index $.Site.Data.products $filename "price") }}
+{{ $priceSection := or (index $.Site.Data.products $filename "priceSection") .Page.Params.priceSection }}
+{{ with $priceSection }}
+<div id="savingsPrice" class="style15 container default">
+  <div class="wrapper">
+    <div class="inner">
+      
+      <h3 class="style5">{{ .title }}</h3>
+      
+      {{/* Get price from frontmatter or data file */}}
+      {{ $price := or .priceWholesale .price }}
+      {{ $finalPrice := or $price $dataPrice }}
+      {{ with $finalPrice }}
+      <h3 id="text52">
+        {{ $cleanPrice := strings.TrimPrefix "$" . }}
+        {{ $wholePart := index (split $cleanPrice ".") 0 }}
+        <span style="color: #FF5500">${{ $wholePart }}</span>{{ if gt (len (split $cleanPrice ".")) 1 }}.{{ index (split $cleanPrice ".") 1 }}{{ end }}
+      </h3>
+      {{ end }}
+      
+      {{/* Display caption with fallback logic */}}
+      {{ $dataCaptions := index $.Site.Data.products $filename }}
+      {{ $longCaption := or .pricePerCaptionLong (index $dataCaptions "pricePerCaptionLong") }}
+      {{ if $longCaption }}
+        <h3 class="style6">
+          {{ $longCaption }}
+        </h3>
+      {{ end }}
+
+    </div>
+  </div>
+</div>
+{{ end }}

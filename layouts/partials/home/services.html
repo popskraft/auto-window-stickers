@@ -1,0 +1,33 @@
+{{/* --- Services Section --- */}}
+{{ with .Params.services }}
+<div id="container03" class="style1 container columns">
+  <div class="wrapper">
+    <div class="inner">
+      {{ $items := .items }}
+      {{ $total_items := len $items }}
+      {{ $items_per_col := math.Ceil (div (float $total_items) 3.0) }}
+      {{ $col_count := 3 }}
+      
+      {{ range $col_index := seq 0 (sub $col_count 1) }}
+        <div>
+          {{ $col_start := mul $col_index (int $items_per_col) }}
+          
+          {{ range $i := seq 0 (sub (int $items_per_col) 1) }}
+            {{ $item_index := add $col_start $i }}
+            {{ if lt $item_index $total_items }}
+              {{ $item := index $items $item_index }}
+              
+              <h2 class="style2">{{ $item.heading | safeHTML }}</h2>
+              <p class="style3">{{ $item.text | safeHTML }}</p>
+              
+              {{ if and (lt (add $i 1) (int $items_per_col)) (lt (add $item_index 1) $total_items) }}
+                <hr class="style1">
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

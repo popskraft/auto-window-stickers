@@ -1,0 +1,120 @@
+{{ with .Page.Params.productItems }}
+  {{ $items := .items }}
+  {{ $totalItems := len $items }}
+  {{ $isOdd := eq (mod $totalItems 2) 1 }}
+  {{ $mainContainerCount := div $totalItems 2 }}
+  
+  <!-- Regular containers with pairs of items -->
+  {{ range $containerIndex := seq 1 $mainContainerCount }}
+    {{ $startIndex := mul (sub $containerIndex 1) 2 }}
+    <div id="product2Cols-{{ $containerIndex }}" class="style19 products container columns">
+      <div class="wrapper">
+        <div class="inner">
+          {{ range $itemIndex := seq $startIndex (add $startIndex 1) }}
+            {{ $item := index $items $itemIndex }}
+            <div>
+              <p id="product-title-{{ $itemIndex }}" class="style18">
+                <a href="{{ $item.url }}">{{ $item.title | markdownify }}</a>
+              </p>
+              <div id="product-image-{{ $itemIndex }}" class="style4 image full">
+                <a href="{{ $item.url }}" class="frame">
+                  {{ $mainImage := resources.Get $item.mainImage.src }}
+                  {{ $processedImage := $mainImage.Resize "839x webp picture Center" }}
+                  <img src="{{ $processedImage.RelPermalink }}" alt="{{ $item.mainImage.alt }}">
+                </a>
+              </div>
+              <div id="product-gallery-{{ $itemIndex }}" class="style2 gallery full">
+                <div class="inner">
+                  <ul>
+                    {{ range $galleryIndex, $galleryItem := $item.gallery }}
+                    <li>
+                      <a href="{{ $item.url }}" class="thumbnail n{{ printf "%02d" (add 1 $galleryIndex) }}">
+                        <span class="frame">
+                          {{ $galleryImage := resources.Get (strings.TrimPrefix "/" $galleryItem.src) }}
+                          {{ $processedImage := $galleryImage.Fill "300x300 webp picture Center" }}
+                          <img src="{{ $processedImage.RelPermalink }}" alt="{{ $galleryItem.alt | default $item.title | markdownify | plainify }}">
+                        </span>
+                      </a>
+                    </li>
+                    {{ end }}
+                  </ul>
+                </div>
+              </div>
+              <p id="product-desc-{{ $itemIndex }}" class="product-description style3">
+                {{ $item.description | markdownify }}
+              </p>
+              <ul class="style5 buttons">
+                {{ range $buttonIndex, $button := $item.buttons }}
+                <li>
+                  <a href="{{ $button.url }}" class="button {{ $button.class }}" role="button">
+                    <svg aria-labelledby="buttons{{ add 1 $itemIndex }}-icon-{{ add 1 $buttonIndex }}-title">
+                      <title id="product-btn-{{ $itemIndex }}-icon-{{ $buttonIndex }}-title">{{ $button.label }}</title>
+                      <use xlink:href="{{ "icons.svg" | relURL }}#{{ $button.icon }}"></use>
+                    </svg>
+                    <span class="label">{{ $button.label }}</span>
+                  </a>
+                </li>
+                {{ end }}
+              </ul>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  {{ end }}
+
+  <!-- Special container for the last odd item -->
+  {{ if $isOdd }}
+    {{ $lastIndex := sub $totalItems 1 }}
+    {{ $lastItem := index $items $lastIndex }}
+    <div id="product2Cols-last" class="products container default">
+      <div class="wrapper">
+        <div class="inner">
+          <p id="product-title-{{ $lastIndex }}" class="style18">
+            <a href="{{ $lastItem.url }}">{{ $lastItem.title | markdownify }}</a>
+          </p>
+          <div id="product-image-{{ $lastIndex }}" class="style4 image full">
+            <a href="{{ $lastItem.url }}" class="frame">
+              {{ $mainImage := resources.Get $lastItem.mainImage.src }}
+              {{ $processedImage := $mainImage.Resize "900x webp picture Center" }}
+              <img src="{{ $processedImage.RelPermalink }}" alt="{{ $lastItem.mainImage.alt }}">
+            </a>
+          </div>
+          <div id="product-gallery-{{ $lastIndex }}" class="style2 gallery full">
+            <div class="inner">
+              <ul>
+                {{ range $galleryIndex, $galleryItem := $lastItem.gallery }}
+                <li>
+                  <a href="{{ $lastItem.url }}" class="thumbnail n{{ printf "%02d" (add 1 $galleryIndex) }}">
+                    <span class="frame">
+                      {{ $galleryImage := resources.Get (strings.TrimPrefix "/" $galleryItem.src) }}
+                      {{ $processedImage := $galleryImage.Fill "300x300 webp picture Center" }}
+                      <img src="{{ $processedImage.RelPermalink }}" alt="{{ $galleryItem.alt | default $lastItem.title | markdownify | plainify }}">
+                    </span>
+                  </a>
+                </li>
+                {{ end }}
+              </ul>
+            </div>
+          </div>
+          <p id="product-desc-{{ $lastIndex }}" class="product-description style3">
+            {{ $lastItem.description | markdownify }}
+          </p>
+          <ul class="style5 buttons">
+            {{ range $buttonIndex, $button := $lastItem.buttons }}
+            <li>
+              <a href="{{ $button.url }}" class="button {{ $button.class }}" role="button">
+                <svg aria-labelledby="buttons{{ add 1 $lastIndex }}-icon-{{ add 1 $buttonIndex }}-title">
+                  <title id="product-btn-{{ $lastIndex }}-icon-{{ $buttonIndex }}-title">{{ $button.label }}</title>
+                  <use xlink:href="{{ "icons.svg" | relURL }}#{{ $button.icon }}"></use>
+                </svg>
+                <span class="label">{{ $button.label }}</span>
+              </a>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {{ end }}
+{{ end }}

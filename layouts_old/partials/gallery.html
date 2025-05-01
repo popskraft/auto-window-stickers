@@ -1,0 +1,44 @@
+{{- $id := .id | default "product-gallery" -}}
+{{- $style := .style | default "style4" -}}
+{{- $class := .class | default "full" -}}
+{{- $title := .title | default "" -}}
+{{- $items := .items -}}
+
+<div id="{{ $id }}" class="{{ $style }} gallery {{ $class }}">
+  <div class="inner">
+    <ul>
+      {{- range $index, $item := $items -}}
+        {{- $imgSrc := $item.image | default "" -}}
+        {{- $imgAlt := $item.alt | default "Image" -}}
+        {{- $caption := $item.caption | default "" -}}
+        {{- $link := $item.link | default "#" -}}
+        {{- $thumbnailClass := printf "n%02d" (add $index 1) -}}
+        
+        <li>
+          {{- if ne $link "#" -}}
+            <a href="{{ $link }}">
+          {{- end -}}
+            <span class="thumbnail {{ $thumbnailClass }}">
+              <span class="frame">
+                {{ $image := resources.Get $imgSrc }}
+                {{ with $image }}
+                  {{ $filter := images.UnsharpMask .5 .5 0 }}
+                  {{ $processed := $image.Filter $filter }}
+                  {{ $final := $processed.Fill "598x598 webp picture Center" }}
+                  <img src="{{ $final.RelPermalink }}" alt="{{ $imgAlt }}" loading="lazy">
+                {{ end }}
+              </span>
+            </span>
+            {{- with $caption -}}
+            <div class="caption">
+              <p>{{ . }}</p>
+            </div>
+            {{- end -}}
+          {{- if ne $link "#" -}}
+            </a>
+          {{- end -}}
+        </li>
+      {{- end -}}
+    </ul>
+  </div>
+</div>

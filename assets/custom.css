@@ -1,0 +1,104 @@
+/* Price larger */
+.style5 .style6 strong {
+font-size: 130%;
+}
+.style5 .style3 strong {
+font-size: 140%;
+}
+
+/* Hide the cursor completely */
+[contenteditable], div, img {
+caret-color: transparent;
+}
+
+/* Navigation active/inactive states */
+ul.links li.active a {
+color: #ffffff !important;
+transition: all 0.3s ease;
+cursor: default;
+}
+ul.links li.inactive a {
+opacity: 0.5;
+transition: all 0.3s ease;
+}
+ul.links li a:hover {
+opacity: 1;
+}
+
+/* Slideshow */
+.slideshow.style1 .nav:before {
+margin-right: -3.75rem;
+}
+
+/* Galleries on home */
+.productGallery .frame img {
+object-fit: contain !important;
+}
+
+@media (min-width: 737px) and (max-width: 1680px) {
+body {
+font-size: 110%;
+/* font-size: clamp(calc(0.875rem* 1.25), 1.25vw, 5rem); */
+}
+}
+
+/* Collapsed FAQ */
+.collapse {
+cursor: pointer;
+}
+.collapse .collapse-target-self,
+.collapse .collapse-parent {
+opacity: 0;
+height: 0;
+overflow: hidden;
+transition: all 1s ease;
+}
+.collapse:not(.show) .collapse-target-self,
+.collapse:not(.show) .collapse-parent {
+margin-bottom: -1rem;
+padding-top: 0;
+padding-bottom: 0;
+}
+.collapse.show .collapse-target-self,
+.collapse.show .collapse-parent {
+opacity: 1;
+height: auto;
+}
+.collapse:not(.show) > .wrapper > .inner > :nth-child(1) {
+width: 100% !important;
+}
+
+/* FAQ Styles */
+#faqBody .style3 {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.3s ease-out;
+margin: 0;
+padding: 0;
+opacity: 0;
+}
+#faqBody .style3.active {
+max-height: 500px; /* Adjust based on your content */
+opacity: 1;
+margin: 1em 0;
+transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+}
+#faqBody .style2 {
+cursor: pointer;
+position: relative;
+padding-right: 30px;
+}
+#faqBody .style2::after {
+content: '+';
+font-size: 28px;
+font-weight: normal;
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+transition: transform 0.3s ease;
+color: #2EC0FF;
+}
+#faqBody .style2.active::after {
+transform: translateY(-50%) rotate(45deg);
+}
