@@ -6,8 +6,10 @@
 		<div class="content">
 			<div class="bg slideshow-background fade">
 				{{ range $imgIndex, $image := $product.images }}
+				{{ $imgResource := resources.Get $image.src }}
+				{{ $processedImg := $imgResource.Permalink }}
 				<div role="img" aria-label="{{ $image.alt }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
-					style="background-image: url(&quot;{{ $image.src }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
+					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
 				</div>
 				{{ end }}
 			</div>

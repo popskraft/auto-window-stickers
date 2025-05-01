@@ -28,12 +28,12 @@ purchase_links:
     icon: "cart"
     primary: false
 images:
-  - src: "/images/slideshow05-09c25a8a.jpg"
+  - src: "images/EXTERIOR/1-blank-1.jpg"
     alt: "Exterior Window Sticker Blank"
     primary: true
-  - src: "/images/slideshow05-dc3af612.jpg"
+  - src: "images/EXTERIOR/1-blank-2.jpg"
     alt: "Exterior Window Sticker Blank"
     primary: false
-  - src: "/images/slideshow05-77503dcc.jpg"
+  - src: "images/EXTERIOR/1-blank-3.jpg"
     alt: "Exterior Window Sticker Blank"
     primary: false

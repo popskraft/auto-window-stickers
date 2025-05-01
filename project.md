@@ -171,30 +171,74 @@ Hugo's fingerprinting is used for cache busting:
 - State-specific Pages
 - FAQ sections
 
-### Creating and Updating Content
+### Modular Product Data Structure
 
-1. **Creating New Content**:
+Products use a modular data structure where product information is stored in YAML files in the `data/products/` directory, and product pages in the `content/exterior/` directory reference this data through the `product_id` parameter.
+
+#### Product Data Structure (YAML)
+
+```yaml
+id: "product-id"
+title: "Product Title with **Markdown** Support"
+size: "8.5 x 11\""
+description: "Detailed product description."
+features:
+  - "Feature 1"
+  - "Feature 2"
+  - "Feature 3"
+price: 0.39
+price_note: "per item (min quantity)"
+best_price_note: "* Best Price for AK Dealer Services"
+purchase_links:
+  - name: "Buy on AK Dealer Services"
+    url: "https://akdealerservices.com/product/1000000-product-name"
+    icon: "cart"
+    primary: true
+  - name: "Buy on Amazon"
+    url: "#"
+    icon: "cart"
+    primary: false
+images:
+  - src: "images/EXTERIOR/product-image-1.jpg"
+    alt: "Product Image Alt Text"
+    primary: true
+  - src: "images/EXTERIOR/product-image-2.jpg"
+    alt: "Product Image Alt Text"
+    primary: false
+```
+
+#### Product Page Structure (Markdown)
+
+```yaml
+---
+title: "Product Name"
+layout: "product"
+description: "Details about the product."
+product_id: "product-id"
+---
+```
+
+### Creating New Products
+
+1. **Create a product page**:
    ```bash
-   hugo new products/new-product.md
-   # or
-   hugo new articles/new-article.md
+   hugo new exterior/new-product-name.md
    ```
+   This creates a new product page based on the `archetypes/product.md` archetype.
 
-2. **Front Matter Structure**:
-   Each content type requires specific front matter. For example, product pages need:
-   ```yaml
-   ---
-   title: "Product Name"
-   date: 2025-03-30T12:00:00-04:00
-   draft: false
-   layout: "product"
-   coverImage: "images/products/product-image.jpg"
-   coverImageMobile: "images/products/product-image-mobile.jpg"
-   coverImageAlt: "Product description"
-   coverImageTitle: "Product title"
-   productLink: "https://example.com/product"
-   ---
+2. **Generate product data YAML file**:
+   ```bash
+   bash archetypes/product-data-generator.sh new-product-name
    ```
+   This creates a YAML file with product data in `data/products/new-product-name.yaml`.
+
+3. **Edit product data**:
+   Update the created YAML file with the correct product data:
+   - Title and description
+   - Features
+   - Price and price notes
+   - Purchase links
+   - Paths to images in the `assets/images/EXTERIOR/` folder
 
 3. **Adding FAQ Data**:
    FAQ data is stored in page frontmatter, not in global configuration:

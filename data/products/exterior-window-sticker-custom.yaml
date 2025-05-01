@@ -28,12 +28,12 @@ purchase_links:
     icon: "cart"
     primary: false
 images:
-  - src: "/images/slideshow06-0cd21dcf.jpg"
+  - src: "images/EXTERIOR/2-custom-1.jpg"
     alt: "Exterior Window Sticker Custom"
     primary: true
-  - src: "/images/slideshow06-f74c3c8c.jpg"
+  - src: "images/EXTERIOR/2-custom-2.jpg"
     alt: "Exterior Window Sticker Custom"
     primary: false
-  - src: "/images/slideshow06-40899e5c.jpg"
+  - src: "images/EXTERIOR/2-custom-3.jpg"
     alt: "Exterior Window Sticker Custom"
     primary: false
