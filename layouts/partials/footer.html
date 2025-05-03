@@ -45,19 +45,23 @@
 			<div class="inner">
 				<div>
 					<div id="image01" class="image">
-						<a href="#home" class="frame"><img src="{{ "/logo.svg" | relURL }}" alt="Logo" /></a>
+						<a href="{{ "/" | relURL }}" class="frame"><img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo" /></a>
 					</div>
 				</div>
 				<div>
 					<div id="image28" class="image">
-						<a href="https://akdealerservices.com/" class="frame"><img src="/images/image28.png" alt="akdealerservices"
-								title="akdealerservices.com" /></a>
+						<a href="{{ $.Site.Params.distributor.website }}" class="frame"><img src="{{ $.Site.Params.distributor.logo | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}" /></a>
 					</div>
 				</div>
 				<div>
-					<p id="text42"><span class="p">2025 All rights reserved.<br />By using this site, by sending messages, you
-							agree to the processing of personal data in accordance with the <a
-								href="#terms">Terms &amp; Conditions</a></span></p>
+					<ul id="links03" class="style1 links">
+						{{ range $.Site.Params.footerNav }}
+							<li>
+								<a href="{{ .url | relURL }}">{{ .name }}</a>
+							</li>
+						{{ end }}
+					</ul>
+					<p id="text42"><span class="p">{{ $.Site.Params.company.copyright }}<br />{{ $.Site.Params.legal.terms.text }} <a href="{{ $.Site.Params.legal.terms.url }}">{{ $.Site.Params.legal.terms.linkText }}</a></span></p>
 				</div>
 			</div>
 		</div>

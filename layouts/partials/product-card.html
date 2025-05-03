@@ -7,7 +7,12 @@
 			<div class="bg slideshow-background fade">
 				{{ range $imgIndex, $image := $product.images }}
 				{{ $imgResource := resources.Get $image.src }}
-				{{ $processedImg := $imgResource.Permalink }}
+				{{ $processedImg := "" }}
+				{{ if $imgResource }}
+					{{ $processedImg = $imgResource.Permalink }}
+				{{ else }}
+					{{ $processedImg = $image.src | relURL }}
+				{{ end }}
 				<div role="img" aria-label="{{ $image.alt }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
 					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
 				</div>
@@ -31,7 +36,8 @@
 	</ul>
 	<ul class="style2 links">
 		<li class="n01">
-			<a href="#{{ $product.id }}">More details</a>
+			{{ $section := cond (hasPrefix $product.id "exterior") "exterior" (cond (hasPrefix $product.id "interior") "interior" "") }}
+			<a href="/{{ if ne $section "" }}{{ $section }}/{{ end }}{{ $product.id }}/">More details</a>
 		</li>
 	</ul>
 </div>

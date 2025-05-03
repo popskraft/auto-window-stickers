@@ -1,6 +1,13 @@
 {{ define "main" }}
 
-{{ $products := slice "exterior-window-sticker-blank" "exterior-window-sticker-custom" }}
+{{ $section := .Section }}
+{{ $products := slice }}
+
+{{ if eq $section "exterior" }}
+  {{ $products = slice "exterior-window-sticker-blank" "exterior-window-sticker-custom" }}
+{{ else if eq $section "interior" }}
+  {{ $products = slice "interior-window-sticker-blank" "interior-window-sticker-custom" }}
+{{ end }}
 
 <section id="products-section" class="active">
 	<div id="container16" class="style5 container columns">

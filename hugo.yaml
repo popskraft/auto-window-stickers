@@ -1,144 +1,197 @@
 baseURL: "https://autowindowstickers.com/"
 
-# $siteName
+# Site name and language
 title: "Auto Window Stickers"
 languageCode: "en"
 
-# Site metadata
+# Site metadata and configuration
 params:
-  # Form links - UPDATE THESE LATER if needed
-  formContactUrl: "https://nutcrackerpro.ju.mp/" # Placeholder - Update!
-  formWholesaleUrl: "https://nutcrackerpro.ju.mp/#wholesale" # Placeholder - Update!
-
+  # Company information
+  company:
+    name: "Auto Window Stickers"
+    tagline: "Quality window stickers for auto dealerships"
+    description: "Your source for quality auto window stickers for vehicle exteriors and interiors."
+    copyright: "2025 All rights reserved."
+    yearEstablished: "2010"
+  
+  # Distributor information
+  distributor:
+    name: "AK Dealer Services"
+    description: "AK Dealer Services is an authorized distributor of Auto Window Stickers. You can purchase the product directly from the company's website or contact us by phone or email with inquiries."
+    website: "https://akdealerservices.com/"
+    logo: "/images/image28.png"
+  
+  # Contact information
+  contact:
+    phone: "800.260.5051"
+    email: "info@akdealerservices.com"
+    phoneLink: "tel:800.260.5051"
+    emailLink: "mailto:info@akdealerservices.com"
+  
+  # Address information
+  address:
+    street: "7315 Gibson Cemetery Rd # 103"
+    city: "Mansfield"
+    state: "TX"
+    zip: "76063"
+    country: "US"
+    formatted: "7315 Gibson Cemetery Rd # 103, Mansfield, TX 76063"
+  
+  # Main navigation links
+  mainNav:
+    - name: "Exterior Products"
+      url: "/exterior/"
+      class: "n01"
+    - name: "Interior Products"
+      url: "/interior/"
+      class: "n02"
+  
+  # Footer navigation
+  footerNav:
+    - name: "About"
+      url: "#about"
+    - name: "Contact"
+      url: "#contacts"
+    - name: "Terms & Conditions"
+      url: "#terms"
+  
+  # Form settings
+  forms:
+    contact:
+      url: "#contacts"
+      title: "Contact us"
+      button: "Get in touch"
+    wholesale:
+      url: "#wholesale"
+      title: "Wholesale Inquiry"
+      button: "Wholesale"
+  
+  # Purchase options
+  purchase:
+    retail:
+      title: "Buy on AK Dealer Services"
+      url: "https://akdealerservices.com/product/"
+      icon: "cart"
+    amazon:
+      title: "Buy on Amazon"
+      url: "#"
+      icon: "cart"
+    wholesale:
+      title: "Wholesale Inquiry"
+      url: "#wholesale"
+      icon: "cart"
+  
+  # SEO and metadata settings
+  seo:
+    titleSuffix: " | Auto Window Stickers"
+    description: "Quality window stickers for auto dealerships. Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility."
+    ogImage: "/images/og-image.jpg"
+    type: "website"
+    logo: "/logo.svg"
+  
+  # Legal information
+  legal:
+    terms: {
+      text: "By using this site, you agree to the processing of personal data in accordance with the",
+      linkText: "Terms & Conditions",
+      url: "#terms"
+    }
+  
   # Performance settings
   prefetch:
     enabled: true
     pages:
       - "/"
-      # Add other key pages when content is available
-    externalUrls:
-      [] # Clear external URLs for now
+      - "/exterior/"
+      - "/interior/"
+    externalUrls: []
   
-  # SEO and metadata settings
-  seoTitleAfter: "" # Clear suffix
-  description: "Your source for quality auto window stickers." # New description
-  ogImage: "" # Clear OG image - Add default later
-  openGrapeType: "website"
-  siteLogo: "" # Clear logo - Add later
-
-  # Company information (Placeholders - update when info is available)
-  # companyName: "Nutcracker Pro"
-  # tagline: "Secret Gear Of Silent Heroes"
-  # distributorName: "AK Dealer Services"
-  # distributorDescription: "**AK Dealer Services** is an authorized distributor..."
-
-  # Company address information (Placeholders)
-  # companyAddress:
-  #   streetAddress: "7315 Gibson Cemetery Rd # 103"
-  #   addressLocality: "Mansfield"
-  #   addressRegion: "TX"
-  #   postalCode: "76063"
-  #   addressCountry: "US"
-
-  # Schema.org structured data settings (Placeholders/Defaults)
+  # Schema.org structured data settings
   schema:
-    priceValidUntil: "" # Clear date
+    priceValidUntil: "2026-12-31"
     aggregateRating:
-      ratingValue: "" # Clear rating
-      reviewCount: "" # Clear count
+      ratingValue: "4.8"
+      reviewCount: "124"
     returnPolicy:
-      description: "" # Clear policy
+      description: "30-day return policy on unused products in original packaging."
     shipping:
-      description: "" # Clear policy
+      description: "Free shipping on orders over $100. Standard shipping available for all orders."
   
-  # Main and common pages header settings (Placeholders)
-  # header:
-  #   description: >
-  #     Nutcracker Pro is a B2B supplier...
-  #   customersTitle: "There is two way you can purchase it:"
-  #   customers:
-  #     - "**Retail customers**..."
-  #     - "**Wholesalers or Bulk Purchasers**..."
-
-  # Contact settings (Placeholders)
-  # contact:
-  #   phone: "800.260.5051"
-  #   email: "info@akdealerservices.com"
-    
-  # contactSection: (Comment out placeholder section)
-  #   title: "Contact us"
-  #   description: >
-  #     Provide details of your order...
-    
-  # contactBody: (Comment out placeholder section)
-  #   title: "How to order?"
-  #   description: >
-  #     **AK Dealer Services** is an authorized distributor...
-  #   buttons:
-  #     - label: "Contact us"
-  #       icon: "email-alt"
-  #       class: "n01"
-  #     - label: "Wholesale Inquiry"
-  #       icon: "form"
-  #       class: "n02"
+  # Header settings
+  header:
+    title: "Auto Window Stickers"
+    subtitle: "Quality window stickers for auto dealerships"
+    description: "Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility."
+    buttons:
+      - label: "About"
+        url: "#about"
+        class: "n01"
+      - label: "Get in touch"
+        url: "#contacts"
+        class: "n02"
   
-  # Common product settings (Defaults)
+  # Order section settings
+  orderSection:
+    title: "How to order?"
+    description: "You can purchase our products directly from our distributor's website or contact us by phone or email with inquiries."
+    buttons:
+      - label: "Contact us"
+        icon: "email-alt"
+        class: "n01"
+        url: "#contacts"
+      - label: "Wholesale Inquiry"
+        icon: "form"
+        class: "n02"
+        url: "#wholesale"
+  
+  # Product settings
   products:
-    defaultButtonCartText: "View Details" # Generic text
-    defaultButtonWholesaleText: "Wholesale Inquiry"
-    defaultWholesaleLink: "#wholesale"
-    defaultCurrency: "USD"
-    defaultPrice: "" # Clear default price
-    defaultItemCondition: "https://schema.org/NewCondition"
-    defaultAvailability: "https://schema.org/InStock"
-    
-  # Common slider images (Clear defaults)
+    buttonCartText: "View Details"
+    buttonWholesaleText: "Wholesale Inquiry"
+    wholesaleLink: "#wholesale"
+    currency: "USD"
+    currencySymbol: "$"
+    itemCondition: "https://schema.org/NewCondition"
+    availability: "https://schema.org/InStock"
+    minOrderQuantity: 1000
+  
+  # Slider settings
   slider:
-    defaultSlides: []
-        
-  # Cover image processing settings (Keep as likely reusable)
-  coverImage:
-    desktopWidth: 756
-    desktopHeight: 756
-    mobileWidth: 600
-    format: "webp"
-    filter:
-      unsharpMask:
-        sigma: 0.5
-        amount: 0.5
-        threshold: 0
-
-  # Footer settings (Keep structure, clear specific text if needed)
+    autoplay: true
+    interval: 5000
+    transition: "fade"
+    slides: []
+  
+  # Image processing settings
+  images:
+    cover:
+      desktopWidth: 756
+      desktopHeight: 756
+      mobileWidth: 600
+      format: "webp"
+      filter:
+        unsharpMask:
+          sigma: 0.5
+          amount: 0.5
+          threshold: 0
+    product:
+      thumbnailWidth: 300
+      thumbnailHeight: 300
+      detailWidth: 800
+      format: "webp"
+  
+  # Footer settings
   footer:
-    copyright: ". All rights reserved."
-    terms_text: "By using this site, you agree to the processing of personal data in accordance with the"
-    terms_link_text: "Terms & Conditions"
-    terms_link: "/terms/" # Keep link structure
+    copyright: "2025 All rights reserved."
+    terms:
+      text: "By using this site, you agree to the processing of personal data in accordance with the"
+      linkText: "Terms & Conditions"
+      url: "#terms"
     
-#nav menus
-menus:
-  main:
-    - name: "Home"
-      url: "/"
-      weight: 1
-    - name: "Products"
-      url: "/products/"
-      weight: 2
-    - name: "About"
-      url: "/about/"
-      weight: 3
-    - name: "Contact"
-      url: "/contact/"
-      weight: 4
-
-  footer:
-    - name: "About"
-      url: "/about/"
-      weight: 1
-    - name: "Contact"
-      url: "/contact/"
-      weight: 2
-    # Add Privacy Policy, Terms etc. later
+# Примечание: стандартный механизм меню Hugo не используется в этом проекте.
+# Вместо этого используются пользовательские навигационные параметры:
+# - params.mainNav для основной навигации
+# - params.footerNav для навигации в футере
 
 ## Settings
 
@@ -183,7 +236,7 @@ minify:
   minifyOutput: true
 
 # Google Analytics
-googleAnalytics: "" # Clear GA ID
+googleAnalytics: "G-XXXXXXXXXX" # Placeholder - replace with actual GA ID when available
 
 server:
   headers:

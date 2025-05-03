@@ -9,20 +9,37 @@
 			<div class="inner">
 				<div>
 					<div id="image02" class="style5 image">
-						<a href="https://akdealerservices.com/" class="frame"><img src="/images/image02.jpg" alt="akdealerservices"
-								title="akdealerservices.com" /></a>
+						<a href="#" class="frame">
+							{{ $mainImage := resources.Get (index $product.images 0).src }}
+							{{ if $mainImage }}
+								{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+								{{ $processed := $mainImage.Filter $filter }}
+								{{ $final := $processed.Fill "1086x814 webp picture Center" }}
+								<img src="{{ $final.RelPermalink }}" alt="{{ (index $product.images 0).alt }}" title="{{ $product.title }}" loading="eager" />
+							{{ else }}
+								<img src="{{ (index $product.images 0).src | relURL }}" alt="{{ (index $product.images 0).alt }}" title="{{ $product.title }}" />
+							{{ end }}
+						</a>
 					</div>
 					<div id="gallery04" class="style5 productGallery gallery">
 						<div class="inner">
 							<ul>
-								{{ range $product.images }}
+								{{ range $index, $image := $product.images }}
+								{{ if and (gt $index 0) (lt $index 3) }}
 								<li>
-									{{ if .primary }}
-									<span class="frame"><img src="{{ .src }}" alt="{{ .alt }}" /></span>
+									<a href="#" class="thumbnail n0{{ $index }}">
+									{{ $thumbImage := resources.Get $image.src }}
+									{{ if $thumbImage }}
+										{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+										{{ $processed := $thumbImage.Filter $filter }}
+										{{ $final := $processed.Fill "724x543 webp picture Center" }}
+										<span class="frame"><img src="{{ $final.RelPermalink }}" alt="{{ $image.alt }}" loading="lazy" /></span>
 									{{ else }}
-									<a href="#{{ $product.id }}" class="thumbnail n02"><span class="frame"><img src="{{ .src }}" alt="{{ .alt }}" /></span></a>
+										<span class="frame"><img src="{{ $image.src | relURL }}" alt="{{ $image.alt }}" /></span>
 									{{ end }}
+								</a>
 								</li>
+								{{ end }}
 								{{ end }}
 							</ul>
 						</div>

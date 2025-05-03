@@ -19,12 +19,11 @@
       </div>
       <div>
         <ul id="links02" class="style1 main-nav links">
-          <li class="n01">
-            <a href="#exterior">Exterior Products</a>
-          </li>
-          <li class="n02">
-            <a href="#interior">Interior Products</a>
-          </li>
+          {{ range .Site.Params.mainNav }}
+            <li class="{{ .class }}">
+              <a href="{{ .url | relURL }}">{{ .name }}</a>
+            </li>
+          {{ end }}
         </ul>
       </div>
       <div>
