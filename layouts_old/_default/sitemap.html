@@ -1,0 +1,34 @@
+{{ define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div id="articleListing" class="style10 container default">
+  <div class="wrapper">
+    <div class="inner">
+      <h1 class="style1">{{ .Title }}</h1>
+      {{ with .Content }}
+      <div class="sitemap-content">
+        {{ . }}
+      </div>
+      {{ end }}
+
+      <div class="style3 list">
+        {{ range where .Site.Sections "Section" "ne" "articles" }}
+        <h2 class="style2 mt-4">
+          <a href="{{ .RelPermalink }}" title="Go to {{ .Title | markdownify | plainify }}">{{ .Title | markdownify | plainify }}</a>
+        </h2>
+        <ul class="sitemap-list">
+          {{ range .RegularPages.ByTitle }}
+          <li>
+            <p>
+              <a href="{{ .RelPermalink }}" title="Go to {{ .Title | markdownify | plainify }}">{{ .Params.titlePrefix }} {{ .Title | markdownify | plainify }}</a>
+            </p>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </div>
+
+      <hr class="style2">
+    </div>
+  </div>
+</div>
+{{ end }}

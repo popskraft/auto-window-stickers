@@ -1,0 +1,78 @@
+weight: "4"
+productName: "Industrial Absorbent Pads"
+price: "$39"
+priceWholesale: "$34"
+pricePerCaptionLong: "Per 200-pad pack (wholesale price, pallet)"
+pricePerCaptionShort: "Per pack"
+productLink: https://akdealerservices.com/product/1000532-absorbent-pads-pig-mats
+
+# Media
+ogImage: /images/abspads/ogimage.jpg
+
+# Cover Slider
+slider:
+  - image: /images/covers/cover-4-2.webp
+  - image: /images/covers/cover-11.webp
+  - image: /images/covers/cover-8.webp
+
+# Cover Image
+coverImage: /images/abspads/product-cover.png
+coverImageMobile: /images/abspads/product-cover-mobile.png
+coverImageTitle: "Order the"
+coverImageAlt: "Industrial Absorbent Pads (PIG Mats)"
+
+# CTA Buttons
+buttonCartText: "Buy Absorbent Pads"
+
+# Price Section
+priceSection:
+  title: "Outstanding price"
+
+# Features
+features:
+  - "Perforated design for custom sizing"
+  - "No residue or fraying during use"
+  - "Single-layer meltblown polypropylene construction"
+  - "Sonic-bonded dimpled surface for enhanced absorption"
+  - "Compatible with oils, solvents, and chemicals"
+  - "OSHA compliant for workplace safety"
+
+# Products Section
+products:
+  - size: ""
+    image: /images/abspads/product-1.jpg
+    imageAlt: "Buy Small Batch of Absorbent Pads"
+    buttonText: "Buy Now"
+    buttonWholesaleText: "false"
+    priceText: "Small batch minimum 2 packages (400 pads)"
+    priceTextWholesale: "Wholesale price for small batch"
+  - size: ""
+    image: /images/abspads/product-2.jpg
+    imageAlt: "Buy Wholesale Absorbent Pads"
+    buttonText: "false"
+    buttonWholesaleText: "Buy Wholesale"
+    priceText: "Large batch 1 pallet (36 packages, 7200 pads)"
+    priceTextWholesale: "Wholesale price for pallet"
+
+# Benefits Content
+benefitsImages:
+  - image: /images/abspads/product-main.jpg
+  - image: /images/abspads/product-details.jpg
+
+# gallery section
+gallery:
+  items:
+    - image: /images/abspads/gallery-1.jpg
+      alt: "Industrial absorbent pads protecting dealership floors"
+    - image: /images/abspads/gallery-2.jpg
+      alt: "Demonstration of absorbent pad's moisture trapping capabilities"
+    - image: /images/abspads/gallery-3.jpg
+      alt: "Box of 500 industrial absorbent pads for bulk ordering"
+
+# savings section
+savings:
+  title: "Save up to $3,996 a year"
+  # subtitle: "Special offer for car dealerships!"
+  # image: "/images/carflag.jpg"
+  description: >-
+    We’ve analyzed real-world spill management in automotive service centers. For example, purchasing a pallet of **7,200** pads costs only **$1,404**, with our Industrial Absorbent Pads, priced at just **$39** per case (200 pads). In contrast, traditional methods can cost around **$5,400** for the same volume—unlocking potential annual savings of **$3,996**. Whether you’re a mid-sized U.S. auto dealer or managing a larger operation, these savings can have a big impact on your bottom line.

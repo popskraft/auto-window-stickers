@@ -1,0 +1,69 @@
+{{ $filename := .File.BaseFileName }}
+{{ $productName := partial "productName" . | markdownify | plainify }}
+{{ $productLink := partial "rawProductLink" . }}
+{{ $imageAlt := or $productName $.Page.Title | markdownify | plainify }}
+<div id="savingsFooter2goods" class="style13 products container columns">
+  <div class="wrapper">
+    <div class="inner">
+      {{ $products := or (index $.Site.Data.products $filename).products .Page.Params.products }}
+      {{ range $index, $product := $products }}
+      {{ $productLink := or $product.productLink $productLink }}
+        <div>
+          <div id="savings2-image-{{ $index }}" class="style2 image">
+            {{ with resources.Get $product.image }}
+
+              {{ $image := . }}
+              {{ $filter := images.UnsharpMask .5 .5 0 }}
+              {{ $processed := $image.Filter $filter }}
+              {{ $final := $processed.Resize "720x webp picture Center" }}
+
+              {{ if ne $product.buttonText false }}
+              <a href="{{ $productLink }}" class="frame">
+              {{ else }}
+              <a href="{{ $.Site.Params.formWholesaleUrl }}" class="frame">
+              {{ end }}
+                <img 
+                  src="{{ $final.RelPermalink }}" 
+                  alt="{{ or $product.imageAlt $product.buttonText }} {{ $imageAlt }}" 
+                  title="{{ or $product.imageAlt $product.buttonText }} {{ $imageAlt }}"
+                  loading="lazy"
+                >
+              </a>
+            {{ end }}
+          </div>
+          
+          {{ with $product.priceText }}
+          <p class="style6">
+            {{ . | markdownify }}
+            {{/* Get price from frontmatter or data file */}}
+            {{ $dataPrice := or (index $.Site.Data.products $filename "priceWholesale") (index $.Site.Data.products $filename "price") }}
+            {{ $price := or $.Page.Params.priceSection.priceWholesale $.Page.Params.priceSection.price $dataPrice }}
+            {{ $priceType := cond (ne $product.buttonText false) "price" "priceWholesale" }}
+            {{ with $dataPrice := index $.Site.Data.products $filename $priceType }}
+              <strong>&ensp;
+                <span style="color: #FF5500">{{ $dataPrice }}</span>
+                {{ with $caption := index $.Site.Data.products $filename "pricePerCaptionShort" }}
+                {{ $caption }}
+                {{ end }}
+              </strong>
+            {{ end }}
+          </p>
+          {{ end }}
+          
+          <ul id="savings2-buttons-{{ $index }}" class="style2 buttons">
+            {{ if ne $product.buttonText false }}
+            <li>
+              <a href="{{ $productLink }}" class="button n01" role="button">{{ or (index $.Site.Data.products $filename "buttonCartText") $product.buttonText $.Page.Params.buttonCartText "Buy now" }}</a>
+            </li>
+            {{ end }}
+            {{ if ne $product.buttonWholesaleText false }}
+            <li>
+              <a href="{{ $.Site.Params.formWholesaleUrl }}" class="button n02" role="button">{{ or $product.buttonWholesaleText $.Page.Params.buttonWholesaleText "Wholesale Inquiry" }}</a>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

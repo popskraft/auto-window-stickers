@@ -1,0 +1,8 @@
+{{/*
+  layouts/partials/productName.html
+  Get the productName from the data file based on the file name of the current page
+*/}}
+{{ $filename := $.Page.File.BaseFileName }}
+{{ with index $.Site.Data.products $filename }}
+  {{ .productName }}
+{{ end }}

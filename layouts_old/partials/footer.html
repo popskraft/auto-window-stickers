@@ -1,0 +1,80 @@
+<footer id="footer">
+  <div id="footerTop" class="container columns">
+    <div class="wrapper">
+      <div class="inner">
+        <div>
+          <div id="logoHeader" class="image">
+            <a href="#home" class="frame">
+              <img src="{{ "logo.svg" | relURL }}" alt="{{ .Site.Params.companyName }} Logo">
+            </a>
+          </div>
+          {{/*  <ul id="buttons01" class="style1 buttons">
+            <li>
+              <a href="tel:{{ replaceRE "[^0-9]" "" .Site.Params.contact.phone }}" class="button n01" role="button"><svg
+                  aria-labelledby="buttons01-icon-1-title">
+                  <title id="buttons01-icon-1-title">Phone</title>
+                  <use xlink:href="{{ "icons.svg" | relURL }}#phone"></use>
+                </svg><span class="label">{{ .Site.Params.contact.phone }}</span></a>
+            </li>
+            <li>
+              <a href="mailto:{{ .Site.Params.contact.email }}" class="button n02" role="button"><svg
+                  aria-labelledby="buttons01-icon-2-title">
+                  <title id="buttons01-icon-2-title">Email (Alt)</title>
+                  <use xlink:href="{{ "icons.svg" | relURL }}#email-alt"></use>
+                </svg><span class="label">{{ .Site.Params.contact.email }}</span></a>
+            </li>
+          </ul>  */}}
+        </div>
+        <div>
+          <ul id="links02" class="style2 links">
+            {{ range .Site.Menus.main }}
+            <li class="{{ .Identifier | default "n01" }}">
+              <a href="{{ .URL }}">{{ .Name }}</a>
+            </li>
+            {{ end }}
+            {{ with .Site.Menus.footer }}
+            {{ range . }}
+            <li class="{{ .Identifier | default "fn01" }}">
+              <a href="{{ .URL }}">{{ .Name }}</a>
+            </li>
+            {{ end }}
+            {{ end }}
+          </ul>
+        </div>
+        <div>
+          <p class="style6">Subscribe to special offers</p>
+          <form data-netlify="true" data-netlify-honeypot="bot-field" name="subscribe" id="form02" method="POST" action="/thank-you/" class="style2">
+            <input type="hidden" name="form-name" value="subscribe" />
+            <p class="hidden">
+              <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+            </p>
+            <div class="inner">
+              <div class="field" data-type="email">
+                <input type="email" name="your-email-address" id="form02-your-email-address"
+                  placeholder="Your email address" maxlength="128" required />
+              </div>
+              <div class="actions">
+                <button type="submit">Subscribe</button>
+              </div>
+            </div>
+            <input type="hidden" name="About" value="The Submission form was submitted from the {{ .Site.Params.companyName }} website at {{ .Permalink }}" >
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footerBottom" class="container default">
+    <div class="wrapper">
+      <div class="inner">
+        <p id="text42">
+          <span class="p">{{ now.Format "2006" }} {{ .Site.Params.companyName }} {{ .Site.Params.footer.copyright }}<br />{{ .Site.Params.footer.terms_text }} 
+          <a href="{{ .Site.Params.footer.terms_link }}">{{ .Site.Params.footer.terms_link_text }}</a></span>
+          {{ with .Site.GetPage "sitemap" }}
+          <span class="p"><a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a></span>
+          {{ end }}
+        </p>
+        <hr id="divider03" class="style3">
+      </div>
+    </div>
+  </div>
+</footer>

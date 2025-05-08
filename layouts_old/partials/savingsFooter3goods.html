@@ -1,0 +1,41 @@
+<div id="savingsFooter3goods" class="style13 products container columns">
+  <div class="wrapper">
+    <div class="inner">
+      {{ range $index, $product := .Page.Params.products }}
+        <div>
+          <div id="savings3-image-{{ $index }}" class="style2 image">
+            {{ with resources.Get $product.image }}
+              {{ $image := . }}
+              {{ $filter := images.UnsharpMask .5 .5 0 }}
+              {{ $processed := $image.Filter $filter }}
+              {{ $final := $processed.Resize "900x webp picture Center" }}
+              <a href="{{ if $product.productLink }}{{ $product.productLink }}{{ else }}{{ $.Page.Params.productLink }}{{ end }}" class="frame">
+                <img 
+                  src="{{ $final.RelPermalink }}" 
+                  alt="{{ $product.imageAlt | default $.Page.Title }}" 
+                  title="{{ $product.imageAlt | default $.Page.Title }}"
+                  loading="lazy"
+                >
+              </a>
+            {{ end }}
+          </div>
+          {{ with $product.priceText }}
+          <p id="savings3-text-{{ $index }}" class="style3">{{ . | markdownify }}</p>
+          {{ end }}
+          <ul id="savings3-buttons-{{ $index }}" class="style7 buttons">
+            {{ if ne $product.buttonText false }}
+            <li>
+              <a href="{{ if $product.productLink }}{{ $product.productLink }}{{ else }}{{ $.Page.Params.productLink }}{{ end }}" class="button n01" role="button">{{ or $product.buttonText $.Page.Params.buttonCartText "Buy now" }}</a>
+            </li>
+            {{ end }}
+            {{ if ne $product.buttonWholesaleText false }}
+            <li>
+              <a href="{{ $.Site.Params.formWholesaleUrl }}" class="button n02" role="button">{{ or $product.buttonWholesaleText $.Page.Params.buttonWholesaleText "Wholesale Inquiry" }}</a>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

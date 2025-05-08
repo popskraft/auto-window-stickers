@@ -1,0 +1,19 @@
+<section id="wholesale-section">
+  <div id="formContainerWholesale" class="style18 container default">
+    <div class="wrapper">
+      <div class="inner">
+        <p class="style13">{{ .Site.Params.wholesaleSection.title | markdownify }}</p>
+        <p class="style3">{{ .Site.Params.wholesaleSection.description | markdownify }}</p>
+        {{ partial "formWholesale" . }}
+        <ul class="style6 buttons">
+          <li>
+            <a href="#home" class="button n01" role="button"><svg aria-labelledby="buttons16-icon-1-title-wholesale">
+                <title id="buttons16-icon-1-title-wholesale">Cancel (Light)</title>
+                <use xlink:href="/icons.svg#cancel-light"></use>
+              </svg><span class="label">Close</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

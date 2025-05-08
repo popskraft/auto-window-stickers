@@ -1,0 +1,10 @@
+{{ $customersTitle := .Site.Params.header.customersTitle }}
+{{ with .Site.Params.header.customers }}
+<h2>{{ $customersTitle }}</h2>
+
+<ul>
+{{ range . }}
+  <li>{{ . | markdownify }}</li>
+{{ end }}
+</ul>
+{{ end }}
