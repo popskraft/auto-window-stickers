@@ -270,6 +270,26 @@ body.is-playing.with-loader #loader {
 	visibility: hidden;
 }
 
+#main > .inner > header, #main > .inner > footer {
+	transition: opacity 0.125s ease-in-out 0.1875s,visibility 0.125s linear 0.1875s;
+}
+
+#main > .inner > header.hidden, #main > .inner > footer.hidden {
+	opacity: 0;
+	transition: opacity 0.125s ease-in-out,visibility 0.125s;
+	visibility: hidden;
+}
+
+#main > .inner > section {
+	transition: opacity 0.25s ease-in-out 0.125s,transform 0.25s ease-in-out 0.125s,min-height 0.125s ease-in-out,max-height 0.125s ease-in-out;
+}
+
+#main > .inner > section.inactive {
+	opacity: 0;
+	transition: opacity 0.125s ease-in-out,transform 0.125s ease-in-out;
+	transform: scale(0.96125);
+}
+
 body.is-instant #main, body.is-instant #main > .inner > *,body.is-instant #main > .inner > section > *  {
 	transition: none !important;
 }
