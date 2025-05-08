@@ -46,47 +46,9 @@ hero:
       link: "/interior/"
 
 about:
-  heading: "About Window Stickers"
-  text: >
-    You know these. No dealership lot operates without them. Autodealer Window Stickers meet Monroney Label requirements and give vehicles a clean professional look. Made from tough coated paper, they install in minutes, survive sunlight, rain and pressure washing, and peel off cleanly with no residue. We offer a complete set of sticker variants including blank forms, custom-print templates, Buyers Guides and Addendums so your inventory stays compliant, organized and ready to sell.
-
-features:
-  columns:
-    - # First column
-      - heading: "Laser Compatible"
-        text: >- 
-          Stickers easily customize with standard laser printers, allowing dealerships to conveniently print accurate, vehicle-specific information at their location.
-        image: "images/about/about-printer.jpg"
-        link: "/exterior/"
-      - heading: "Compliance & Marketing"
-        text: >-
-          Fully meets U.S. Monroney Label requirements and local regulations. Doubles as a branding tool with dealer colors, logo, and contact details—reinforcing brand identity at first glance.
-      - heading: "Reliable supply chain"
-        text: >-
-          Fast production turnaround, flexible order quantities, and expedited shipping options ensure managers never run out of stickers. Predictable lead times and responsive customer support reduce downtime and sustain uninterrupted vehicle display.
-    - # Second column
-      - heading: "Durable in all conditions"
-        text: >-
-          Made from high-density coated paper and protective lamination, these stickers resist UV fading, moisture, and pressure washing. Managers gain peace of mind knowing pricing and specs remain legible and professional-looking.
-        image: "images/about/about-openned.jpg"
-        link: "/exterior/"
-      - heading: "Easy Application and Removal"
-        text: >-
-          Stickers apply quickly and peel off cleanly without leaving residue, helping streamline dealership workflow while protecting vehicle windows including sensitive or factory-tinted surfaces.
-        image: "images/about/about-removing.jpg"
-        link: "/exterior/"
-    - # Third column
-      - heading: "UV & Pressure-wash resistant"
-        text: >-
-          Window Stickers won't fade in sunlight, won't peel in rain, and stay in place even after repeated pressure washes. They stay clear and readable in all kinds of weather.
-        image: "images/about/about-washing.jpg"
-        link: "/exterior/"
-      - heading: "Reduced waste and inventory costs"
-        text: >-
-          On-demand printing capability eliminates the need for bulk pre-printed stickers. Dealership managers avoid outdated stock and reduce storage expenses, ensuring they only print what's needed when it's needed, cutting material waste.
-      - heading: "Cost Efficiency"
-        text: >-
-          Priced among the most competitive in the industry, our stickers deliver top-tier performance at a lower per-unit cost. Bulk discounts, minimal waste, and streamlined procurement boost ROI and translate into significant savings for dealership budgets.
+  heading: "About"
+  text: >-
+    Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility, allowing customers to conveniently view information from within the car.
 
 services:
   items:
