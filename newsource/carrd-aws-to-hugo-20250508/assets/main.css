@@ -133,7 +133,7 @@ unloaded-script {
 	position: relative;
 	text-align: var(--alignment);
 	z-index: 1;
-	transition: opacity 0.125s ease-in-out 0s;
+	transition: opacity 0.375s ease-in-out 0s;
 }
 
 #main > .inner {
