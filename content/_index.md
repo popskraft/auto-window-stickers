@@ -6,6 +6,7 @@ description: "AK Dealer Services - Professional vehicle photography, window labe
 hero:
   exterior:
     heading: "<strong>Exterior</strong> Products"
+    description: "Resist rain, snow, heat, and pressure washing. Applied outside windows, they stay clear, peel off without damaging tint, and boost your lot's professional look."
     image: "images/home/exterior-cover.jpg"
     gallery:
       - image: "images/home/exterior-cover-frag-1.png"
@@ -25,11 +26,12 @@ hero:
       link: "/exterior/"
   interior:
     heading: "<strong>Interior</strong> Products"
+    description: "Applied inside the vehicle's window, these stickers deliver a clean, professional look. Ideal for standard conditions and provide clear visibility from outside."
     image: "images/home/interior-cover.jpg"
     gallery:
       - image: "images/home/interior-cover-frag-1.png"
         alt: "Interior Custom Blank"
-        caption: "Interior Custom Blank"
+        caption: "Interior Custom"
         link: "/interior/interior-window-sticker-custom-blank/"
       - image: "images/home/interior-cover-frag-2.png"
         alt: "Interior Buyers Guide"

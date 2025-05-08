@@ -7,6 +7,7 @@
       {{ with .exterior }}
       <div>
         {{ with .button }}<h2 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h2>{{ end }}
+        {{ with .description }}<p class="style3">{{ . }}</p>{{ end }}
         {{ with .image }}
         <div id="image04" class="style2 image">
           {{ with $.Params.hero.exterior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
@@ -43,11 +44,11 @@
         </div>
         {{ end }}
         {{ with .button }}
-        <ul class="style2 buttons">
+        <ul id="buttons11" class="style2 buttons">
           <li>
             <a href="{{ .link | default "#" | relURL }}" class="button n01" role="button">
-              <svg>
-                  <title>{{ $.Params.hero.exterior.button.text | plainify }}</title>
+              <svg aria-labelledby="buttons11-icon-1-title">
+                  <title id="buttons11-icon-1-title">{{ $.Params.hero.exterior.button.text | plainify }}</title>
                   <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
               </svg>
               <span class="label">{{ .text }}</span>
@@ -55,13 +56,14 @@
           </li>
         </ul>
         {{ end }}
-        <hr class="style3" data-visibility="desktop">
+        <hr id="divider02" class="style3" data-visibility="desktop">
       </div>
       {{ end }}
       {{/* --- Interior Column --- */}}
       {{ with .interior }}
       <div>
         {{ with .button }}<h2 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.interior.heading | safeHTML }}</a></h2>{{ end }}
+        {{ with .description }}<p class="style3">{{ . }}</p>{{ end }}
         {{ with .image }}
         <div id="image03" class="style2 image">
           {{ with $.Params.hero.interior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
@@ -98,11 +100,11 @@
         </div>
         {{ end }}
         {{ with .button }}
-        <ul class="style2 buttons">
+        <ul id="buttons03" class="style2 buttons">
            <li>
             <a href="{{ .link | default "#" | relURL }}" class="button n01" role="button">
-              <svg>
-                  <title>{{ $.Params.hero.interior.button.text | plainify }}</title>
+              <svg aria-labelledby="buttons03-icon-1-title">
+                  <title id="buttons03-icon-1-title">{{ $.Params.hero.interior.button.text | plainify }}</title>
                   <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
               </svg>
               <span class="label">{{ .text }}</span>
@@ -116,4 +118,5 @@
     </div>
   </div>
 </div>
+<hr class="style2">
 {{ end }}
