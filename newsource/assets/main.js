@@ -657,25 +657,21 @@
 		
 			}, 1000);
 	
-	// Sections.
+	// Load elements.
+		// Load elements (if needed).
+			loadElements(document.body);
+	
+	// Scroll points.
 		(function() {
 		
-			var initialSection, initialScrollPoint, initialId,
-				header, footer, name, hideHeader, hideFooter, disableAutoScroll,
-				h, e, ee, k,
-				locked = false,
-				title = document.title,
-				scrollPointParent = function(target) {
+			var	scrollPointParent = function(target) {
 		
-					while (target) {
+					var inner;
 		
-						if (target.parentElement
-						&&	target.parentElement.tagName == 'SECTION')
-							break;
+					inner = $('#main > .inner');
 		
+					while (target && target.parentElement != inner)
 						target = target.parentElement;
-		
-					}
 		
 					return target;
 		
@@ -850,215 +846,7 @@
 						else
 							location.href = '#' + id;
 		
-				},
-				doNextSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').nextElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doPreviousSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').previousElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + (section.matches(':first-child') ? '' : section.id.replace(/-section$/, ''));
-		
-				},
-				doFirstSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:first-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doLastSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:last-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				resetSectionChangeElements = function(section) {
-		
-					var ee, e, x;
-		
-					// Get elements with data-reset-on-section-change attribute.
-						ee = section.querySelectorAll('[data-reset-on-section-change="1"]');
-		
-					// Step through elements.
-						for (e of ee) {
-		
-							// Determine type.
-								x = e ? e.tagName : null;
-		
-								switch (x) {
-		
-									case 'FORM':
-		
-										// Reset.
-											e.reset();
-		
-										break;
-		
-									default:
-										break;
-		
-								}
-		
-						}
-		
-				},
-				activateSection = function(section, scrollPoint) {
-		
-					var sectionHeight, currentSection, currentSectionHeight,
-						name, hideHeader, hideFooter, disableAutoScroll,
-						ee, k;
-		
-					// Section already active?
-						if (!section.classList.contains('inactive')) {
-		
-							// Get options.
-								name = (section ? section.id.replace(/-section$/, '') : null);
-								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-							// Scroll to scroll point (if applicable).
-								if (scrollPoint)
-									scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-							// Otherwise, just scroll to top (if not disabled for this section).
-								else if (!disableAutoScroll)
-									scrollToElement(null);
-		
-							// Bail.
-								return false;
-		
-						}
-		
-					// Otherwise, activate it.
-						else {
-		
-							// Lock.
-								locked = true;
-		
-							// Clear index URL hash.
-								if (location.hash == '#home')
-									history.replaceState(null, null, '#');
-		
-							// Get options.
-								name = (section ? section.id.replace(/-section$/, '') : null);
-								hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-								hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-							// Deactivate current section.
-		
-								// Hide header and/or footer (if necessary).
-		
-									// Header.
-										if (header && hideHeader) {
-		
-											header.classList.add('hidden');
-											header.style.display = 'none';
-		
-										}
-		
-									// Footer.
-										if (footer && hideFooter) {
-		
-											footer.classList.add('hidden');
-											footer.style.display = 'none';
-		
-										}
-		
-								// Deactivate.
-									currentSection = $('#main > .inner > section:not(.inactive)');
-									currentSection.classList.add('inactive');
-									currentSection.classList.remove('active');
-									currentSection.style.display = 'none';
-		
-								// Reset title.
-									document.title = title;
-		
-								// Unload elements.
-									unloadElements(currentSection);
-		
-								// Reset section change elements.
-									resetSectionChangeElements(currentSection);
-		
-								// Clear timeout (if present).
-									clearTimeout(window._sectionTimeoutId);
-		
-							// Activate target section.
-		
-								// Show header and/or footer (if necessary).
-		
-									// Header.
-										if (header && !hideHeader) {
-		
-											header.style.display = '';
-											header.classList.remove('hidden');
-		
-										}
-		
-									// Footer.
-										if (footer && !hideFooter) {
-		
-											footer.style.display = '';
-											footer.classList.remove('hidden');
-		
-										}
-		
-								// Activate.
-									section.classList.remove('inactive');
-									section.classList.add('active');
-									section.style.display = '';
-		
-							// Trigger 'resize' event.
-								trigger('resize');
-		
-							// Update title.
-								if (section.dataset.title)
-									document.title = section.dataset.title + ' - ' + title;
-		
-							// Load elements.
-								loadElements(section);
-		
-							// Scroll to scroll point (if applicable).
-								if (scrollPoint)
-									scrollToElement(scrollPoint, 'instant');
-		
-							// Otherwise, just scroll to top (if not disabled for this section).
-								else if (!disableAutoScroll)
-									scrollToElement(null, 'instant');
-		
-							// Unlock.
-								locked = false;
-		
-						}
-		
-				},
-				sections = {};
+				};
 		
 			// Expose doNextScrollPoint, doPreviousScrollPoint, doFirstScrollPoint, doLastScrollPoint.
 				window._nextScrollPoint = doNextScrollPoint;
@@ -1066,32 +854,17 @@
 				window._firstScrollPoint = doFirstScrollPoint;
 				window._lastScrollPoint = doLastScrollPoint;
 		
-			// Expose doNextSection, doPreviousSection, doFirstSection, doLastSection.
-				window._nextSection = doNextSection;
-				window._previousSection = doPreviousSection;
-				window._firstSection = doFirstSection;
-				window._lastSection = doLastSection;
-		
 			// Override exposed scrollToTop.
 				window._scrollToTop = function() {
-		
-					var section, id;
 		
 					// Scroll to top.
 						scrollToElement(null);
 		
-					// Section active?
-						if (!!(section = $('section.active'))) {
+					// Scroll point active?
+						if (window.location.hash) {
 		
-							// Get name.
-								id = section.id.replace(/-section$/, '');
-		
-								// Index section? Clear.
-									if (id == 'home')
-										id = '';
-		
-							// Reset hash to section name (via new state).
-								history.pushState(null, null, '#' + id);
+							// Reset hash (via new state).
+								history.pushState(null, null, '.');
 		
 						}
 		
@@ -1103,117 +876,24 @@
 					if ('scrollRestoration' in history)
 						history.scrollRestoration = 'manual';
 		
-				// Header, footer.
-					header = $('#header');
-					footer = $('#footer');
-		
-				// Show initial section.
-		
-					// Determine target.
-						h = thisHash();
-		
-						// Contains invalid characters? Might be a third-party hashbang, so ignore it.
-							if (h
-							&&	!h.match(/^[a-zA-Z0-9\-]+$/))
-								h = null;
-		
-						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
-		
-								initialScrollPoint = e;
-								initialSection = initialScrollPoint.parentElement;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								initialScrollPoint = null;
-								initialSection = e;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Missing initial section?
-							if (!initialSection) {
-		
-								// Default to index.
-									initialScrollPoint = null;
-									initialSection = $('#' + 'home' + '-section');
-									initialId = initialSection.id;
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// Get options.
-						name = (h ? h : 'home');
-						hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-						hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-						disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-					// Deactivate all sections (except initial).
-		
-						// Initially hide header and/or footer (if necessary).
-		
-							// Header.
-								if (header && hideHeader) {
-		
-									header.classList.add('hidden');
-									header.style.display = 'none';
-		
-								}
-		
-							// Footer.
-								if (footer && hideFooter) {
-		
-									footer.classList.add('hidden');
-									footer.style.display = 'none';
-		
-								}
-		
-						// Deactivate.
-							ee = $$('#main > .inner > section:not([id="' + initialId + '"])');
-		
-							for (k = 0; k < ee.length; k++) {
-		
-								ee[k].className = 'inactive';
-								ee[k].style.display = 'none';
-		
-							}
-		
-					// Activate initial section.
-						initialSection.classList.add('active');
-		
-					// Add ready event.
-						ready.add(() => {
-		
-							// Update title.
-								if (initialSection.dataset.title)
-									document.title = initialSection.dataset.title + ' - ' + title;
-		
-							// Load elements.
-								loadElements(initialSection);
-		
-								if (header)
-									loadElements(header);
-		
-								if (footer)
-									loadElements(footer);
-		
-							// Scroll to top (if not disabled for this section).
-								if (!disableAutoScroll)
-									scrollToElement(null, 'instant');
-		
-						});
-		
 				// Load event.
 					on('load', function() {
 		
-						// Scroll to initial scroll point (if applicable).
-					 		if (initialScrollPoint)
+						var initialScrollPoint, h;
+		
+						// Determine target.
+							h = thisHash();
+		
+							// Contains invalid characters? Might be a third-party hashbang, so ignore it.
+								if (h
+								&&	!h.match(/^[a-zA-Z0-9\-]+$/))
+									h = null;
+		
+							// Scroll point.
+								initialScrollPoint = $('[data-scroll-id="' + h + '"]');
+		
+						// Scroll to scroll point (if applicable).
+							if (initialScrollPoint)
 								scrollToElement(initialScrollPoint, 'instant');
 		
 					});
@@ -1221,12 +901,7 @@
 			// Hashchange event.
 				on('hashchange', function(event) {
 		
-					var section, scrollPoint,
-						h, e;
-		
-					// Lock.
-						if (locked)
-							return false;
+					var scrollPoint, h, pos;
 		
 					// Determine target.
 						h = thisHash();
@@ -1237,41 +912,18 @@
 								return false;
 		
 						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
+							scrollPoint = $('[data-scroll-id="' + h + '"]');
 		
-								scrollPoint = e;
-								section = scrollPoint.parentElement;
+					// Scroll to scroll point (if applicable).
+						if (scrollPoint)
+							scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
-							}
+					// Otherwise, just scroll to top.
+						else
+							scrollToElement(null);
 		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								scrollPoint = null;
-								section = e;
-		
-							}
-		
-						// Anything else.
-							else {
-		
-								// Default to index.
-									scrollPoint = null;
-									section = $('#' + 'home' + '-section');
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// No section? Bail.
-						if (!section)
-							return false;
-		
-					// Activate section.
-						activateSection(section, scrollPoint);
-		
-					return false;
+					// Bail.
+						return false;
 		
 				});
 		
@@ -1280,7 +932,7 @@
 		
 						var t = event.target,
 							tagName = t.tagName.toUpperCase(),
-							scrollPoint, section;
+							scrollPoint;
 		
 						// Find real target.
 							switch (tagName) {
@@ -1323,27 +975,8 @@
 										// Prevent default.
 											event.preventDefault();
 		
-										// Get section.
-											section = scrollPoint.parentElement;
-		
-										// Section is inactive?
-											if (section.classList.contains('inactive')) {
-		
-												// Reset hash to section name (via new state).
-													history.pushState(null, null, '#' + section.id.replace(/-section$/, ''));
-		
-												// Activate section.
-													activateSection(section, scrollPoint);
-		
-											}
-		
-										// Otherwise ...
-											else {
-		
-												// Scroll to scroll point.
-													scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-											}
+										// Scroll to element.
+											scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
 									}
 		
@@ -1840,110 +1473,6 @@
 		
 		// Initialize.
 			scrollEvents.init();
-	
-	// Deferred.
-		(function() {
-		
-			var items = $$('.deferred'),
-				loadHandler, enterHandler;
-		
-			// Handlers.
-		
-				/**
-				 * "On Load" handler.
-				 */
-				loadHandler = function() {
-		
-					var i = this,
-						p = this.parentElement,
-						duration = 375;
-		
-					// Not "done" yet? Bail.
-						if (i.dataset.src !== 'done')
-							return;
-		
-					// Image loaded faster than expected? Reduce transition duration.
-						if (Date.now() - i._startLoad < duration)
-							duration = 175;
-		
-					// Set transition duration.
-						i.style.transitionDuration = (duration / 1000.00) + 's';
-		
-					// Show image.
-						p.classList.remove('loading');
-						i.style.opacity = 1;
-		
-						setTimeout(function() {
-		
-							// Clear background image.
-								i.style.backgroundImage = 'none';
-		
-							// Clear transition properties.
-								i.style.transitionProperty = '';
-								i.style.transitionTimingFunction = '';
-								i.style.transitionDuration = '';
-		
-						}, duration);
-		
-				};
-		
-				/**
-				 * "On Enter" handler.
-				 */
-				enterHandler = function() {
-		
-					var	i = this,
-						p = this.parentElement,
-						src;
-		
-					// Get src, mark as "done".
-						src = i.dataset.src;
-						i.dataset.src = 'done';
-		
-					// Mark parent as loading.
-						p.classList.add('loading');
-		
-					// Swap placeholder for real image src.
-						i._startLoad = Date.now();
-						i.src = src;
-		
-				};
-		
-			// Initialize items.
-				items.forEach(function(p) {
-		
-					var i = p.firstElementChild;
-		
-					// Set parent to placeholder.
-						if (!p.classList.contains('enclosed')) {
-		
-							p.style.backgroundImage = 'url(' + i.src + ')';
-							p.style.backgroundSize = '100% 100%';
-							p.style.backgroundPosition = 'top left';
-							p.style.backgroundRepeat = 'no-repeat';
-		
-						}
-		
-					// Hide image.
-						i.style.opacity = 0;
-		
-					// Set transition properties.
-						i.style.transitionProperty = 'opacity';
-						i.style.transitionTimingFunction = 'ease-in-out';
-		
-					// Load event.
-						i.addEventListener('load', loadHandler);
-		
-					// Add to scroll events.
-						scrollEvents.add({
-							element: i,
-							enter: enterHandler,
-							offset: 250,
-						});
-		
-				});
-		
-		})();
 	
 	// "On Visible" animation.
 		var onvisible = {

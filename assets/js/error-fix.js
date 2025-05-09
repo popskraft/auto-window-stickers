@@ -24,6 +24,16 @@
         return element;
     };
     
+    // Fix for removeChild errors
+    const originalRemoveChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function(child) {
+        if (!this.contains(child)) {
+            console.warn('Error Prevention: Prevented removeChild error');
+            return child; // Return the child without removing it
+        }
+        return originalRemoveChild.call(this, child);
+    };
+    
     // Helper function to create a minimal virtual element that won't throw errors
     // but still allows animations to work on real elements
     function createVirtualElement(id) {
@@ -42,8 +52,10 @@
     window.addEventListener('error', function(event) {
         // Only suppress specific errors from main.js
         if (event.filename && event.filename.includes('main.') && 
-            event.message && event.message.includes('Cannot read properties of null')) {
-            console.warn('Error Prevention: Suppressed null property error in main.js');
+            (event.message.includes('Cannot read properties of null') ||
+             event.message.includes('Failed to execute \'removeChild\' on \'Node\'') ||
+             event.message.includes('NotFoundError'))) {
+            console.warn('Error Prevention: Suppressed error in main.js:', event.message);
             event.preventDefault();
             return true; // Prevents the error from propagating
         }

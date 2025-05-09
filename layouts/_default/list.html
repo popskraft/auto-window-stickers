@@ -9,29 +9,29 @@
   {{ $products = slice "interior-window-sticker-blank" "interior-window-sticker-custom" }}
 {{ end }}
 
-<section id="products-section" class="active">
-	<div id="container16" class="style5 container columns">
+	<div id="product-row-1" class="style5 product-row container columns">
 		<div class="wrapper">
 			<div class="inner">
 				{{ range $rowIndex, $row := (slice 0 2 4 6 8) }}
-				{{ $product1Index := $row }}
-				{{ $product2Index := add $row 1 }}
-				
-				{{ if lt $product1Index (len $products) }}
-				{{ $product1ID := index $products $product1Index }}
-				{{ $product1 := index site.Data.products $product1ID }}
-				{{ partial "product-card.html" $product1 }}
-				{{ end }}
-				
-				{{ if lt $product2Index (len $products) }}
-				{{ $product2ID := index $products $product2Index }}
-				{{ $product2 := index site.Data.products $product2ID }}
-				{{ partial "product-card.html" $product2 }}
-				{{ end }}
+
+					{{ $product1Index := $row }}
+					{{ $product2Index := add $row 1 }}
+					
+					{{ if lt $product1Index (len $products) }}
+					{{ $product1ID := index $products $product1Index }}
+					{{ $product1 := index site.Data.products $product1ID }}
+					{{ partial "product-card.html" $product1 }}
+					{{ end }}
+					
+					{{ if lt $product2Index (len $products) }}
+					{{ $product2ID := index $products $product2Index }}
+					{{ $product2 := index site.Data.products $product2ID }}
+					{{ partial "product-card.html" $product2 }}
+					{{ end }}
+					
 				{{ end }}
 			</div>
 		</div>
 	</div>
-</section>
 
 {{ end }}

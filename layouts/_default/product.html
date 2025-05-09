@@ -3,12 +3,11 @@
 {{ $productID := .Params.product_id | default "exterior-window-sticker-custom" }}
 {{ $product := index site.Data.products $productID }}
 
-<section id="{{ $product.id }}-section">
-	<div id="container06" class="style3 container columns">
+	<div id="container12" class="style3 container columns">
 		<div class="wrapper">
 			<div class="inner">
 				<div>
-					<div id="image02" class="style5 image">
+					<div id="image11" class="style5 image">
 						<a href="#" class="frame">
 							{{ $mainImage := resources.Get (index $product.images 0).src }}
 							{{ if $mainImage }}
@@ -21,23 +20,29 @@
 							{{ end }}
 						</a>
 					</div>
-					<div id="gallery04" class="style5 productGallery gallery">
+					<div id="gallery05" class="style5 productGallery gallery">
 						<div class="inner">
 							<ul>
 								{{ range $index, $image := $product.images }}
 								{{ if and (gt $index 0) (lt $index 3) }}
 								<li>
-									<a href="#" class="thumbnail n0{{ $index }}">
+									{{ if eq $index 1 }}
+									<span class="frame">
+									{{ else }}
+									<a href="#{{ if hasPrefix $productID "exterior" }}exterior{{ else }}interior{{ end }}" class="thumbnail n0{{ $index }}">
+									<span class="frame">
+									{{ end }}
 									{{ $thumbImage := resources.Get $image.src }}
 									{{ if $thumbImage }}
 										{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
 										{{ $processed := $thumbImage.Filter $filter }}
 										{{ $final := $processed.Fill "724x543 webp picture Center" }}
-										<span class="frame"><img src="{{ $final.RelPermalink }}" alt="{{ $image.alt }}" loading="lazy" /></span>
+										<img src="{{ $final.RelPermalink }}" alt="{{ $image.alt }}" loading="lazy" />
 									{{ else }}
-										<span class="frame"><img src="{{ $image.src | relURL }}" alt="{{ $image.alt }}" /></span>
+										<img src="{{ $image.src | relURL }}" alt="{{ $image.alt }}" />
 									{{ end }}
-								</a>
+									</span>
+									{{ if ne $index 1 }}</a>{{ end }}
 								</li>
 								{{ end }}
 								{{ end }}
@@ -46,10 +51,10 @@
 					</div>
 				</div>
 				<div>
-					<h2 id="text12" class="style12">{{ $product.size }}</h2>
-					<h2 id="text15" class="style1">{{ $product.title | safeHTML }}</h2>
-					<h2 id="text16" class="style3">{{ $product.description }}</h2>
-					<div id="list01" class="style3 list">
+					<p id="text27" class="style12">{{ $product.size }}</p>
+					<h2 id="text52" class="style5">{{ $product.title | markdownify }}</h2>
+					<p id="text53" class="style3">{{ $product.description | markdownify }}</p>
+					<div id="list03" class="style3 list">
 						<ul>
 							{{ range $product.features }}
 							<li>
@@ -58,27 +63,30 @@
 							{{ end }}
 						</ul>
 					</div>
-					<h2 id="text21" class="style11">${{ $product.price }}<span style="color: #03A4FF">*</span></h2>
-					<p id="text39">{{ $product.price_note }}</p>
-					<ul id="buttons02" class="style5 buttons">
-						{{ range $product.purchase_links }}
+					<p id="text54" class="style11">${{ $product.price }}{{/*  <span style="color: #03A4FF">*</span>  */}}</p>
+					<p id="text58">{{ $product.price_note }}</p>
+					<ul id="buttons16" class="style5 buttons">
+						{{ range $index, $link := $product.purchase_links }}
+						{{ if $link.url }}
 						<li>
-							<a href="{{ .url }}" class="button {{ if .primary }}n01{{ else if eq .name "Buy on Amazon" }}n02{{ else }}n03{{ end }}" role="button">
-								<svg aria-labelledby="buttons02-icon-{{ .name | urlize }}-title">
-									<title id="buttons02-icon-{{ .name | urlize }}-title">{{ .icon | title }}</title>
-									<use xlink:href="{{ "/icons.svg#" | relURL }}{{ .icon }}"></use>
+							<a href="{{ $link.url }}" class="button n0{{ add $index 1 }}" role="button">
+								<svg aria-labelledby="buttons16-icon-{{ add $index 1 }}-title">
+									<title id="buttons16-icon-{{ add $index 1 }}-title">{{ $link.icon | title }}</title>
+									<use xlink:href="{{ "/icons.svg#" | relURL }}{{ $link.icon }}"></use>
 								</svg>
-								<span class="label">{{ .name }}</span>
+								<span class="label">{{ $link.name }}</span>
 							</a>
 						</li>
 						{{ end }}
+						{{ end }}
 					</ul>
-					<p id="text49" class="style13">{{ $product.best_price_note }}</p>
-					<hr id="divider07" class="style3">
+					{{ if $product.best_price_note }}
+					<p id="text61" class="style13">${{ $product.price }} — {{ $product.best_price_note }}</p>
+					{{ end }}
+					<hr id="divider20" class="style3">
 				</div>
 			</div>
 		</div>
 	</div>
-</section>
 
 {{ end }}

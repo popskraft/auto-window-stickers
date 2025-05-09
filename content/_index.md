@@ -112,36 +112,71 @@ services:
 reviews:
   heading: "Reviews"
   items:
-    - heading: "Trusted by Leading American Auto Dealers"
-      text: >-
-        Our services are relied upon by top dealerships, helping them achieve better results and drive sales.
-    - heading: "Regular On-Lot Service Visits for Consistent Quality"
-      text: >-
-        With scheduled visits from our team, your dealership can count on consistently high-quality services that keep your inventory presentation polished and professional. This consistency leads to better buyer impressions and higher engagement.
-    - heading: "Years of Proven Experience"
-      text: >-
-        With a long history of serving dealerships, we bring a deep understanding of the industry and the expertise needed to address your unique challenges. Our experience ensures reliable and effective solutions that deliver results every time.
-    - heading: "Flexible, Customizable Services to Fit Your Dealership’s Goals"
-      text: >-
-        Tailored to your dealership's specific needs, our solutions are designed to help you stand out in a competitive market. Whether it's custom marketing strategies or specialized support, we focus on delivering measurable benefits for your business.
-    - heading: "Unmatched Professionalism"
-      text: >-
-        Our team consists of highly skilled professionals who get the job done right the first time. We pride ourselves on delivering quick, high-quality work that exceeds expectations. You can trust us to handle your needs without disappointment.
-    - heading: "Scalable Services"
-      text: >-
-        Our marketing solutions grow with your dealership, ensuring you stay competitive as your business expands.
+    - title: "Exactly what I needed"
+      text: "Fits perfectly on the side window and prints cleanly on my laser printer. Easy to remove, no residue left. Will buy again."
+      author: "Jason T."
+    - title: "Best price for this quality"
+      text: "I've been ordering window stickers for years and this is easily one of the best deals out there. Great quality at a much lower cost than the competitors. They help us maintain a clean and consistent presentation across the lot. Will definitely reorder in bulk."
+      author: "Brian F."
+    - title: "Great quality and durability"
+      text: "I run a mid-sized used car dealership, and we go through a lot of window stickers each month. These are by far the best I've found in terms of durability and appearance. The material feels premium, they don't bubble up, and they stay put even after pressure washes. Very impressed."
+      author: "Danielle"
+    - title: "Perfect for our dealership needs"
+      text: "These stickers hold up well in all types of weather—rain, heat, even snow. They stay flat and legible, which is exactly what we need. Very happy with the performance and look."
+      author: "Tim V."
+    - title: "Super easy to use"
+      text: "No issues printing or applying. We use them every day in our used car section. They make everything look more professional."
+      author: "Maria L."
+    - title: "Will definitely reorder"
+      text: "This product has become a staple at our dealership. Solid quality and very easy to work with."
+      author: "Harold B."
 
 faq:
   heading_styled: 'Window Stickers <span style="color: #2EC0FF"><strong>F.A.Q.</strong></span>'
-  questions:
-    - question: "Can we customize the services to fit specific needs?"
-      answer: >-
-        Absolutely! We understand that every dealership is unique. Whether it's custom comments, tailored photography styles, or specific branding requirements, we'll work with you to create a solution that meets your goals.
-    - question: "Can we customize the services to fit specific needs?"
-      answer: >-
-        Absolutely! We understand that every dealership is unique. Whether it's custom comments, tailored photography styles, or specific branding requirements, we'll work with you to create a solution that meets your goals.
-    - question: "Can we customize the services to fit specific needs?"
-      answer: >-
-        Absolutely! We understand that every dealership is unique. Whether it's custom comments, tailored photography styles, or specific branding requirements, we'll work with you to create a solution that meets your goals.
+  categories:
+    - name: "Pricing & Fees"
+      questions:
+        - question: "How do your prices compare to competitors?"
+          answer: >
+            Our stickers are priced 20%-50% lower than leading competitors.<br />Standard interior stickers start at $0.19 each; exterior stickers start at $0.39 each. Final pricing depends on quantity, customization level, and shipping method. For an instant quote, call 800-260-5051 or email info@akdealerservices.com.
+        - question: "Are there any hidden fees or setup charges?"
+          answer: >
+            No. Your quote covers printing, lamination, and standard shipping. If you request custom design work, there's a one-time $25 vector-artwork setup fee. We disclose all costs up front.
+    - name: "Customization & Design"
+      questions:
+        - question: "Can I customize the sticker layout with my dealership's branding?"
+          answer: >
+            Absolutely. We support full-color logos, brand colors, special promotions, and high-resolution QR codes. After placing a customization order, our design team will send a digital proof within 24 hours. You'll have one free revision before final approval.
+        - question: "Do you provide design assistance?"
+          answer: >
+            If you need help creating or refining your artwork, our in-house designers will collaborate with you at no extra charge beyond the $25 setup fee (only once per new design).
+    - name: "Printing & Application"
+      questions:
+        - question: "What equipment do I need to print these stickers?"
+          answer: >
+            No special hardware. Any standard office laser printer and regular toner will work. We include detailed printing and application instructions with every order.
+        - question: "Can I include QR codes or other scannable elements?"
+          answer: >
+            Yes. Our templates are optimized for high-contrast printing so QR codes scan easily—even through glass or under tinted windows.
+        - question: "How do I apply and remove the stickers?"
+          answer: >
+            1. Clean the glass surface.<br />2. Peel the backing and align the sticker.<br />3. Press firmly, smoothing out bubbles.<br />4. To remove, lift a corner and peel gently—no adhesive residue left behind.
+    - name: "Compliance & Durability"
+      questions:
+        - question: "Do your stickers meet regulatory requirements?"
+          answer: >
+            Yes. All sizes, materials, and layouts fully meet federal Monroney Label requirements and FTC Buyer's Guide rules.
+        - question: "How weather-resistant are they?"
+          answer: >
+            UV-proof: No fading or discoloration for at least 3 months outdoors. Water- and pressure-wash safe: No peeling, cracking, or bubbling.
+        - question: "Will Window Stickers damage tinted or factory-installed glass?"
+          answer: >
+            No. Our adhesive is formulated for clean removal — no residue, no damage to tint or glass.
+        - question: "Can stickers remain on a window if the glass is rolled down?"
+          answer: >
+            Yes. They withstand low-pressure contact and won't tear or lose adhesion when the window moves.
+        - question: "Are Window Stickers reusable?"
+          answer: >
+            No. These are single-use stickers designed for professional, tamper-free presentation of vehicle information.
 
 ---

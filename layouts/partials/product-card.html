@@ -1,6 +1,8 @@
 {{ $product := . }}
 <div>
-	<h2 class="style5">{{ $product.title | markdownify }}</h2>
+	<h2 id="text10" class="style5">{{ $product.title | markdownify }}
+		{{ if $product.size }}<span style="color: #bbbbbb"> –&nbsp;{{ $product.size }}</span>{{ end }}
+	</h2>
 	<div id="{{ $product.id }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
 		ondragstart="return false;">
 		<div class="content">
@@ -22,16 +24,18 @@
 			<div class="nav previous"></div>
 		</div>
 	</div>
-	<h2 class="style3"><strong>${{ $product.price }}</strong>* {{ $product.price_note }}</h2>
-	<ul class="style5 buttons">
+	<p class="style3"><strong>${{ $product.price }}</strong>&ensp;{{ $product.price_note }}</p>
+	<ul id="buttons02" class="style5 buttons product-buttons">
 		{{ range $linkIndex, $link := $product.purchase_links }}
+		{{ if $link.url }}
 		<li>
 			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}"
 				role="button"><svg aria-labelledby="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">
 					<title id="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">{{ $link.icon | title }}</title>
 					<use xlink:href="{{ "/icons.svg#" | relURL }}{{ $link.icon }}"></use>
-				</svg><span class="label">{{ if $link.primary }}*{{ end }} {{ $link.name }}</span></a>
+				</svg><span class="label">{{ $link.name }}</span></a>
 		</li>
+		{{ end }}
 		{{ end }}
 	</ul>
 	<ul class="style2 links">

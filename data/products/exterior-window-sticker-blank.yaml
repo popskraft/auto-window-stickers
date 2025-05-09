@@ -13,14 +13,14 @@ features:
   - "1-part, self-adhesive, 4 sides"
 price: 0.39
 price_note: "per blank (min 1000)"
-best_price_note: "* Best Price for AK Dealer Services"
+best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
   - name: "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
     icon: "cart"
     primary: true
   - name: "Buy on Amazon"
-    url: "#"
+    # url: "#"
     icon: "cart"
     primary: false
   - name: "Wholesale Inquiry"

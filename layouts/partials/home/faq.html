@@ -1,0 +1,26 @@
+{{ if .Params.faq }}
+<hr id="divider05" class="style3">
+<div id="container01" class="style10 container default">
+    <div class="wrapper">
+        <div class="inner">
+            <hr id="divider18" class="style3" data-visibility="desktop">
+            <h3 id="text121" class="style1">{{ .Params.faq.heading_styled | safeHTML }}</h3>
+        </div>
+    </div>
+</div>
+<div id="faqBody" class="style12 collapse container default">
+    <div class="wrapper">
+        <div class="inner">
+            {{ range $categoryIndex, $category := .Params.faq.categories }}
+            <h3 id="text-category-{{ $categoryIndex }}" class="style15"><span style="color: #2EC0FF">{{ $category.name }}</span></h3>
+            {{ range $category.questions }}
+            <h3 class="style2"><span style="color: #2EC0FF">Q.</span> {{ .question }}</h3>
+            <p class="style3 collapse-target">{{ .answer | safeHTML }}</p>
+            <hr class="style8 full">
+            {{ end }}
+            {{ end }}
+            <hr id="divider16" class="style3">
+        </div>
+    </div>
+</div>
+{{ end }}

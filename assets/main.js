@@ -638,7 +638,7 @@
 									$body.removeChild($loaderElement);
 								}, 1000);
 		
-						}, 375);
+						}, 125);
 		
 				}, 100);
 			};
@@ -652,27 +652,26 @@
 				// Remove load event.
 					off('load', loadHandler);
 		
+				// Call load handler.
+					(loadHandler)();
+		
 			}, 1000);
 	
-	// Sections.
+	// Load elements.
+		// Load elements (if needed).
+			loadElements(document.body);
+	
+	// Scroll points.
 		(function() {
 		
-			var initialSection, initialScrollPoint, initialId,
-				header, footer, name, hideHeader, hideFooter, disableAutoScroll,
-				h, e, ee, k,
-				locked = false,
-				title = document.title,
-				scrollPointParent = function(target) {
+			var	scrollPointParent = function(target) {
 		
-					while (target) {
+					var inner;
 		
-						if (target.parentElement
-						&&	target.parentElement.tagName == 'SECTION')
-							break;
+					inner = $('#main > .inner');
 		
+					while (target && target.parentElement != inner)
 						target = target.parentElement;
-		
-					}
 		
 					return target;
 		
@@ -847,293 +846,7 @@
 						else
 							location.href = '#' + id;
 		
-				},
-				doNextSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').nextElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doPreviousSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').previousElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + (section.matches(':first-child') ? '' : section.id.replace(/-section$/, ''));
-		
-				},
-				doFirstSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:first-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doLastSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:last-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				resetSectionChangeElements = function(section) {
-		
-					var ee, e, x;
-		
-					// Get elements with data-reset-on-section-change attribute.
-						ee = section.querySelectorAll('[data-reset-on-section-change="1"]');
-		
-					// Step through elements.
-						for (e of ee) {
-		
-							// Determine type.
-								x = e ? e.tagName : null;
-		
-								switch (x) {
-		
-									case 'FORM':
-		
-										// Reset.
-											e.reset();
-		
-										break;
-		
-									default:
-										break;
-		
-								}
-		
-						}
-		
-				},
-				activateSection = function(section, scrollPoint) {
-		
-					var sectionHeight, currentSection, currentSectionHeight,
-						name, hideHeader, hideFooter, disableAutoScroll,
-						ee, k;
-		
-					// Section already active?
-						if (!section.classList.contains('inactive')) {
-		
-							// Get options.
-								name = (section ? section.id.replace(/-section$/, '') : null);
-								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-							// Scroll to scroll point (if applicable).
-								if (scrollPoint)
-									scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-							// Otherwise, just scroll to top (if not disabled for this section).
-								else if (!disableAutoScroll)
-									scrollToElement(null);
-		
-							// Bail.
-								return false;
-		
-						}
-		
-					// Otherwise, activate it.
-						else {
-		
-							// Lock.
-								locked = true;
-		
-							// Clear index URL hash.
-								if (location.hash == '#home')
-									history.replaceState(null, null, '#');
-		
-						// Get options.
-							name = (section ? section.id.replace(/-section$/, '') : null);
-							hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-							hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-							disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-						// Deactivate current section.
-		
-							// Hide header and/or footer (if necessary).
-		
-								// Header.
-									if (header && hideHeader) {
-		
-										header.classList.add('hidden');
-		
-										setTimeout(function() {
-											header.style.display = 'none';
-										}, 125);
-		
-									}
-		
-								// Footer.
-									if (footer && hideFooter) {
-		
-										footer.classList.add('hidden');
-		
-										setTimeout(function() {
-											footer.style.display = 'none';
-										}, 125);
-		
-									}
-		
-							// Deactivate.
-								currentSection = $('#main > .inner > section:not(.inactive)');
-		
-								if (currentSection) {
-		
-									// Get current height.
-										currentSectionHeight = currentSection.offsetHeight;
-		
-									// Deactivate.
-										currentSection.classList.add('inactive');
-		
-									// Reset title.
-										document.title = title;
-		
-									// Unload elements.
-										unloadElements(currentSection);
-		
-									// Reset section change elements.
-										resetSectionChangeElements(currentSection);
-		
-									// Clear timeout (if present).
-										clearTimeout(window._sectionTimeoutId);
-		
-										// Hide.
-											setTimeout(function() {
-												currentSection.style.display = 'none';
-												currentSection.classList.remove('active');
-											}, 125);
-		
-									}
-		
-							// Update title.
-								if (section.dataset.title)
-									document.title = section.dataset.title + ' - ' + title;
-		
-							// Activate target section.
-								setTimeout(function() {
-		
-									// Show header and/or footer (if necessary).
-		
-										// Header.
-											if (header && !hideHeader) {
-		
-												header.style.display = '';
-		
-												setTimeout(function() {
-													header.classList.remove('hidden');
-												}, 0);
-		
-											}
-		
-										// Footer.
-											if (footer && !hideFooter) {
-		
-												footer.style.display = '';
-		
-												setTimeout(function() {
-													footer.classList.remove('hidden');
-												}, 0);
-		
-											}
-		
-									// Activate.
-		
-										// Show.
-											section.style.display = '';
-		
-										// Trigger 'resize' event.
-											trigger('resize');
-		
-										// Scroll to top (if not disabled for this section).
-											if (!disableAutoScroll)
-												scrollToElement(null, 'instant');
-		
-										// Get target height.
-											sectionHeight = section.offsetHeight;
-		
-										// Set target heights.
-											if (sectionHeight > currentSectionHeight) {
-		
-												section.style.maxHeight = currentSectionHeight + 'px';
-												section.style.minHeight = '0';
-		
-											}
-											else {
-		
-												section.style.maxHeight = '';
-												section.style.minHeight = currentSectionHeight + 'px';
-		
-											}
-		
-										// Delay.
-											setTimeout(function() {
-		
-												// Activate.
-													section.classList.remove('inactive');
-													section.classList.add('active');
-		
-												// Temporarily restore target heights.
-													section.style.minHeight = sectionHeight + 'px';
-													section.style.maxHeight = sectionHeight + 'px';
-		
-												// Delay.
-													setTimeout(function() {
-		
-														// Turn off transitions.
-															section.style.transition = 'none';
-		
-														// Clear target heights.
-															section.style.minHeight = '';
-															section.style.maxHeight = '';
-		
-														// Load elements.
-															loadElements(section);
-		
-													 	// Scroll to scroll point (if applicable).
-													 		if (scrollPoint)
-																scrollToElement(scrollPoint, 'instant');
-		
-														// Delay.
-															setTimeout(function() {
-		
-																// Turn on transitions.
-																	section.style.transition = '';
-		
-																// Unlock.
-																	locked = false;
-		
-															}, 75);
-		
-													}, 250 + 125);
-		
-											}, 75);
-		
-								}, 125);
-		
-						}
-		
-				},
-				sections = {};
+				};
 		
 			// Expose doNextScrollPoint, doPreviousScrollPoint, doFirstScrollPoint, doLastScrollPoint.
 				window._nextScrollPoint = doNextScrollPoint;
@@ -1141,32 +854,17 @@
 				window._firstScrollPoint = doFirstScrollPoint;
 				window._lastScrollPoint = doLastScrollPoint;
 		
-			// Expose doNextSection, doPreviousSection, doFirstSection, doLastSection.
-				window._nextSection = doNextSection;
-				window._previousSection = doPreviousSection;
-				window._firstSection = doFirstSection;
-				window._lastSection = doLastSection;
-		
 			// Override exposed scrollToTop.
 				window._scrollToTop = function() {
-		
-					var section, id;
 		
 					// Scroll to top.
 						scrollToElement(null);
 		
-					// Section active?
-						if (!!(section = $('section.active'))) {
+					// Scroll point active?
+						if (window.location.hash) {
 		
-							// Get name.
-								id = section.id.replace(/-section$/, '');
-		
-								// Index section? Clear.
-									if (id == 'home')
-										id = '';
-		
-							// Reset hash to section name (via new state).
-								history.pushState(null, null, '#' + id);
+							// Reset hash (via new state).
+								history.pushState(null, null, '.');
 		
 						}
 		
@@ -1178,117 +876,24 @@
 					if ('scrollRestoration' in history)
 						history.scrollRestoration = 'manual';
 		
-				// Header, footer.
-					header = $('#header');
-					footer = $('#footer');
-		
-				// Show initial section.
-		
-					// Determine target.
-						h = thisHash();
-		
-						// Contains invalid characters? Might be a third-party hashbang, so ignore it.
-							if (h
-							&&	!h.match(/^[a-zA-Z0-9\-]+$/))
-								h = null;
-		
-						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
-		
-								initialScrollPoint = e;
-								initialSection = initialScrollPoint.parentElement;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								initialScrollPoint = null;
-								initialSection = e;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Missing initial section?
-							if (!initialSection) {
-		
-								// Default to index.
-									initialScrollPoint = null;
-									initialSection = $('#' + 'home' + '-section');
-									initialId = initialSection.id;
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// Get options.
-						name = (h ? h : 'home');
-						hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-						hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-						disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-					// Deactivate all sections (except initial).
-		
-						// Initially hide header and/or footer (if necessary).
-		
-							// Header.
-								if (header && hideHeader) {
-		
-									header.classList.add('hidden');
-									header.style.display = 'none';
-		
-								}
-		
-							// Footer.
-								if (footer && hideFooter) {
-		
-									footer.classList.add('hidden');
-									footer.style.display = 'none';
-		
-								}
-		
-						// Deactivate.
-							ee = $$('#main > .inner > section:not([id="' + initialId + '"])');
-		
-							for (k = 0; k < ee.length; k++) {
-		
-								ee[k].className = 'inactive';
-								ee[k].style.display = 'none';
-		
-							}
-		
-					// Activate initial section.
-						initialSection.classList.add('active');
-		
-					// Add ready event.
-						ready.add(() => {
-		
-							// Update title.
-								if (initialSection.dataset.title)
-									document.title = initialSection.dataset.title + ' - ' + title;
-		
-							// Load elements.
-								loadElements(initialSection);
-		
-								if (header)
-									loadElements(header);
-		
-								if (footer)
-									loadElements(footer);
-		
-							// Scroll to top (if not disabled for this section).
-								if (!disableAutoScroll)
-									scrollToElement(null, 'instant');
-		
-						});
-		
 				// Load event.
 					on('load', function() {
 		
-						// Scroll to initial scroll point (if applicable).
-					 		if (initialScrollPoint)
+						var initialScrollPoint, h;
+		
+						// Determine target.
+							h = thisHash();
+		
+							// Contains invalid characters? Might be a third-party hashbang, so ignore it.
+								if (h
+								&&	!h.match(/^[a-zA-Z0-9\-]+$/))
+									h = null;
+		
+							// Scroll point.
+								initialScrollPoint = $('[data-scroll-id="' + h + '"]');
+		
+						// Scroll to scroll point (if applicable).
+							if (initialScrollPoint)
 								scrollToElement(initialScrollPoint, 'instant');
 		
 					});
@@ -1296,12 +901,7 @@
 			// Hashchange event.
 				on('hashchange', function(event) {
 		
-					var section, scrollPoint,
-						h, e;
-		
-					// Lock.
-						if (locked)
-							return false;
+					var scrollPoint, h, pos;
 		
 					// Determine target.
 						h = thisHash();
@@ -1312,41 +912,18 @@
 								return false;
 		
 						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
+							scrollPoint = $('[data-scroll-id="' + h + '"]');
 		
-								scrollPoint = e;
-								section = scrollPoint.parentElement;
+					// Scroll to scroll point (if applicable).
+						if (scrollPoint)
+							scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
-							}
+					// Otherwise, just scroll to top.
+						else
+							scrollToElement(null);
 		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								scrollPoint = null;
-								section = e;
-		
-							}
-		
-						// Anything else.
-							else {
-		
-								// Default to index.
-									scrollPoint = null;
-									section = $('#' + 'home' + '-section');
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// No section? Bail.
-						if (!section)
-							return false;
-		
-					// Activate section.
-						activateSection(section, scrollPoint);
-		
-					return false;
+					// Bail.
+						return false;
 		
 				});
 		
@@ -1355,7 +932,7 @@
 		
 						var t = event.target,
 							tagName = t.tagName.toUpperCase(),
-							scrollPoint, section;
+							scrollPoint;
 		
 						// Find real target.
 							switch (tagName) {
@@ -1398,27 +975,8 @@
 										// Prevent default.
 											event.preventDefault();
 		
-										// Get section.
-											section = scrollPoint.parentElement;
-		
-										// Section is inactive?
-											if (section.classList.contains('inactive')) {
-		
-												// Reset hash to section name (via new state).
-													history.pushState(null, null, '#' + section.id.replace(/-section$/, ''));
-		
-												// Activate section.
-													activateSection(section, scrollPoint);
-		
-											}
-		
-										// Otherwise ...
-											else {
-		
-												// Scroll to scroll point.
-													scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-											}
+										// Scroll to element.
+											scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
 									}
 		
@@ -1915,110 +1473,6 @@
 		
 		// Initialize.
 			scrollEvents.init();
-	
-	// Deferred.
-		(function() {
-		
-			var items = $$('.deferred'),
-				loadHandler, enterHandler;
-		
-			// Handlers.
-		
-				/**
-				 * "On Load" handler.
-				 */
-				loadHandler = function() {
-		
-					var i = this,
-						p = this.parentElement,
-						duration = 375;
-		
-					// Not "done" yet? Bail.
-						if (i.dataset.src !== 'done')
-							return;
-		
-					// Image loaded faster than expected? Reduce transition duration.
-						if (Date.now() - i._startLoad < duration)
-							duration = 175;
-		
-					// Set transition duration.
-						i.style.transitionDuration = (duration / 1000.00) + 's';
-		
-					// Show image.
-						p.classList.remove('loading');
-						i.style.opacity = 1;
-		
-						setTimeout(function() {
-		
-							// Clear background image.
-								i.style.backgroundImage = 'none';
-		
-							// Clear transition properties.
-								i.style.transitionProperty = '';
-								i.style.transitionTimingFunction = '';
-								i.style.transitionDuration = '';
-		
-						}, duration);
-		
-				};
-		
-				/**
-				 * "On Enter" handler.
-				 */
-				enterHandler = function() {
-		
-					var	i = this,
-						p = this.parentElement,
-						src;
-		
-					// Get src, mark as "done".
-						src = i.dataset.src;
-						i.dataset.src = 'done';
-		
-					// Mark parent as loading.
-						p.classList.add('loading');
-		
-					// Swap placeholder for real image src.
-						i._startLoad = Date.now();
-						i.src = src;
-		
-				};
-		
-			// Initialize items.
-				items.forEach(function(p) {
-		
-					var i = p.firstElementChild;
-		
-					// Set parent to placeholder.
-						if (!p.classList.contains('enclosed')) {
-		
-							p.style.backgroundImage = 'url(' + i.src + ')';
-							p.style.backgroundSize = '100% 100%';
-							p.style.backgroundPosition = 'top left';
-							p.style.backgroundRepeat = 'no-repeat';
-		
-						}
-		
-					// Hide image.
-						i.style.opacity = 0;
-		
-					// Set transition properties.
-						i.style.transitionProperty = 'opacity';
-						i.style.transitionTimingFunction = 'ease-in-out';
-		
-					// Load event.
-						i.addEventListener('load', loadHandler);
-		
-					// Add to scroll events.
-						scrollEvents.add({
-							element: i,
-							enter: enterHandler,
-							offset: 250,
-						});
-		
-				});
-		
-		})();
 	
 	// "On Visible" animation.
 		var onvisible = {
@@ -3168,10 +2622,786 @@
 		
 		};
 	
-
 	// Slideshow backgrounds.
-		// Slideshow functionality has been removed and moved to simple-slideshow.js
-
+		/**
+		 * Slideshow background.
+		 * @param {string} id ID.
+		 * @param {object} settings Settings.
+		 */
+		function slideshowBackground(id, settings) {
+		
+			var _this = this;
+		
+			// Settings.
+				if (!('images' in settings)
+				||	!('target' in settings))
+					return;
+		
+				this.id = id;
+				this.wait = ('wait' in settings ? settings.wait : 0);
+				this.defer = ('defer' in settings ? settings.defer : false);
+				this.navigation = ('navigation' in settings ? settings.navigation : false);
+				this.order = ('order' in settings ? settings.order : 'default');
+				this.preserveImageAspectRatio = ('preserveImageAspectRatio' in settings ? settings.preserveImageAspectRatio : false);
+				this.transition = ('transition' in settings ? settings.transition : { style: 'crossfade', speed: 1000, delay: 6000, resume: 12000 });
+				this.images = settings.images;
+		
+			// Properties.
+				this.preload = true;
+				this.locked = false;
+				this.$target = $(settings.target);
+				this.$wrapper = ('wrapper' in settings ? $(settings.wrapper) : null);
+				this.pos = 0;
+				this.lastPos = 0;
+				this.$slides = [];
+				this.img = document.createElement('img');
+				this.preloadTimeout = null;
+				this.resumeTimeout = null;
+				this.transitionInterval = null;
+		
+			// Using preserveImageAspectRatio and transition style is crossfade? Force to regular fade.
+				if (this.preserveImageAspectRatio
+				&&	this.transition.style == 'crossfade')
+					this.transition.style = 'fade';
+		
+			// Adjust transition delay (if in use).
+				if (this.transition.delay !== false)
+					switch (this.transition.style) {
+		
+						case 'crossfade':
+							this.transition.delay = Math.max(this.transition.delay, this.transition.speed * 2);
+							break;
+		
+		
+						case 'fade':
+							this.transition.delay = Math.max(this.transition.delay, this.transition.speed * 3);
+							break;
+		
+						case 'instant':
+						default:
+							break;
+		
+					}
+		
+			// Force navigation to false if a wrapper wasn't provided.
+				if (!this.$wrapper)
+					this.navigation = false;
+		
+			// Defer?
+				if (this.defer) {
+		
+					// Add to scroll events.
+						scrollEvents.add({
+							element: this.$target,
+							enter: function() {
+								_this.preinit();
+							}
+						});
+		
+				}
+		
+			// Otherwise ...
+				else {
+		
+					// Preinit immediately.
+						this.preinit();
+		
+				}
+		
+		};
+		
+			/**
+			 * Gets the speed class name for a given speed.
+			 * @param {int} speed Speed.
+			 * @return {string} Speed class name.
+			 */
+			slideshowBackground.prototype.speedClassName = function(speed) {
+		
+				switch (speed) {
+		
+					case 1:
+						return 'slow';
+		
+					default:
+					case 2:
+						return 'normal';
+		
+					case 3:
+						return 'fast';
+		
+				}
+		
+			};
+		
+			/**
+			 * Pre-initializes the slideshow background.
+			 */
+			slideshowBackground.prototype.preinit = function() {
+		
+				var _this = this;
+		
+				// Preload?
+					if (this.preload) {
+		
+						// Mark as loading (after delay).
+							this.preloadTimeout = setTimeout(function() {
+								_this.$target.classList.add('is-loading');
+							}, this.transition.speed);
+		
+						// Init after a delay (to prevent load events from holding up main load event).
+							setTimeout(function() {
+								_this.init();
+							}, 0);
+		
+					}
+		
+				// Otherwise ...
+					else {
+		
+						// Init immediately.
+							this.init();
+		
+					}
+		
+			};
+		
+			/**
+			 * Initializes the slideshow background.
+			 */
+			slideshowBackground.prototype.init = function() {
+		
+				var	_this = this,
+					loaded = 0,
+					hasLinks = false,
+					dragStart = null,
+					dragEnd = null,
+					$slide, intervalId, i;
+		
+				// Apply classes.
+					this.$target.classList.add('slideshow-background');
+					this.$target.classList.add(this.transition.style);
+		
+				// Create navigation (if enabled).
+					if (this.navigation) {
+		
+						// Next arrow (if allowed).
+							this.$next = document.createElement('div');
+								this.$next.classList.add('nav', 'next');
+								this.$next.addEventListener('click', function(event) {
+		
+									// Stop transitioning.
+										_this.stopTransitioning();
+		
+									// Show next slide (using "default" order).
+										_this.next('default');
+		
+								});
+								this.$wrapper.appendChild(this.$next);
+		
+						// Previous arrow (if allowed).
+							this.$previous = document.createElement('div');
+								this.$previous.classList.add('nav', 'previous');
+								this.$previous.addEventListener('click', function(event) {
+		
+									// Stop transitioning.
+										_this.stopTransitioning();
+		
+									// Show previous slide (using "default" order).
+										_this.previous('default');
+		
+								});
+								this.$wrapper.appendChild(this.$previous);
+		
+						// Swiping.
+							this.$wrapper.addEventListener('touchstart', function(event) {
+		
+								// More than two touches? Bail.
+									if (event.touches.length > 1)
+										return;
+		
+								// Record drag start.
+									dragStart = {
+										x: event.touches[0].clientX,
+										y: event.touches[0].clientY
+									};
+		
+							});
+		
+							this.$wrapper.addEventListener('touchmove', function(event) {
+		
+								var dx, dy;
+		
+								// No drag start, or more than two touches? Bail.
+									if (!dragStart
+									||	event.touches.length > 1)
+										return;
+		
+								// Record drag end.
+									dragEnd = {
+										x: event.touches[0].clientX,
+										y: event.touches[0].clientY
+									};
+		
+								// Determine deltas.
+									dx = dragStart.x - dragEnd.x;
+									dy = dragStart.y - dragEnd.y;
+		
+								// Doesn't exceed threshold? Bail.
+									if (Math.abs(dx) < 50)
+										return;
+		
+								// Prevent default.
+									event.preventDefault();
+		
+								// Positive value? Move to next.
+									if (dx > 0) {
+		
+										// Stop transitioning.
+											_this.stopTransitioning();
+		
+										// Show next slide (using "default" order).
+											_this.next('default');
+		
+									}
+		
+								// Negative value? Move to previous.
+									else if (dx < 0) {
+		
+										// Stop transitioning.
+											_this.stopTransitioning();
+		
+										// Show previous slide (using "default" order).
+											_this.previous('default');
+		
+									}
+		
+							});
+		
+							this.$wrapper.addEventListener('touchend', function(event) {
+		
+								// Clear drag start, end.
+									dragStart = null;
+									dragEnd = null;
+		
+							});
+		
+					}
+		
+				// Create slides.
+					for (i=0; i < this.images.length; i++) {
+		
+						// Preload?
+							if (this.preload) {
+		
+								// Create img.
+									this.$img = document.createElement('img');
+										this.$img.src = this.images[i].src;
+										this.$img.addEventListener('load', function(event) {
+		
+											// Increment loaded count.
+												loaded++;
+		
+										});
+		
+							}
+		
+						// Create slide.
+							$slide = document.createElement('div');
+								$slide.style.backgroundImage = 'url(\'' + this.images[i].src + '\')';
+								$slide.style.backgroundPosition = this.images[i].position;
+								$slide.style.backgroundRepeat = 'no-repeat';
+								$slide.style.backgroundSize = (this.preserveImageAspectRatio ? 'contain' : 'cover');
+								$slide.setAttribute('role', 'img');
+								$slide.setAttribute('aria-label', this.images[i].caption);
+								this.$target.appendChild($slide);
+		
+							// Apply motion classes (if applicable).
+								if (this.images[i].motion != 'none') {
+		
+									$slide.classList.add(this.images[i].motion);
+									$slide.classList.add(this.speedClassName(this.images[i].speed));
+		
+								}
+		
+							// Link URL provided?
+								if ('linkUrl' in this.images[i]) {
+		
+									// Set cursor style to pointer.
+										$slide.style.cursor = 'pointer';
+		
+									// Set linkUrl property on slide.
+										$slide._linkUrl = this.images[i].linkUrl;
+		
+									// Mark hasLinks as true.
+										hasLinks = true;
+		
+								}
+		
+						// Add to array.
+							this.$slides.push($slide);
+		
+					}
+		
+				// Has links? Add click event listener to target.
+					if (hasLinks)
+						this.$target.addEventListener('click', function(event) {
+		
+							var slide;
+		
+							// Target doesn't have linkUrl property? Bail.
+								if (!('_linkUrl' in event.target))
+									return;
+		
+							// Get slide.
+								slide = event.target;
+		
+							// Onclick provided?
+								if ('onclick' in slide._linkUrl) {
+		
+									// Run handler.
+										(slide._linkUrl.onclick)(event);
+		
+									return;
+		
+								}
+		
+							// Href provided?
+								if ('href' in slide._linkUrl) {
+		
+									// URL is a hash URL?
+										if (slide._linkUrl.href.charAt(0) == '#') {
+		
+											// Go to hash URL.
+												window.location.href = slide._linkUrl.href;
+		
+											return;
+		
+										}
+		
+									// Target provided and it's "_blank"? Open URL in new tab.
+										if ('target' in slide._linkUrl
+										&&	slide._linkUrl.target == '_blank')
+											window.open(slide._linkUrl.href);
+		
+									// Otherwise, just go to URL.
+										else
+											window.location.href = slide._linkUrl.href;
+		
+								}
+		
+						});
+		
+				// Determine starting position.
+					switch (this.order) {
+		
+						case 'random':
+		
+							// Randomly pick starting position.
+								this.pos = (Math.ceil(Math.random() * this.$slides.length) - 1);
+		
+							break;
+		
+						case 'reverse':
+		
+							// Start at end.
+								this.pos = this.$slides.length - 1;
+		
+							break;
+		
+						case 'default':
+						default:
+		
+							// Start at beginning.
+								this.pos = 0;
+		
+							break;
+		
+					}
+		
+					// Update last position.
+						this.lastPos = this.pos;
+		
+				// Preload?
+					if (this.preload)
+						intervalId = setInterval(function() {
+		
+							// All images loaded?
+								if (loaded >= _this.images.length) {
+		
+									// Stop checking.
+										clearInterval(intervalId);
+		
+									// Clear loading.
+										clearTimeout(_this.preloadTimeout);
+										_this.$target.classList.remove('is-loading');
+		
+									// Start.
+										_this.start();
+		
+								}
+		
+						}, 250);
+		
+				// Otherwise ...
+					else {
+		
+						// Start.
+							this.start();
+		
+					}
+		
+			};
+		
+			/**
+			 * Moves to an adjacent slide.
+			 * @param {int} direction Direction (1 = forwards, -1 = backwards).
+			 * @param {string} activeOrder Active order.
+			 */
+			slideshowBackground.prototype.move = function(direction, activeOrder) {
+		
+				var pos, order;
+		
+				// No active order provided? Fall back on default.
+					if (!activeOrder)
+						activeOrder = this.order;
+		
+				// Determine effective order based on chosen direction.
+					switch (direction) {
+		
+						// Forwards: use active order as-is.
+							case 1:
+								order = activeOrder;
+								break;
+		
+						// Backwards: inverse active order.
+							case -1:
+								switch (activeOrder) {
+		
+									case 'random':
+										order = 'random';
+										break;
+		
+									case 'reverse':
+										order = 'default';
+										break;
+		
+									case 'default':
+									default:
+										order = 'reverse';
+										break;
+		
+								}
+		
+								break;
+		
+						// Anything else: bail.
+							default:
+								return;
+		
+					}
+		
+				// Determine new position based on effective order.
+					switch (order) {
+		
+						case 'random':
+		
+							// Randomly pick position.
+								for (;;) {
+		
+									pos = (Math.ceil(Math.random() * this.$slides.length) - 1);
+		
+									// Didn't pick current position? Stop.
+										if (pos != this.pos)
+											break;
+		
+								}
+		
+							break;
+		
+						case 'reverse':
+		
+							// Decrement position.
+								pos = this.pos - 1;
+		
+							// Wrap to end if necessary.
+								if (pos < 0)
+									pos = this.$slides.length - 1;
+		
+							break;
+		
+						case 'default':
+						default:
+		
+							// Increment position.
+								pos = this.pos + 1;
+		
+							// Wrap to beginning if necessary.
+								if (pos >= this.$slides.length)
+									pos = 0;
+		
+							break;
+		
+					}
+		
+				// Show pos.
+					this.show(pos);
+		
+			};
+		
+			/**
+			 * Moves to next slide.
+			 * @param {string} activeOrder Active order.
+			 */
+			slideshowBackground.prototype.next = function(activeOrder) {
+		
+				// Move forwards.
+					this.move(1, activeOrder);
+		
+			};
+		
+			/**
+			 * Moves to previous slide.
+			 * @param {string} activeOrder Active order.
+			 */
+			slideshowBackground.prototype.previous = function(activeOrder) {
+		
+				// Move backwards.
+					this.move(-1, activeOrder);
+		
+			};
+		
+			/**
+			 * Shows a slide.
+			 * @param {int} pos Position.
+			 */
+			slideshowBackground.prototype.show = function(pos) {
+		
+				var _this = this;
+		
+				// Locked? Bail.
+					if (this.locked)
+						return;
+		
+				// Capture current position.
+					this.lastPos = this.pos;
+		
+				// Switch to new position.
+					this.pos = pos;
+		
+				// Perform transition.
+					switch (this.transition.style) {
+		
+						case 'instant':
+		
+							// Swap top slides.
+								this.$slides[this.lastPos].classList.remove('top');
+								this.$slides[this.pos].classList.add('top');
+		
+							// Show current slide.
+								this.$slides[this.pos].classList.add('visible');
+		
+							// Start playing current slide.
+								this.$slides[this.pos].classList.add('is-playing');
+		
+							// Hide last slide.
+								this.$slides[this.lastPos].classList.remove('visible');
+								this.$slides[this.lastPos].classList.remove('initial');
+		
+							// Stop playing last slide.
+								this.$slides[this.lastPos].classList.remove('is-playing');
+		
+							break;
+		
+						case 'crossfade':
+		
+							// Lock.
+								this.locked = true;
+		
+							// Swap top slides.
+								this.$slides[this.lastPos].classList.remove('top');
+								this.$slides[this.pos].classList.add('top');
+		
+							// Show current slide.
+								this.$slides[this.pos].classList.add('visible');
+		
+							// Start playing current slide.
+								this.$slides[this.pos].classList.add('is-playing');
+		
+							// Wait for fade-in to finish.
+								setTimeout(function() {
+		
+									// Hide last slide.
+										_this.$slides[_this.lastPos].classList.remove('visible');
+										_this.$slides[_this.lastPos].classList.remove('initial');
+		
+									// Stop playing last slide.
+										_this.$slides[_this.lastPos].classList.remove('is-playing');
+		
+									// Unlock.
+										_this.locked = false;
+		
+								}, this.transition.speed);
+		
+							break;
+		
+						case 'fade':
+		
+							// Lock.
+								this.locked = true;
+		
+							// Hide last slide.
+								this.$slides[this.lastPos].classList.remove('visible');
+		
+							// Wait for fade-out to finish.
+								setTimeout(function() {
+		
+									// Stop playing last slide.
+										_this.$slides[_this.lastPos].classList.remove('is-playing');
+		
+									// Swap top slides.
+										_this.$slides[_this.lastPos].classList.remove('top');
+										_this.$slides[_this.pos].classList.add('top');
+		
+									// Start playing current slide.
+										_this.$slides[_this.pos].classList.add('is-playing');
+		
+									// Show current slide.
+										_this.$slides[_this.pos].classList.add('visible');
+		
+									// Unlock.
+										_this.locked = false;
+		
+								}, this.transition.speed);
+		
+							break;
+		
+						default:
+							break;
+		
+					}
+		
+			};
+		
+			/**
+			 * Starts the slideshow.
+			 */
+			slideshowBackground.prototype.start = function() {
+		
+				var _this = this;
+		
+				// Prepare initial slide.
+					this.$slides[_this.pos].classList.add('visible');
+					this.$slides[_this.pos].classList.add('top');
+					this.$slides[_this.pos].classList.add('initial');
+					this.$slides[_this.pos].classList.add('is-playing');
+		
+				// Single slide? Bail.
+					if (this.$slides.length == 1)
+						return;
+		
+				// Wait (if needed).
+					setTimeout(function() {
+		
+						// Start transitioning.
+							_this.startTransitioning();
+		
+					}, this.wait);
+		
+			};
+		
+			/**
+			 * Starts transitioning.
+			 */
+			slideshowBackground.prototype.startTransitioning = function() {
+		
+				var _this = this;
+		
+				// Delay not in use? Bail.
+					if (this.transition.delay === false)
+						return;
+		
+				// Start transition interval.
+					this.transitionInterval = setInterval(function() {
+		
+						// Move to next slide.
+							_this.next();
+		
+					}, this.transition.delay);
+		
+			};
+		
+			/**
+			 * Stops transitioning.
+			 */
+			slideshowBackground.prototype.stopTransitioning = function() {
+		
+				var _this = this;
+		
+				// Clear transition interval.
+					clearInterval(this.transitionInterval);
+		
+				// Resume in use?
+					if (this.transition.resume !== false) {
+		
+						// Clear resume timeout (if one already exists).
+							clearTimeout(this.resumeTimeout);
+		
+						// Set resume timeout.
+							this.resumeTimeout = setTimeout(function() {
+		
+								// Start transitioning.
+									_this.startTransitioning();
+		
+							}, this.transition.resume);
+		
+					}
+		
+			};
+	
+	// Slideshow: slideshow05.
+		(function() {
+		
+			new slideshowBackground('slideshow05', {
+				target: '#slideshow05 .bg',
+				wrapper: '#slideshow05 .content',
+				wait: 0,
+				defer: false,
+				navigation: true,
+				order: 'default',
+				preserveImageAspectRatio: true,
+				transition: {
+					style: 'fade',
+					speed: 500,
+					delay: 3000,
+					resume: 3000,
+				},
+				images: [
+					{
+						src: 'assets/images/slideshow05-784e27bb.jpg',
+						position: 'center',
+						motion: 'none',
+						speed: 2,
+						caption: 'Exterior Window Sticker Blank',
+					},
+					{
+						src: 'assets/images/slideshow05-dc3af612.jpg',
+						position: 'center',
+						motion: 'none',
+						speed: 2,
+						caption: 'Exterior Window Sticker Blank',
+					},
+					{
+						src: 'assets/images/slideshow05-77503dcc.jpg',
+						position: 'center',
+						motion: 'none',
+						speed: 2,
+						caption: 'Untitled',
+					},
+				]
+			});
+		
+		})();
+	
 	// Initialize "On Visible" animations.
 		onvisible.add('.image.style1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style3, h2.style3, h3.style3, p.style3', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
