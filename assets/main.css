@@ -600,7 +600,7 @@ h1.style3 mark, h2.style3 mark, h3.style3 mark, p.style3 mark {
 }
 
 h1.style3 a, h2.style3 a, h3.style3 a, p.style3 a {
-	color: #FFB800;
+	color: #03A4FF;
 	text-decoration: none;
 }
 
@@ -896,9 +896,9 @@ h1.style13:not(:last-child), h2.style13:not(:last-child), h3.style13:not(:last-c
 h1.style13, h2.style13, h3.style13, p.style13 {
 	color: #03A4FF;
 	font-family: 'Wix Madefor Display', sans-serif;
-	font-size: 0.75em;
+	font-size: 0.875em;
 	line-height: 1.5;
-	font-weight: 500;
+	font-weight: 400;
 }
 
 h1.style13 strong, h2.style13 strong, h3.style13 strong, p.style13 strong {
@@ -909,13 +909,12 @@ h1.style13 mark, h2.style13 mark, h3.style13 mark, p.style13 mark {
 	background-color: #FBFF2E;
 }
 
-h1.style13 a, h2.style13 a, h3.style13 a, p.style13 a {
-	color: #FFB800;
-	text-decoration: none;
-}
-
 h1.style13 a:hover, h2.style13 a:hover, h3.style13 a:hover, p.style13 a:hover {
 	color: #000000;
+}
+
+h1.style13 a, h2.style13 a, h3.style13 a, p.style13 a {
+	text-decoration: none;
 }
 
 h1.style13 span.p:nth-child(n + 2), h2.style13 span.p:nth-child(n + 2), h3.style13 span.p:nth-child(n + 2), p.style13 span.p:nth-child(n + 2) {
@@ -4519,7 +4518,7 @@ hr.style8:before {
 	h1.style13, h2.style13, h3.style13, p.style13 {
 		letter-spacing: 0rem;
 		width: 100%;
-		font-size: 0.75em;
+		font-size: 0.875em;
 		line-height: 1.5;
 	}
 	
@@ -6212,7 +6211,7 @@ hr.style8:before {
 	}
 	
 	h1.style13, h2.style13, h3.style13, p.style13 {
-		font-size: 0.75em;
+		font-size: 0.875em;
 	}
 	
 	h1.style15, h2.style15, h3.style15, p.style15 {

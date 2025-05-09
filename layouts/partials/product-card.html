@@ -1,9 +1,10 @@
-{{ $product := . }}
+{{ $product := .product }}
+{{ $productID := .id }}
 <div>
 	<h2 id="text10" class="style5">{{ $product.title | markdownify }}
 		{{ if $product.size }}<span style="color: #bbbbbb"> –&nbsp;{{ $product.size }}</span>{{ end }}
 	</h2>
-	<div id="{{ $product.id }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
+	<div id="{{ $productID }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
 		ondragstart="return false;">
 		<div class="content">
 			<div class="bg slideshow-background fade">
@@ -15,7 +16,7 @@
 				{{ else }}
 					{{ $processedImg = $image.src | relURL }}
 				{{ end }}
-				<div role="img" aria-label="{{ $image.alt }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
+				<div role="img" aria-label="{{ $image.alt | default $product.title }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
 					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
 				</div>
 				{{ end }}
@@ -26,22 +27,23 @@
 	</div>
 	<p class="style3"><strong>${{ $product.price }}</strong>&ensp;{{ $product.price_note }}</p>
 	<ul id="buttons02" class="style5 buttons product-buttons">
+		{{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" "Wholesale Inquiry" }}
 		{{ range $linkIndex, $link := $product.purchase_links }}
 		{{ if $link.url }}
 		<li>
 			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}"
-				role="button"><svg aria-labelledby="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">
-					<title id="product-icon-{{ $product.id }}-{{ add $linkIndex 1 }}-title">{{ $link.icon | title }}</title>
-					<use xlink:href="{{ "/icons.svg#" | relURL }}{{ $link.icon }}"></use>
-				</svg><span class="label">{{ $link.name }}</span></a>
+				role="button"><svg aria-labelledby="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">
+					<title id="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">Cart</title>
+					<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
+				</svg><span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $linkIndex }}{{ end }}</span></a>
 		</li>
 		{{ end }}
 		{{ end }}
 	</ul>
 	<ul class="style2 links">
 		<li class="n01">
-			{{ $section := cond (hasPrefix $product.id "exterior") "exterior" (cond (hasPrefix $product.id "interior") "interior" "") }}
-			<a href="/{{ if ne $section "" }}{{ $section }}/{{ end }}{{ $product.id }}/">More details</a>
+			{{ $section := cond (hasPrefix $productID "exterior") "exterior" (cond (hasPrefix $productID "interior") "interior" "") }}
+			<a href="/{{ $section }}/{{ $productID }}/">More details</a>
 		</li>
 	</ul>
 </div>

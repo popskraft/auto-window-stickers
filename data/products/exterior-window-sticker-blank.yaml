@@ -1,7 +1,7 @@
-id: exterior-window-sticker-blank
 title: "Exterior Window Sticker **Blank**"
 size: "8.5 x 11\""
-description: "Blank exterior window sticker with peel-off border on all four sides. Can be adhered to the window on the outside or inside of the vehicle."
+description: >-
+  Blank exterior window sticker with peel-off border on all four sides. Can be adhered to the window on the outside or inside of the vehicle.
 features:
   - "Size 8.5 x 11"
   - "Waterproof material"
@@ -13,27 +13,15 @@ features:
   - "1-part, self-adhesive, 4 sides"
 price: 0.39
 price_note: "per blank (min 1000)"
-best_price_note: "Best Price for AK Dealer Services"
+# best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
-  - name: "Buy on AK Dealer Services"
+  - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
-    icon: "cart"
-    primary: true
-  - name: "Buy on Amazon"
-    # url: "#"
-    icon: "cart"
-    primary: false
-  - name: "Wholesale Inquiry"
+  - name: # "Buy on Amazon"
+    url: "#"
+  - name: # "Wholesale Inquiry"
     url: "#wholesale"
-    icon: "cart"
-    primary: false
 images:
   - src: "images/EXTERIOR/1-blank-1.jpg"
-    alt: "Exterior Window Sticker Blank"
-    primary: true
   - src: "images/EXTERIOR/1-blank-2.jpg"
-    alt: "Exterior Window Sticker Blank"
-    primary: false
   - src: "images/EXTERIOR/1-blank-3.jpg"
-    alt: "Exterior Window Sticker Blank"
-    primary: false

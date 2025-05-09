@@ -1,7 +1,7 @@
-id: exterior-window-sticker-custom
 title: "Exterior Window Sticker **Custom**"
 size: "8.5 x 11\""
-description: "This form has peel off boarder on all four sides to be adhered to the window on the outside of the vehicle or inside. Laser compatible and can be printed by you or your information pre-printed by us, front or back"
+description: >-
+  This form has peel off boarder on all four sides to be adhered to the window on the outside of the vehicle or inside. Laser compatible and can be printed by you or your information pre-printed by us, front or back
 features:
   - "Size 8.5 x 11"
   - "Waterproof material"
@@ -13,27 +13,15 @@ features:
   - "1-part, self-adhesive, 4 sides"
 price: 0.54
 price_note: "per blank (min 1000)"
-best_price_note: "* Best Price for AK Dealer Services"
+# best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
-  - name: "Buy on AK Dealer Services"
+  - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
-    icon: "cart"
-    primary: true
-  - name: "Buy on Amazon"
+  - name: # "Buy on Amazon"
     url: "#"
-    icon: "cart"
-    primary: false
-  - name: "Wholesale Inquiry"
+  - name: # "Wholesale Inquiry"
     url: "#wholesale"
-    icon: "cart"
-    primary: false
 images:
   - src: "images/EXTERIOR/2-custom-1.jpg"
-    alt: "Exterior Window Sticker Custom"
-    primary: true
   - src: "images/EXTERIOR/2-custom-2.jpg"
-    alt: "Exterior Window Sticker Custom"
-    primary: false
   - src: "images/EXTERIOR/2-custom-3.jpg"
-    alt: "Exterior Window Sticker Custom"
-    primary: false

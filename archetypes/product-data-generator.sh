@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Скрипт для автоматического создания YAML файла данных продукта
-# Использование: ./product-data-generator.sh product-name
+# Script for automatic creation of product data YAML file
+# Usage: ./product-data-generator.sh product-name
 
 if [ -z "$1" ]; then
-  echo "Необходимо указать имя продукта"
-  echo "Использование: ./product-data-generator.sh product-name"
+  echo "Product name is required"
+  echo "Usage: ./product-data-generator.sh product-name"
   exit 1
 fi
 
@@ -14,13 +14,13 @@ PRODUCT_ID="${PRODUCT_NAME}"
 TITLE=$(echo "${PRODUCT_NAME}" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++)sub(/./,toupper(substr($i,1,1)),$i)}1')
 DATA_FILE="data/products/${PRODUCT_ID}.yaml"
 
-# Проверяем, существует ли уже файл данных
+# Check if data file already exists
 if [ -f "${DATA_FILE}" ]; then
-  echo "Файл данных ${DATA_FILE} уже существует"
+  echo "Data file ${DATA_FILE} already exists"
   exit 1
 fi
 
-# Создаем файл данных
+# Create data file
 cat > "${DATA_FILE}" << EOF
 id: "${PRODUCT_ID}"
 title: "${TITLE}"
@@ -63,5 +63,5 @@ images:
     primary: false
 EOF
 
-echo "Файл данных ${DATA_FILE} успешно создан"
-echo "Не забудьте обновить информацию о продукте и пути к изображениям"
+echo "Data file ${DATA_FILE} successfully created"
+echo "Don't forget to update product information and image paths"

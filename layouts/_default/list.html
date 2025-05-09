@@ -20,13 +20,13 @@
 					{{ if lt $product1Index (len $products) }}
 					{{ $product1ID := index $products $product1Index }}
 					{{ $product1 := index site.Data.products $product1ID }}
-					{{ partial "product-card.html" $product1 }}
+					{{ partial "product-card.html" (dict "product" $product1 "id" $product1ID) }}
 					{{ end }}
 					
 					{{ if lt $product2Index (len $products) }}
 					{{ $product2ID := index $products $product2Index }}
 					{{ $product2 := index site.Data.products $product2ID }}
-					{{ partial "product-card.html" $product2 }}
+					{{ partial "product-card.html" (dict "product" $product2 "id" $product2ID) }}
 					{{ end }}
 					
 				{{ end }}
