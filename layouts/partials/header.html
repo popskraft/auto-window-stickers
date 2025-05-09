@@ -5,7 +5,7 @@
         <div>
           <div id="image06" class="image full">
             {{ if not $.IsHome }}
-            <a class="frame" href="{{ absURL .Site.BaseURL }}">
+            <a class="frame" href="{{ .Site.BaseURL | absURL }}">
               {{- else }}
               <div class="frame">
                 {{- end }}
@@ -29,7 +29,7 @@
       <div>
         <ul id="buttons06" class="style9 buttons">
           <li>
-            <a href="#about" class="button n01" role="button">About</a>
+            <a href="{{ .Site.BaseURL | absURL }}#about" class="button n01" role="button">About</a>
           </li>
           <li>
             <a href="#contacts" class="button n02" role="button">Get in touch</a>

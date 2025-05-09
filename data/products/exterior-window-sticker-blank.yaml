@@ -18,7 +18,7 @@ purchase_links:
   - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
   - name: # "Buy on Amazon"
-    url: "#"
+    # url: "#"
   - name: # "Wholesale Inquiry"
     url: "#wholesale"
 images:

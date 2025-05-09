@@ -9,6 +9,8 @@
 	<meta name="color-scheme" content="light only" /> */}}
 	{{- $description := .Description | default (.Summary | plainify) | default .Site.Params.description -}}
 	<meta name="description" content="{{ $description | truncate 160 }}">
+	
+	<link rel="canonical" href="{{ or .Params.seo.canonical .Permalink | safeURL }}">
 
 	{{/* --- Open Graph Tags --- */}}
 	<meta property="og:site_name" content="{{ .Site.Title }}">

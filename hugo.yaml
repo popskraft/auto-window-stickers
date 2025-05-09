@@ -1,34 +1,36 @@
+# Base Configuration
 baseURL: "https://autowindowstickers.com/"
-
-# Site name and language
 title: "Auto Window Stickers"
 languageCode: "en"
 
-# Site metadata and configuration
+# Site Parameters
 params:
-  # Company information
+  # Global Settings
+  global:
+    wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale"
+  
+  # Company Information
   company:
     name: "Auto Window Stickers"
     tagline: "Quality window stickers for auto dealerships"
     description: "Your source for quality auto window stickers for vehicle exteriors and interiors."
-    copyright: "2025 All rights reserved."
     yearEstablished: "2010"
   
-  # Distributor information
+  # Distributor Information
   distributor:
     name: "AK Dealer Services"
     description: "AK Dealer Services is an authorized distributor of Auto Window Stickers. You can purchase the product directly from the company's website or contact us by phone or email with inquiries."
     website: "https://akdealerservices.com/"
-    logo: "/images/image28.png"
+    logo: "akdslogo.png"
   
-  # Contact information
+  # Contact Information
   contact:
     phone: "800.260.5051"
+    phoneLink: "tel:8002605051"
     email: "info@akdealerservices.com"
-    phoneLink: "tel:800.260.5051"
     emailLink: "mailto:info@akdealerservices.com"
   
-  # Address information
+  # Address Information
   address:
     street: "7315 Gibson Cemetery Rd # 103"
     city: "Mansfield"
@@ -37,36 +39,14 @@ params:
     country: "US"
     formatted: "7315 Gibson Cemetery Rd # 103, Mansfield, TX 76063"
   
-  # Main navigation links
+  # Navigation
   mainNav:
     - name: "Exterior Products"
       url: "/exterior/"
-      class: "n01"
     - name: "Interior Products"
       url: "/interior/"
-      class: "n02"
   
-  # Footer navigation
-  footerNav:
-    - name: "About"
-      url: "#about"
-    - name: "Contact"
-      url: "#contacts"
-    - name: "Terms & Conditions"
-      url: "#terms"
-  
-  # Form settings
-  forms:
-    contact:
-      url: "#contacts"
-      title: "Contact us"
-      button: "Get in touch"
-    wholesale:
-      url: "#wholesale"
-      title: "Wholesale Inquiry"
-      button: "Wholesale"
-  
-  # Purchase options
+  # Purchase Options
   purchase:
     retail:
       title: "Buy on AK Dealer Services"
@@ -75,29 +55,28 @@ params:
     amazon:
       title: "Buy on Amazon"
       url: "#"
-      icon: "cart"
+      icon: "amazon"
     wholesale:
       title: "Wholesale Inquiry"
-      url: "#wholesale"
-      icon: "cart"
+      url: "global:wholesaleFormUrl"
+      icon: "form"
   
-  # SEO and metadata settings
+  # SEO Settings
   seo:
     titleSuffix: " | Auto Window Stickers"
     description: "Quality window stickers for auto dealerships. Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility."
     ogImage: "/images/og-image.jpg"
     type: "website"
-    logo: "/logo.svg"
+    logo: "akdslogo.png"
   
-  # Legal information
+  # Legal Information
   legal:
-    terms: {
-      text: "By using this site, you agree to the processing of personal data in accordance with the",
-      linkText: "Terms & Conditions",
+    terms:
+      text: "By using this site, you agree to the processing of personal data in accordance with the"
+      linkText: "Terms & Conditions"
       url: "#terms"
-    }
   
-  # Performance settings
+  # Performance Settings
   prefetch:
     enabled: true
     pages:
@@ -106,7 +85,7 @@ params:
       - "/interior/"
     externalUrls: []
   
-  # Schema.org structured data settings
+  # Schema.org Structured Data
   schema:
     priceValidUntil: "2026-12-31"
     aggregateRating:
@@ -117,84 +96,38 @@ params:
     shipping:
       description: "Free shipping on orders over $100. Standard shipping available for all orders."
   
-  # Header settings
-  header:
-    title: "Auto Window Stickers"
-    subtitle: "Quality window stickers for auto dealerships"
-    description: "Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility."
-    buttons:
-      - label: "About"
-        url: "#about"
-        class: "n01"
-      - label: "Get in touch"
-        url: "#contacts"
-        class: "n02"
-  
-  # Order section settings
+  # UI Components  
   orderSection:
     title: "How to order?"
     description: "You can purchase our products directly from our distributor's website or contact us by phone or email with inquiries."
     buttons:
       - label: "Contact us"
         icon: "email-alt"
-        class: "n01"
         url: "#contacts"
       - label: "Wholesale Inquiry"
         icon: "form"
-        class: "n02"
-        url: "#wholesale"
+        url: "global:wholesaleFormUrl"
   
-  # Product settings
+  # Product Settings
   products:
     buttonCartText: "View Details"
     buttonWholesaleText: "Wholesale Inquiry"
-    wholesaleLink: "#wholesale"
+    wholesaleLink: "global:wholesaleFormUrl"
     currency: "USD"
     currencySymbol: "$"
     itemCondition: "https://schema.org/NewCondition"
     availability: "https://schema.org/InStock"
     minOrderQuantity: 1000
   
-  # Slider settings
-  slider:
-    autoplay: true
-    interval: 5000
-    transition: "fade"
-    slides: []
-  
-  # Image processing settings
-  images:
-    cover:
-      desktopWidth: 756
-      desktopHeight: 756
-      mobileWidth: 600
-      format: "webp"
-      filter:
-        unsharpMask:
-          sigma: 0.5
-          amount: 0.5
-          threshold: 0
-    product:
-      thumbnailWidth: 300
-      thumbnailHeight: 300
-      detailWidth: 800
-      format: "webp"
-  
-  # Footer settings
+  # Footer
   footer:
     copyright: "2025 All rights reserved."
     terms:
       text: "By using this site, you agree to the processing of personal data in accordance with the"
       linkText: "Terms & Conditions"
       url: "#terms"
-    
-# Примечание: стандартный механизм меню Hugo не используется в этом проекте.
-# Вместо этого используются пользовательские навигационные параметры:
-# - params.mainNav для основной навигации
-# - params.footerNav для навигации в футере
 
-## Settings
-
+# Hugo Settings
 markup:
   goldmark:
     renderer:
@@ -235,9 +168,10 @@ outputs:
 minify:
   minifyOutput: true
 
-# Google Analytics
+# Analytics
 googleAnalytics: "G-XXXXXXXXXX" # Placeholder - replace with actual GA ID when available
 
+# Security Headers
 server:
   headers:
     - for: "/**"

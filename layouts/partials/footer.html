@@ -1,69 +1,73 @@
 <footer id="footer">
-	<div id="container10" data-scroll-id="contacts" data-scroll-behavior="default" data-scroll-offset="0"
-		data-scroll-speed="3" class="container default">
-		<div class="wrapper">
-			<div class="inner">
-				<p id="text22" class="style1">How to order?</p>
-				<p id="text41" class="style6">AK Dealer Services is an authorized distributor of Auto Window Stickers. You can
-					purchase the product directly from the company’s website or contact us by phone or email with inquiries.</p>
-				<ul id="buttons01" class="style1 buttons">
-					<li>
-						<a href="tel:800.260.5051" class="button n01" role="button"><svg aria-labelledby="buttons01-icon-1-title">
-								<title id="buttons01-icon-1-title">Phone</title>
-								<use xlink:href="{{ "/icons.svg#phone" | relURL }}"></use>
-							</svg><span class="label">800.260.5051</span></a>
-					</li>
-				</ul>
-				<p id="text50" class="style6"><strong>email us:</strong> <a
-						href="mailto:info@akdealerservices.com">info@akdealerservices.com</a></p>
-				<hr id="divider09" class="style3">
-				<ul id="buttons27" class="style5 buttons">
-					<li>
-						<a href="#" class="button n01" role="button"><svg aria-labelledby="buttons27-icon-1-title">
-								<title id="buttons27-icon-1-title">Cart</title>
-								<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-							</svg><span class="label">Buy on AK Dealer Services</span></a>
-					</li>
-					<li>
-						<a href="#" class="button n02" role="button"><svg aria-labelledby="buttons27-icon-2-title">
-								<title id="buttons27-icon-2-title">Cart</title>
-								<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-							</svg><span class="label">Buy on Amazon</span></a>
-					</li>
-					<li>
-						<a href="#wholesale" class="button n03" role="button"><svg aria-labelledby="buttons27-icon-3-title">
-								<title id="buttons27-icon-3-title">Cart</title>
-								<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-							</svg><span class="label">Wholesale</span></a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div id="container27" class="container columns">
-		<div class="wrapper">
-			<div class="inner">
-				<div>
-					<div id="image01" class="image">
-						<a href="{{ "/" | relURL }}" class="frame"><img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo" /></a>
-					</div>
-				</div>
-				<div>
-					<div id="image28" class="image">
-						<a href="{{ $.Site.Params.distributor.website }}" class="frame"><img src="{{ $.Site.Params.distributor.logo | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}" /></a>
-					</div>
-				</div>
-				<div>
-					<ul id="links03" class="style1 links">
-						{{ range $.Site.Params.footerNav }}
-							<li>
-								<a href="{{ .url | relURL }}">{{ .name }}</a>
-							</li>
-						{{ end }}
-					</ul>
-					<p id="text42"><span class="p">{{ $.Site.Params.company.copyright }}<br />{{ $.Site.Params.legal.terms.text }} <a href="{{ $.Site.Params.legal.terms.url }}">{{ $.Site.Params.legal.terms.linkText }}</a></span></p>
-				</div>
-			</div>
-		</div>
-	</div>
+
+  <div id="container10" data-scroll-id="contacts" data-scroll-behavior="default" data-scroll-offset="0"
+    data-scroll-speed="3" class="container default">
+    <div class="wrapper">
+      <div class="inner">
+        <h3 id="text22" class="style1">{{ $.Site.Params.orderSection.title }}</h3>
+        <p id="text41" class="style6">{{ $.Site.Params.distributor.description }}</p>
+        <ul id="buttons01" class="style1 buttons">
+          <li>
+            <a href="{{ $.Site.Params.contact.phoneLink }}" class="button n01" role="button"><svg
+                aria-labelledby="buttons01-icon-1-title">
+                <title id="buttons01-icon-1-title">Phone</title>
+                <use xlink:href="{{ "/icons.svg#phone" | relURL }}"></use>
+              </svg><span class="label">{{ $.Site.Params.contact.phone }}</span></a>
+          </li>
+        </ul>
+        <p id="text50" class="style6"><strong>email us:</strong> <a href="{{ $.Site.Params.contact.emailLink }}">{{
+            $.Site.Params.contact.email }}</a></p>
+        <hr id="divider09" class="style3">
+        <ul id="buttons27" class="style5 buttons">
+          <li>
+            <a href="{{ $.Site.Params.purchase.retail.url }}1000030-monroney-addendum-software" class="button n01"
+              role="button"><svg aria-labelledby="buttons27-icon-1-title">
+                <title id="buttons27-icon-1-title">{{ $.Site.Params.purchase.retail.icon }}</title>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.retail.icon }}"></use>
+              </svg><span class="label">{{ $.Site.Params.purchase.retail.title }}</span></a>
+          </li>
+          <li>
+            <a href="{{ $.Site.Params.purchase.amazon.url }}" class="button n02" role="button"><svg
+                aria-labelledby="buttons27-icon-2-title">
+                <title id="buttons27-icon-2-title">{{ $.Site.Params.purchase.amazon.icon }}</title>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.amazon.icon }}"></use>
+              </svg><span class="label">{{ $.Site.Params.purchase.amazon.title }}</span></a>
+          </li>
+          <li>
+            <a href="{{ $.Site.Params.global.wholesaleFormUrl }}" class="button n03" role="button">
+              <svg aria-labelledby="buttons27-icon-3-title">
+                <title id="buttons27-icon-3-title">{{ $.Site.Params.purchase.wholesale.icon }}</title>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.wholesale.icon }}"></use>
+              </svg><span class="label">{{ $.Site.Params.purchase.wholesale.title }}</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="container27" class="container columns">
+    <div class="wrapper">
+      <div class="inner">
+        <div>
+          <div id="image01" class="image">
+            <a href="#home" class="frame"><img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo"></a>
+          </div>
+        </div>
+        <div>
+          <div id="image28" class="image">
+            <a href="{{ $.Site.Params.distributor.website }}" class="frame">
+              <img src="{{ "/akdslogo.png" | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}">
+            </a>
+          </div>
+        </div>
+        <div>
+          <p id="text42">
+            <span class="p">{{ $.Site.Params.footer.copyright }}<br> {{ $.Site.Params.footer.terms.text }}
+              <a href="{{ $.Site.Params.footer.terms.url }}">{{ $.Site.Params.footer.terms.linkText }}</a>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </footer>
