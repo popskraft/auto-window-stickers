@@ -73,65 +73,55 @@ body {
 }
 }
 
-/* Collapsed FAQ */
-.collapse {
-  cursor: pointer;
-}
-.collapse .collapse-target-self,
-.collapse .collapse-parent {
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-  transition: all 1s ease;
-}
-.collapse:not(.show) .collapse-target-self,
-.collapse:not(.show) .collapse-parent {
-  margin-bottom: -1rem;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.collapse.show .collapse-target-self,
-.collapse.show .collapse-parent {
-  opacity: 1;
-  height: auto;
-}
-.collapse:not(.show) > .wrapper > .inner > :nth-child(1) {
-  width: 100% !important;
+/* FAQ Styles */
+#faqBody {
+  width: 100%;
 }
 
-/* FAQ Styles */
-#faqBody .style3 {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-}
-#faqBody .style3.active {
-  max-height: 500px; /* Adjust based on your content */
-  opacity: 1;
-  margin: 1em 0;
-  transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
-}
 #faqBody .style2 {
   cursor: pointer;
   position: relative;
-  padding-right: 30px;
+  padding: 12px 40px 12px 15px;
+  margin-top: 10px;
 }
+
+/* #faqBody .style2.active {
+} */
+
 #faqBody .style2::after {
   content: '+';
-  font-size: 28px;
+  font-size: 24px;
   font-weight: normal;
   position: absolute;
-  right: 10px;
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  transition: transform 0.3s ease;
   color: #2EC0FF;
 }
+
 #faqBody .style2.active::after {
-  transform: translateY(-50%) rotate(45deg);
+  content: '−';
+  transform: translateY(-50%);
+}
+
+/* Hide all answers by default */
+#faqBody .collapse-target {
+  display: none;
+  padding: 0 15px 0 20px;
+  margin: 0 0 15px 15px;
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Show answers when they have the visible class */
+#faqBody .collapse-target.visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  padding-top: 10px;
+  padding-bottom: 15px;
 }
 
 

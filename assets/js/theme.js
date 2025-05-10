@@ -28,30 +28,44 @@
         // FAQ Accordion
         const faqQuestions = document.querySelectorAll('#faqBody .style2');
         
-        // Hide all answers initially
+        // Reset all answers initially
         const faqAnswers = document.querySelectorAll('#faqBody .collapse-target');
         faqAnswers.forEach(answer => {
-            answer.style.display = 'none';
+            // Remove any inline styles that might be interfering
+            answer.removeAttribute('style');
+            // Remove any visible class
+            answer.classList.remove('visible');
         });
         
+        // Add click event listeners to all FAQ questions
         faqQuestions.forEach(question => {
-            question.addEventListener('click', function() {
+            question.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent any default behavior
+                
                 // Toggle active class on the question
                 this.classList.toggle('active');
                 
                 // Get the next element (answer)
                 const answer = this.nextElementSibling;
                 
-                // If it's not an answer with collapse-target class, skip it
+                // If it's not an answer with collapse-target class, try to find it
                 if (!answer || !answer.classList.contains('collapse-target')) {
+                    console.warn('FAQ: Could not find answer element directly after question');
                     return;
                 }
                 
-                // Toggle display of the answer
-                if (answer.style.display === 'none' || answer.style.display === '') {
-                    answer.style.display = 'block';
+                // Clear any existing inline styles first
+                answer.removeAttribute('style');
+                
+                // Toggle visibility class on the answer
+                if (this.classList.contains('active')) {
+                    // Show answer
+                    answer.classList.add('visible');
+                    console.log('FAQ: Showing answer');
                 } else {
-                    answer.style.display = 'none';
+                    // Hide answer
+                    answer.classList.remove('visible');
+                    console.log('FAQ: Hiding answer');
                 }
             });
         });
