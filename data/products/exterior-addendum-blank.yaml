@@ -1,0 +1,23 @@
+title: "Exterior **Addendum Blank**"
+weight: 5
+size: "4.25 x 11"
+description: >- 
+  This form has peel off boarder on all four sides to be adhered to the window on the inside of the vehicle. Simply print, peel and seal
+features:
+  - "Heavy white stock"
+  - "Laser compatible"
+  - "Fade resistant"
+  - "1-part, self-adhesive, 4 sides"
+  - "4.25 x 11"
+price: "0.18"
+price_note: "per blank (min 1000)"
+purchase_links:
+  - name: "Buy on AK Dealer Services"
+    url: "https://akdealerservices.com/product/1001913-exterior-addendum-blank"
+  # - name: "Buy on Amazon"
+  #   url: ""
+ogImage: "images/EXTERIOR/4-addendum-1.jpg"
+images:
+  - src: "images/EXTERIOR/4-addendum-1.jpg"
+  - src: "images/EXTERIOR/4-addendum-2.jpg"
+  - src: "images/EXTERIOR/4-addendum-3.jpg"

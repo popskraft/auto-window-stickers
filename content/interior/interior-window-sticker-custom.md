@@ -1,6 +1,4 @@
 ---
-title: "Interior Window Sticker Custom"
+date: 2025-05-10
 layout: "product"
-description: "Details about the custom interior window sticker product."
-product_id: "interior-window-sticker-custom"
 ---

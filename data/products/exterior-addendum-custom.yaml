@@ -1,0 +1,23 @@
+title: "Exterior **Addendum Custom**"
+weight: 6
+size: "4.25 x 11"
+description: >- 
+  This form has peel off boarder on all four sides to be adhered to the window on the inside of the vehicle. Simply print on the custom pre printed area, peel and seal
+features:
+  - "Custom printed to fit your needs"
+  - "Full color"
+  - "We can match any design"
+  - "1-part, self-adhesive, 4 sides"
+  - "4.25 x 11"
+price: "0.27"
+price_note: "per blank (min 1000)"
+purchase_links:
+  - name: "Buy on AK Dealer Services"
+    url: "https://akdealerservices.com/product/exterior-addendum-custom"
+  # - name: "Buy on Amazon"
+    # url: ""
+ogImage: "images/EXTERIOR/5-addendum-custom-1.jpg"
+images:
+  - src: "images/EXTERIOR/5-addendum-custom-1.jpg"
+  - src: "images/EXTERIOR/5-addendum-custom-2.jpg"
+  - src: "images/EXTERIOR/5-addendum-custom-3.jpg"

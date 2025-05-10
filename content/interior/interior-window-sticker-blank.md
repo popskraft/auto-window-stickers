@@ -1,6 +1,4 @@
 ---
-title: "Interior Window Sticker Blank"
+date: 2025-05-10
 layout: "product"
-description: "Details about the blank interior window sticker product."
-product_id: "interior-window-sticker-blank"
 ---

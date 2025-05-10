@@ -8,15 +8,15 @@
 			<div class="inner">
 				<div>
 					<div id="image11" class="style5 image">
-						<a href="#" class="frame">
+						<a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
 							{{ $mainImage := resources.Get (index $product.images 0).src }}
 							{{ if $mainImage }}
 								{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
 								{{ $processed := $mainImage.Filter $filter }}
 								{{ $final := $processed.Fill "1086x814 webp picture Center" }}
-								<img src="{{ $final.RelPermalink }}" alt="{{ (index $product.images 0).alt | default $product.title }}" title="{{ $product.title }}" loading="eager" />
+								<img src="{{ $final.RelPermalink }}" alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}" title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
 							{{ else }}
-								<img src="{{ (index $product.images 0).src | relURL }}" alt="{{ (index $product.images 0).alt | default $product.title }}" title="{{ $product.title }}" />
+								<img src="{{ (index $product.images 0).src | relURL }}" alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}" title="Buy {{ $product.title | markdownify | plainify }}" />
 							{{ end }}
 						</a>
 					</div>
@@ -37,9 +37,9 @@
 										{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
 										{{ $processed := $thumbImage.Filter $filter }}
 										{{ $final := $processed.Fill "724x543 webp picture Center" }}
-										<img src="{{ $final.RelPermalink }}" alt="{{ $image.alt | default $product.title }}" loading="lazy" />
+										<img src="{{ $final.RelPermalink }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
 									{{ else }}
-										<img src="{{ $image.src | relURL }}" alt="{{ $image.alt | default $product.title }}" />
+										<img src="{{ $image.src | relURL }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" />
 									{{ end }}
 									</span>
 									{{ if ne $index 1 }}</a>{{ end }}

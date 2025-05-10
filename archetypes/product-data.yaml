@@ -12,15 +12,19 @@ features:
   - "Full color printing available"
   - "No set up charge"
   - "1-part, self-adhesive, 4 sides"
-price: 0.00
-price_note: "per item (min quantity)"
+price: 0.39
+price_note: "per item (min 1000)"
 # best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
   - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000000-product-name"
-  - name: # "Buy on Amazon"
-    # url: "#"
+  # - name: # "Buy on Amazon"
+  #   url: "#"
+ogImage: "images/CATEGORY/product-image-1.jpg"
 images:
   - src: "images/CATEGORY/product-image-1.jpg"
+    # alt: "{{ replace .Name '-' ' ' | title }} - Front View"
   - src: "images/CATEGORY/product-image-2.jpg"
+    # alt: "{{ replace .Name '-' ' ' | title }} - Side View"
   - src: "images/CATEGORY/product-image-3.jpg"
+    # alt: "{{ replace .Name '-' ' ' | title }} - Application Example"

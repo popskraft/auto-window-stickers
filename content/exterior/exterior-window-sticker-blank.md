@@ -1,5 +1,4 @@
 ---
+date: 2025-05-10
 layout: "product"
-date: 2025-05-09T09:00:45+04:00
-draft: false
 ---
