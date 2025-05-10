@@ -9,7 +9,7 @@
               {{- else }}
               <div class="frame">
                 {{- end }}
-                <img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo">
+                <img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo">
                 {{- if not $.IsHome }}
             </a>
             {{- else }}

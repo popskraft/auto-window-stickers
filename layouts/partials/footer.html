@@ -8,38 +8,43 @@
         <p id="text41" class="style6">{{ $.Site.Params.distributor.description }}</p>
         <ul id="buttons01" class="style1 buttons">
           <li>
-            <a href="{{ $.Site.Params.contact.phoneLink }}" class="button n01" role="button"><svg
+            <a href="{{ $.Site.Params.contact.phoneLink | safeURL }}" class="button n01" role="button"><svg
                 aria-labelledby="buttons01-icon-1-title">
                 <title id="buttons01-icon-1-title">Phone</title>
-                <use xlink:href="{{ "/icons.svg#phone" | relURL }}"></use>
+                <use xlink:href="{{ " /icons.svg#phone" | relURL }}"></use>
               </svg><span class="label">{{ $.Site.Params.contact.phone }}</span></a>
           </li>
         </ul>
-        <p id="text50" class="style6"><strong>email us:</strong> <a href="{{ $.Site.Params.contact.emailLink }}">{{
-            $.Site.Params.contact.email }}</a></p>
+        <p id="text50" class="style6"><strong>email us:</strong> <a
+            href="{{ $.Site.Params.contact.emailLink | safeURL }}">{{ $.Site.Params.contact.email }}</a></p>
         <hr id="divider09" class="style3">
         <ul id="buttons27" class="style5 buttons">
+          {{ with $.Site.Params.purchase.retail.url }}
           <li>
-            <a href="{{ $.Site.Params.purchase.retail.url }}1000030-monroney-addendum-software" class="button n01"
-              role="button"><svg aria-labelledby="buttons27-icon-1-title">
+            <a href="{{ . | safeURL }}1000030-monroney-addendum-software" class="button n01" role="button"><svg
+                aria-labelledby="buttons27-icon-1-title">
                 <title id="buttons27-icon-1-title">{{ $.Site.Params.purchase.retail.icon }}</title>
-                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.retail.icon }}"></use>
+                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.retail.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.retail.title }}</span></a>
           </li>
+          {{ end }}
+          {{ with $.Site.Params.purchase.amazon.url }}
           <li>
-            <a href="{{ $.Site.Params.purchase.amazon.url }}" class="button n02" role="button"><svg
-                aria-labelledby="buttons27-icon-2-title">
+            <a href="{{ . | safeURL }}" class="button n02" role="button"><svg aria-labelledby="buttons27-icon-2-title">
                 <title id="buttons27-icon-2-title">{{ $.Site.Params.purchase.amazon.icon }}</title>
-                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.amazon.icon }}"></use>
+                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.amazon.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.amazon.title }}</span></a>
           </li>
+          {{ end }}
+          {{ with $.Site.Params.wholesaleFormUrl }}
           <li>
-            <a href="{{ $.Site.Params.global.wholesaleFormUrl }}" class="button n03" role="button">
+            <a href="{{ . | safeURL }}" class="button n03" role="button">
               <svg aria-labelledby="buttons27-icon-3-title">
                 <title id="buttons27-icon-3-title">{{ $.Site.Params.purchase.wholesale.icon }}</title>
-                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.wholesale.icon }}"></use>
+                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.wholesale.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.wholesale.title }}</span></a>
           </li>
+          {{ end }}
         </ul>
       </div>
     </div>
@@ -50,13 +55,13 @@
       <div class="inner">
         <div>
           <div id="image01" class="image">
-            <a href="#home" class="frame"><img src="{{ "/logo.svg" | relURL }}" alt="{{ $.Site.Title }} Logo"></a>
+            <a href="#home" class="frame"><img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo"></a>
           </div>
         </div>
         <div>
           <div id="image28" class="image">
             <a href="{{ $.Site.Params.distributor.website }}" class="frame">
-              <img src="{{ "/akdslogo.png" | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}">
+              <img src="{{ $.Site.Params.distributor.logo | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}">
             </a>
           </div>
         </div>

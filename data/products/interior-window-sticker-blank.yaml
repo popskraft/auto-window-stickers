@@ -19,8 +19,7 @@ purchase_links:
     url: "https://akdealerservices.com/product/1000535-interior-window-sticker-blank"
   - name: # "Buy on Amazon"
     url: "#"
-  - name: # "Wholesale Inquiry"
-    url: "#wholesale"
+ogImage: "images/INTERIOR/1-blank-1.jpg"
 images:
   - src: "images/INTERIOR/1-blank-1.jpg"
   - src: "images/INTERIOR/1-blank-2.jpg"

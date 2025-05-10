@@ -1,0 +1,246 @@
+<script type="application/ld+json">
+{{- $baseURL := .Site.BaseURL -}}
+{{- $permalink := .Permalink -}}
+{{- $siteTitle := .Site.Title -}}
+{{- $siteDesc := .Site.Params.description | default "Auto Window Stickers for car dealerships" -}}
+{{- $langCode := .Site.LanguageCode | default "en-US" -}}
+{{- $siteLogo := .Site.Params.seo.logo | absURL -}}
+{{- $companyName := .Site.Params.companyName | default $siteTitle -}}
+{{- $phone := .Site.Params.contact.phone | default "555-555-5555" -}}
+{{- $tagline := .Site.Params.tagline | default "Quality Auto Window Stickers" -}}
+{{- $ogImage := .Site.Params.seo.ogImage | absURL -}}
+{{- $pageTitle := cond .IsHome $siteTitle (cond (ne .Title "") (printf "%s | %s" .Title $siteTitle) $siteTitle) -}}
+{{- $pageDesc := cond (ne .Description "") .Description $siteDesc -}}
+
+{{- /* Determine primary image */ -}}
+{{- $primaryImage := $ogImage -}}
+{{- if .IsPage -}}
+  {{- if eq .Type "product" -}}
+    {{- $productId := .File.ContentBaseName -}}
+    {{- $productData := index .Site.Data.products $productId -}}
+    {{- if isset $productData "ogImage" -}}
+      {{- $primaryImage = printf "%s%s" $baseURL $productData.ogImage -}}
+    {{- else if isset $productData "images" -}}
+      {{- $primaryImage = printf "%s%s" $baseURL (index $productData.images 0).src -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{
+"@context": "https://schema.org",
+"@graph": [
+{
+"@type": "WebPage",
+"@id": "{{ $permalink }}#webpage",
+"name": "{{ $pageTitle | markdownify | plainify | safeJS }}",
+"url": "{{ $permalink }}",
+"isPartOf": {
+"@id": "{{ $baseURL }}#website"
+},
+"primaryImageOfPage": {
+"@id": "{{ $permalink }}#primaryimage"
+},
+"breadcrumb": {
+"@id": "{{ $permalink }}#breadcrumb"
+},
+"inLanguage": "{{ $langCode }}",
+"potentialAction": {
+"@type": "ReadAction",
+"target": [
+"{{ $permalink }}"
+]
+}
+},
+{{- if eq .Type "product" -}}
+{{- $productId := .File.ContentBaseName -}}
+{{- $productData := index .Site.Data.products $productId -}}
+{{- $price := $productData.price | default "99.99" -}}
+{{- $priceFormatted := replace $price "$" "" -}}
+{{- $images := slice -}}
+{{- range $productData.images -}}
+  {{- $images = $images | append (printf "%s%s" $baseURL .src) -}}
+{{- end -}}
+{
+"@type": "Product",
+"@id": "{{ $permalink }}#product",
+"name": "{{ .Title | markdownify | plainify | safeJS }}",
+"description": "{{ with .Description }}{{ . | markdownify | plainify | safeJS }}{{ else }}{{ $productData.description | markdownify | plainify | safeJS }}{{ end }}",
+"image": [
+  {{- range $index, $img := $images -}}
+  "{{ $img }}"{{ if lt (add $index 1) (len $images) }},{{ end }}
+  {{- end -}}
+],
+"sku": "{{ $productData.sku | default $productId }}",
+"brand": {
+  "@type": "Brand",
+  "name": "{{ $siteTitle }}"
+},
+"offers": {
+"@type": "Offer",
+"url": "{{ $permalink }}",
+"priceCurrency": "USD",
+"price": "{{ $priceFormatted }}",
+"priceValidUntil": "{{ now.AddDate 1 0 0 | time.Format "2006-01-02" }}",
+"itemCondition": "https://schema.org/NewCondition",
+"availability": "https://schema.org/InStock",
+"seller": {
+  "@id": "{{ $baseURL }}#organization"
+},
+"shippingDetails": {
+  "@type": "OfferShippingDetails",
+  "shippingRate": {
+    "@type": "MonetaryAmount",
+    "value": "{{ $productData.shipping.rate | default "5.99" }}",
+    "currency": "USD"
+  },
+  "shippingDestination": {
+    "@type": "DefinedRegion",
+    "addressCountry": "US"
+  },
+  "deliveryTime": {
+    "@type": "ShippingDeliveryTime",
+    "handlingTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 0,
+      "maxValue": 1,
+      "unitCode": "DAY"
+    },
+    "transitTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 1,
+      "maxValue": 5,
+      "unitCode": "DAY"
+    }
+  }
+}
+}
+},
+{{- end -}}
+
+{{- /* State-specific schema for location-based SEO */ -}}
+{{- if .Params.state -}}
+{{- $stateData := index .Site.Data.states .Params.state -}}
+{
+"@type": "LocalBusiness",
+"@id": "{{ $permalink }}#localbusiness",
+"name": "{{ $siteTitle }} - {{ $stateData.name }}",
+"url": "{{ $permalink }}",
+"description": "{{ $siteTitle }} serving {{ $stateData.name }} car dealerships",
+"areaServed": {
+  "@type": "State",
+  "name": "{{ $stateData.name }}"
+},
+"priceRange": "$$$",
+"hasMap": "https://www.google.com/maps?q={{ $stateData.name | urlize }}",
+"telephone": "{{ $phone }}",
+"keywords": "{{ $stateData.seoKeywords | default (printf "%s window stickers, %s car dealership supplies" $stateData.adjective $stateData.name) }}"
+},
+{{- end -}}
+
+{
+"@type": "Organization",
+"@id": "{{ $baseURL }}#organization",
+"name": "{{ $companyName }}",
+"url": "{{ $baseURL }}",
+"logo": {
+"@id": "{{ $baseURL }}#logo"
+},
+"contactPoint": {
+"@type": "ContactPoint",
+"telephone": "{{ $phone }}",
+"contactType": "Customer Service",
+"areaServed": "US",
+"availableLanguage": "English"
+},
+"slogan": "{{ $tagline | safeJS }}"
+},
+{
+"@type": "WebSite",
+"@id": "{{ $baseURL }}#website",
+"url": "{{ $baseURL }}",
+"name": "{{ $siteTitle | plainify | safeJS }}",
+"description": "{{ $siteDesc | plainify | safeJS }}",
+"publisher": {
+"@id": "{{ $baseURL }}#organization"
+},
+"inLanguage": "{{ $langCode }}"
+},
+{{- if and .Params.faq (or (isset .Params.faq "questions") (and (reflect.IsSlice .Params.faq) (gt (len .Params.faq) 0) (isset (index .Params.faq 0) "question"))) -}}
+{
+"@type": "FAQPage",
+"@id": "{{ $permalink }}#faqpage",
+"mainEntity": [
+{{- $questions := .Params.faq -}}
+{{- if reflect.IsMap .Params.faq -}}
+  {{- if isset .Params.faq "questions" -}}
+    {{- $questions = .Params.faq.questions -}}
+  {{- end -}}
+{{- end -}}
+{{- if reflect.IsSlice $questions -}}
+  {{- $questionCount := len $questions -}}
+  {{- range $index, $question := $questions -}}
+    {{- if and (isset $question "question") (isset $question "answer") -}}
+    {
+    "@type": "Question",
+    "name": {{ $question.question | plainify | jsonify }},
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": {{ $question.answer | plainify | jsonify }}
+    }
+    }{{ if lt (add $index 1) $questionCount }},{{ end }}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+]
+},
+{{- end -}}
+{
+"@type": "ImageObject",
+"@id": "{{ $permalink }}#primaryimage",
+"url": "{{ $primaryImage }}",
+"contentUrl": "{{ $primaryImage }}",
+"caption": "{{ $pageTitle | markdownify | plainify | safeJS }}"
+},
+{
+"@type": "BreadcrumbList",
+"@id": "{{ $permalink }}#breadcrumb",
+"itemListElement": [
+{
+"@type": "ListItem",
+"position": 1,
+"name": "Home",
+"item": "{{ $baseURL }}"
+}
+{{- if ne $permalink $baseURL -}}
+,{
+"@type": "ListItem",
+"position": 2,
+{{- if .Section -}}
+"name": "{{ humanize .Section | title }}",
+"item": "{{ $baseURL }}{{ .Section }}/"
+}
+{{- if ne .Section .Type -}}
+,{
+"@type": "ListItem",
+"position": 3,
+"name": "{{ .Title | markdownify | plainify }}",
+"item": "{{ $permalink }}"
+}
+{{- end -}}
+{{- else -}}
+"name": "{{ .Title | markdownify | plainify }}",
+"item": "{{ $permalink }}"
+}
+{{- end -}}
+{{- end -}}
+]
+},
+{
+"@type": "ImageObject",
+"@id": "{{ $baseURL }}#logo",
+"url": "{{ $siteLogo }}",
+"contentUrl": "{{ $siteLogo }}"
+}
+]
+}
+</script>

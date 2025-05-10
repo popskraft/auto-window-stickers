@@ -1,0 +1,26 @@
+title: "Exterior **Buyers Guide Implied Warranty**"
+weight: 4
+size: "8.5 x 11\""
+description: >-
+  These fade-resistant Buyers Guides have "Permanent Adhesive On All 4 Sides" to adhere to the outside of the vehicle window. Stay in compliance with current FTC regulations with these easy to use forms. These popular forms are laser compatible and easy to remove.
+features:
+  - "Easy to roll window up / down without removing from window - sticker stays in place!"
+  - "Weather-resistant and great for heavy tinted windows"
+  - "Fade resistant"
+  - "Prints in Black Ink on front & Gray Ink on back"
+  - "1-part, self-adhesive, 4 sides"
+  - "Size 8.5 x 11"
+  - "Permanent Adhesive On All 4 Sides"
+price: 0.44
+price_note: "per blank (min 1000)"
+# best_price_note: "Best Price for AK Dealer Services"
+purchase_links:
+  - name: "Buy on AK Dealer Services"
+    url: https://akdealerservices.com/product/1001112-exterior-buyers-guide-implied-warranty-pa-no-lines
+  # - name: "Buy on Amazon"
+  #   url: "#"
+ogImage: "images/EXTERIOR/3-bg-1.jpg"
+images:
+  - src: "images/EXTERIOR/3-bg-1.jpg"
+  - src: "images/EXTERIOR/3-bg-2.jpg"
+  - src: "images/EXTERIOR/3-bg-3.jpg"

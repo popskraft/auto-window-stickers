@@ -18,9 +18,7 @@ purchase_links:
   - name: "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000000-product-name"
   - name: "Buy on Amazon"
-    url: "#"
-  - name: "Wholesale Inquiry"
-    url: "#wholesale"
+    # url: "#"
 images:
   - src: "images/CATEGORY/product-image-1.jpg"
   - src: "images/CATEGORY/product-image-2.jpg"

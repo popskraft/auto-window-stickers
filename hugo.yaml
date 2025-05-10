@@ -6,8 +6,9 @@ languageCode: "en"
 # Site Parameters
 params:
   # Global Settings
-  global:
-    wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale"
+  ogImage: "/images/og-image.jpg"
+  logo: "logo.svg"
+  wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale"
   
   # Company Information
   company:
@@ -54,20 +55,12 @@ params:
       icon: "cart"
     amazon:
       title: "Buy on Amazon"
-      url: "#"
+      # url: "#"
       icon: "amazon"
     wholesale:
       title: "Wholesale Inquiry"
-      url: "global:wholesaleFormUrl"
+      url: "{{ .Site.Params.wholesaleFormUrl }}"
       icon: "form"
-  
-  # SEO Settings
-  seo:
-    titleSuffix: " | Auto Window Stickers"
-    description: "Quality window stickers for auto dealerships. Easy to apply and remove, these stickers protect vehicle exteriors and provide excellent visibility."
-    ogImage: "/images/og-image.jpg"
-    type: "website"
-    logo: "akdslogo.png"
   
   # Legal Information
   legal:
@@ -106,13 +99,13 @@ params:
         url: "#contacts"
       - label: "Wholesale Inquiry"
         icon: "form"
-        url: "global:wholesaleFormUrl"
+        url: "{{ .Site.Params.wholesaleFormUrl }}"
   
   # Product Settings
   products:
     buttonCartText: "View Details"
     buttonWholesaleText: "Wholesale Inquiry"
-    wholesaleLink: "global:wholesaleFormUrl"
+    wholesaleLink: "{{ .Site.Params.wholesaleFormUrl }}"
     currency: "USD"
     currencySymbol: "$"
     itemCondition: "https://schema.org/NewCondition"

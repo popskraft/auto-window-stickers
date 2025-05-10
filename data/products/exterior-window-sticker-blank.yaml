@@ -1,4 +1,5 @@
-title: "Exterior Window Sticker **Blank**"
+title: "Exterior **Window Sticker Blank**"
+weight: 1
 size: "8.5 x 11\""
 description: >-
   Blank exterior window sticker with peel-off border on all four sides. Can be adhered to the window on the outside or inside of the vehicle.
@@ -19,8 +20,7 @@ purchase_links:
     url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
   - name: # "Buy on Amazon"
     # url: "#"
-  - name: # "Wholesale Inquiry"
-    url: "#wholesale"
+ogImage: "images/EXTERIOR/1-blank-1.jpg"
 images:
   - src: "images/EXTERIOR/1-blank-1.jpg"
   - src: "images/EXTERIOR/1-blank-2.jpg"

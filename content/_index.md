@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: ""
 layout: "home"
 description: "AK Dealer Services - Professional vehicle photography, window labels, videography, and more for auto dealerships."
 

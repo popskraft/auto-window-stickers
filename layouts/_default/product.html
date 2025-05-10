@@ -1,5 +1,5 @@
 {{ define "main" }}
-
+{{ $pageParams := .Page.Params }}
 {{ $productID := .File.ContentBaseName }}
 {{ $product := index site.Data.products $productID }}
 
@@ -54,12 +54,12 @@
 					<p id="text61" class="style3" style="opacity: 1; transform: none;">
 						<a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
 					</p>
-					<p id="text27" class="style12">{{ $product.size }}</p>
-					<h1 id="text52" class="style5">{{ $product.title | markdownify }}</h1>
-					<p id="text53" class="style3">{{ $product.description | markdownify }}</p>
+					<p id="text27" class="style12">{{ or $pageParams.size $product.size }}</p>
+					<h1 id="text52" class="style5">{{ or $pageParams.title $product.title | markdownify }}</h1>
+					<p id="text53" class="style3">{{ or $pageParams.description $product.description | markdownify }}</p>
 					<div id="list03" class="style3 list">
 						<ul>
-							{{ range $product.features }}
+							{{ range or $pageParams.features $product.features }}
 							<li>
 								<p>{{ . }}</p>
 							</li>
@@ -69,11 +69,11 @@
 					<p id="text54" class="style11">${{ $product.price }}{{/*  <span style="color: #03A4FF">*</span>  */}}</p>
 					<p id="text58">{{ $product.price_note }}</p>
 					<ul id="buttons16" class="style5 buttons">
-						{{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" "Wholesale Inquiry" }}
+						{{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" }}
 						{{ range $index, $link := $product.purchase_links }}
 						{{ if $link.url }}
 						<li>
-							<a href="{{ $link.url }}" class="button n0{{ add $index 1 }}" role="button">
+							<a href="{{ $link.url }}" class="button n0{{ add $index 1 }}" role="button" title="{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}">
 								<svg aria-labelledby="buttons16-icon-{{ add $index 1 }}-title">
 									<title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
 									<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
@@ -83,6 +83,15 @@
 						</li>
 						{{ end }}
 						{{ end }}
+						<li>
+							<a href="{{ $.Site.Params.wholesaleFormUrl }}" class="button n03" role="button">
+								<svg aria-labelledby="buttons16-icon-wholesale-title">
+									<title id="buttons16-icon-wholesale-title">Wholesale Inquiry</title>
+									<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
+								</svg>
+								<span class="label">Wholesale Inquiry</span>
+							</a>
+						</li>
 					</ul>
 					{{ $validPurchaseLinks := 0 }}
 					{{ range $product.purchase_links }}

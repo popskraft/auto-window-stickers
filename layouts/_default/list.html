@@ -3,35 +3,48 @@
 {{ $section := .Section }}
 {{ $products := slice }}
 
-{{ if eq $section "exterior" }}
-  {{ $products = slice "exterior-window-sticker-blank" "exterior-window-sticker-custom" }}
-{{ else if eq $section "interior" }}
-  {{ $products = slice "interior-window-sticker-blank" "interior-window-sticker-custom" }}
+{{ range $page := where .Site.RegularPages "Section" $section }}
+  {{ $productID := $page.File.ContentBaseName }}
+  {{ if isset site.Data.products $productID }}
+    {{ $products = $products | append $productID }}
+  {{ end }}
 {{ end }}
 
-	<div id="product-row-1" class="style5 product-row container columns">
-		<div class="wrapper">
-			<div class="inner">
-				{{ range $rowIndex, $row := (slice 0 2 4 6 8) }}
+{{ $sortedProducts := slice }}
+{{ range $productID := $products }}
+  {{ $product := index site.Data.products $productID }}
+  {{ $sortedProducts = $sortedProducts | append (dict "id" $productID "weight" (default 999 $product.weight)) }}
+{{ end }}
+{{ $sortedProducts = sort $sortedProducts "weight" }}
+{{ $products = slice }}
+{{ range $item := $sortedProducts }}
+  {{ $products = $products | append $item.id }}
+{{ end }}
 
-					{{ $product1Index := $row }}
-					{{ $product2Index := add $row 1 }}
-					
-					{{ if lt $product1Index (len $products) }}
-					{{ $product1ID := index $products $product1Index }}
-					{{ $product1 := index site.Data.products $product1ID }}
-					{{ partial "product-card.html" (dict "product" $product1 "id" $product1ID) }}
-					{{ end }}
-					
-					{{ if lt $product2Index (len $products) }}
-					{{ $product2ID := index $products $product2Index }}
-					{{ $product2 := index site.Data.products $product2ID }}
-					{{ partial "product-card.html" (dict "product" $product2 "id" $product2ID) }}
-					{{ end }}
-					
-				{{ end }}
-			</div>
+	{{ $totalProducts := len $products }}
+{{ $rowCount := div (add $totalProducts 1) 2 }}
+
+{{ range $rowIndex := seq 1 $rowCount }}
+<div id="product-row-{{ $rowIndex }}" class="style5 product-row container columns">
+	<div class="wrapper">
+		<div class="inner">
+			{{ $product1Index := sub (mul $rowIndex 2) 2 }}
+			{{ $product2Index := sub (mul $rowIndex 2) 1 }}
+			
+			{{ if lt $product1Index $totalProducts }}
+			{{ $product1ID := index $products $product1Index }}
+			{{ $product1 := index site.Data.products $product1ID }}
+			{{ partial "product-card.html" (dict "product" $product1 "id" $product1ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+			{{ end }}
+			
+			{{ if lt $product2Index $totalProducts }}
+			{{ $product2ID := index $products $product2Index }}
+			{{ $product2 := index site.Data.products $product2ID }}
+			{{ partial "product-card.html" (dict "product" $product2 "id" $product2ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+			{{ end }}
 		</div>
 	</div>
+</div>
+{{ end }}
 
 {{ end }}

@@ -1,21 +1,38 @@
+{{- $siteName := .Site.Title -}}
+
+{{/* Get product ID from filename if available */}}
+{{- $productID := "" -}}
+{{- with .File -}}{{- $productID = .ContentBaseName -}}{{- end -}}
+
+{{/* Set up SEO title */}}
+{{- $productTitle := "" -}}
+{{- if and $productID (isset site.Data.products $productID) -}}
+  {{- $productTitle = index site.Data.products $productID "title" | default "" -}}
+{{- end -}}
+
+{{- $productSeoTitle := cond $productTitle (printf "%s %s" $productTitle .Title) .Title -}}
+{{- $seoTitle := or .Params.seoTitle (printf "%s - %s" (or $productSeoTitle .Title) $siteName) -}}
+{{- $seoTitle = $seoTitle | markdownify | plainify -}}
+
+{{- $description := or (.Params.seoDescription) (.Params.description) (.Content) (.Description) (.Site.Params.description) -}}
+{{- $description = $description | markdownify | plainify | truncate 164 -}}
+
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode | default "en" }}">
 
 <head>
 	<meta charset="UTF-8">
-	<title>{{ .Title }} | {{ .Site.Title }}</title>
+	<title>{{ $seoTitle }}</title>
+	{{- if .Params.noindex }}<meta name="robots" content="noindex">{{- end }}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	{{/*
-	<meta name="color-scheme" content="light only" /> */}}
-	{{- $description := .Description | default (.Summary | plainify) | default .Site.Params.description -}}
-	<meta name="description" content="{{ $description | truncate 160 }}">
-	
+	<meta name="description" content="{{ $description }}">
 	<link rel="canonical" href="{{ or .Params.seo.canonical .Permalink | safeURL }}">
-
+	
+	{{/* <meta name="color-scheme" content="light only" /> */}}
 	{{/* --- Open Graph Tags --- */}}
 	<meta property="og:site_name" content="{{ .Site.Title }}">
-	<meta property="og:title" content="{{ .Title }}">
-	<meta property="og:description" content="{{ $description | truncate 160 }}">
+	<meta property="og:title" content="{{ $seoTitle }}">
+	<meta property="og:description" content="{{ $description }}">
 	<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 	<meta property="og:url" content="{{ .Permalink }}">
 	{{ with .Params.ogImage | default .Site.Params.ogImage }}
@@ -31,7 +48,7 @@
 		rel="stylesheet" type="text/css" />
 
 	{{/* --- Favicons --- */}}
-		<link rel="icon" type="image/png" href="{{ "/favicon.png" | relURL }}" />
+	<link rel="icon" type="image/png" href="{{ "/favicon.png" | relURL }}" />
 	<link rel="apple-touch-icon" href="{{ "/apple-touch-icon.png" | relURL }}" />
 
 	{{/* --- CSS --- */}}
@@ -49,7 +66,7 @@
 	{{ $tailwind := resources.Get "tailwindstyle.css" | minify | fingerprint }}
 	<link rel="stylesheet" href="{{ $tailwind.RelPermalink }}" integrity="{{ $tailwind.Data.Integrity }}">
 
-	{{/* {{ partialCached "schema-org.html" . .Permalink }} */}}
+	{{ partialCached "schema-org.html" . .Permalink }}
 
 </head>
 {{/* Added body classes similar to old theme for potential compatibility */}}
