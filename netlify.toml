@@ -8,7 +8,7 @@
 [context.production.environment]
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "true"
-  HUGO_BASEURL = "https://autowindowstickers.netlify.app/"
+  HUGO_BASEURL = "https://autowindowstickers.com/"
 
 [context.split1]
   command = "hugo --gc --minify --enableGitInfo"
