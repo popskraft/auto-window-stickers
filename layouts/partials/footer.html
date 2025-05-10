@@ -11,7 +11,7 @@
             <a href="{{ $.Site.Params.contact.phoneLink | safeURL }}" class="button n01" role="button"><svg
                 aria-labelledby="buttons01-icon-1-title">
                 <title id="buttons01-icon-1-title">Phone</title>
-                <use xlink:href="{{ " /icons.svg#phone" | relURL }}"></use>
+                <use xlink:href="{{ "/icons.svg#phone" | relURL }}"></use>
               </svg><span class="label">{{ $.Site.Params.contact.phone }}</span></a>
           </li>
         </ul>
@@ -24,7 +24,7 @@
             <a href="{{ . | safeURL }}1000030-monroney-addendum-software" class="button n01" role="button"><svg
                 aria-labelledby="buttons27-icon-1-title">
                 <title id="buttons27-icon-1-title">{{ $.Site.Params.purchase.retail.icon }}</title>
-                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.retail.icon }}"></use>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.retail.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.retail.title }}</span></a>
           </li>
           {{ end }}
@@ -32,7 +32,7 @@
           <li>
             <a href="{{ . | safeURL }}" class="button n02" role="button"><svg aria-labelledby="buttons27-icon-2-title">
                 <title id="buttons27-icon-2-title">{{ $.Site.Params.purchase.amazon.icon }}</title>
-                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.amazon.icon }}"></use>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.amazon.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.amazon.title }}</span></a>
           </li>
           {{ end }}
@@ -41,7 +41,7 @@
             <a href="{{ . | safeURL }}" class="button n03" role="button">
               <svg aria-labelledby="buttons27-icon-3-title">
                 <title id="buttons27-icon-3-title">{{ $.Site.Params.purchase.wholesale.icon }}</title>
-                <use xlink:href="{{ " /icons.svg#" | relURL }}{{ $.Site.Params.purchase.wholesale.icon }}"></use>
+                <use xlink:href="{{ "/icons.svg#" | relURL }}{{ $.Site.Params.purchase.wholesale.icon }}"></use>
               </svg><span class="label">{{ $.Site.Params.purchase.wholesale.title }}</span></a>
           </li>
           {{ end }}

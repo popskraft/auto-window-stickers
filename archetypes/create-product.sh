@@ -25,21 +25,42 @@ else
   
   # Create state directory if it doesn't exist
   mkdir -p "$PRODUCT_DIR"
+  
+  # Check if state data file exists, create if not
+  STATE_DATA_FILE="data/states/$STATE.yaml"
+  if [ ! -f "$STATE_DATA_FILE" ]; then
+    echo "State data file not found. Creating template at $STATE_DATA_FILE"
+    mkdir -p "data/states"
+    cat > "$STATE_DATA_FILE" << EOF
+suffix: # State abbreviation (e.g., TX)
+name: # Full state name (e.g., Texas)
+adjective: # State adjective (e.g., Texan)
+citiesList:
+  - # Major city 1
+  - # Major city 2
+priceSuffix: # Shipping info specific to state
+keyIndustries:
+  - # Industry 1
+  - # Industry 2
+seoKeywords:
+  - # SEO keyword 1
+  - # SEO keyword 2
+EOF
+    echo "Please update the state data file with actual values."
+  fi
 fi
 
 # Create the content file using Hugo's new command
 hugo new "$PRODUCT_DIR/$PRODUCT_NAME.md" --kind product
 
-# Create the data file by copying the product-data.yaml template
 DATA_DIR="data/products"
 mkdir -p "$DATA_DIR"
 
 # Copy the template and replace placeholders
 cp "archetypes/product-data.yaml" "$DATA_DIR/$PRODUCT_NAME.yaml"
 
-# Set the ID in the data file to match the filename
-sed -i '' "s/^id: .*$/id: \"$PRODUCT_NAME\"/g" "$DATA_DIR/$PRODUCT_NAME.yaml"
-sed -i '' "s/{{ replace .Name \\\\-\\\" \\\" | title }}/$(echo $PRODUCT_NAME | tr '-' ' ' | awk '{for(i=1;i<=NF;i++)sub(/./,toupper(substr($i,1,1)),$i)}1')/g" "$DATA_DIR/$PRODUCT_NAME.yaml"
+# Replace title placeholder with formatted product name
+sed -i '' "s/{{ replace .Name '-' ' ' | title }}/$(echo $PRODUCT_NAME | tr '-' ' ' | awk '{for(i=1;i<=NF;i++)sub(/./,toupper(substr($i,1,1)),$i)}1')/g" "$DATA_DIR/$PRODUCT_NAME.yaml"
 
 echo "Created product content at $PRODUCT_DIR/$PRODUCT_NAME.md"
 echo "Created product data at $DATA_DIR/$PRODUCT_NAME.yaml"

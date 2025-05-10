@@ -22,8 +22,8 @@ fi
 
 # Create data file
 cat > "${DATA_FILE}" << EOF
-id: "${PRODUCT_ID}"
 title: "${TITLE}"
+weight: 10
 size: "8.5 x 11\""
 description: "Description for ${TITLE} goes here."
 features:
@@ -37,30 +37,16 @@ features:
   - "1-part, self-adhesive, 4 sides"
 price: 0.00
 price_note: "per item (min quantity)"
-best_price_note: "* Best Price for AK Dealer Services"
+# best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
-  - name: "Buy on AK Dealer Services"
+  - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000000-product-name"
-    icon: "cart"
-    primary: true
-  - name: "Buy on Amazon"
-    url: "#"
-    icon: "cart"
-    primary: false
-  - name: "Wholesale Inquiry"
-    url: "#wholesale"
-    icon: "cart"
-    primary: false
+  - name: # "Buy on Amazon"
+    # url: "#"
 images:
   - src: "images/EXTERIOR/${PRODUCT_ID}-1.jpg"
-    alt: "${TITLE}"
-    primary: true
   - src: "images/EXTERIOR/${PRODUCT_ID}-2.jpg"
-    alt: "${TITLE}"
-    primary: false
   - src: "images/EXTERIOR/${PRODUCT_ID}-3.jpg"
-    alt: "${TITLE}"
-    primary: false
 EOF
 
 echo "Data file ${DATA_FILE} successfully created"

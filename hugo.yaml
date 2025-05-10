@@ -8,14 +8,13 @@ params:
   # Global Settings
   ogImage: "/images/og-image.jpg"
   logo: "logo.svg"
-  wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale"
+  wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale" # Referenced in multiple places
   
   # Company Information
   company:
     name: "Auto Window Stickers"
     tagline: "Quality window stickers for auto dealerships"
     description: "Your source for quality auto window stickers for vehicle exteriors and interiors."
-    yearEstablished: "2010"
   
   # Distributor Information
   distributor:
@@ -59,6 +58,7 @@ params:
       icon: "amazon"
     wholesale:
       title: "Wholesale Inquiry"
+      # Using the global wholesaleFormUrl variable
       url: "{{ .Site.Params.wholesaleFormUrl }}"
       icon: "form"
   
@@ -67,7 +67,7 @@ params:
     terms:
       text: "By using this site, you agree to the processing of personal data in accordance with the"
       linkText: "Terms & Conditions"
-      url: "#terms"
+      url: "/terms"
   
   # Performance Settings
   prefetch:
@@ -76,11 +76,12 @@ params:
       - "/"
       - "/exterior/"
       - "/interior/"
-    externalUrls: []
   
   # Schema.org Structured Data
   schema:
     priceValidUntil: "2026-12-31"
+    itemCondition: "https://schema.org/NewCondition"
+    availability: "https://schema.org/InStock"
     aggregateRating:
       ratingValue: "4.8"
       reviewCount: "124"
@@ -99,26 +100,22 @@ params:
         url: "#contacts"
       - label: "Wholesale Inquiry"
         icon: "form"
+        # Using the global wholesaleFormUrl variable
         url: "{{ .Site.Params.wholesaleFormUrl }}"
   
   # Product Settings
   products:
-    buttonCartText: "View Details"
-    buttonWholesaleText: "Wholesale Inquiry"
+    # Using the global wholesaleFormUrl variable
     wholesaleLink: "{{ .Site.Params.wholesaleFormUrl }}"
-    currency: "USD"
-    currencySymbol: "$"
-    itemCondition: "https://schema.org/NewCondition"
-    availability: "https://schema.org/InStock"
-    minOrderQuantity: 1000
   
   # Footer
   footer:
     copyright: "2025 All rights reserved."
+    # Duplicating the terms structure from legal.terms
     terms:
       text: "By using this site, you agree to the processing of personal data in accordance with the"
       linkText: "Terms & Conditions"
-      url: "#terms"
+      url: "/terms"
 
 # Hugo Settings
 markup:

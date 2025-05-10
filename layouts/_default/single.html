@@ -1,0 +1,71 @@
+{{ define "main" }}
+
+{{ if .Params.coverImage }}
+<div id="container15" class="container columns">
+  <div class="wrapper">
+    <div class="inner">
+      <div>
+        <div id="image09" class="style3 image full">
+          <a href="#home" class="frame">
+            {{ $image := resources.Get .Params.coverImage }}
+            {{ with $image }}
+              {{ $filter := images.UnsharpMask .5 .5 0 }}
+              {{ $processed := $image.Filter $filter }}
+              {{ $final := $processed.Fill "700x500 webp picture Center" }}
+              <img 
+                src="{{ $final.RelPermalink }}" 
+                alt="{{ $.Params.coverImageAlt | default $.Title }}" 
+                loading="eager"
+              >
+            {{ end }}
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h1 class="style4">{{ .Title | markdownify }}</h1>
+        {{ with .Params.subtitle }}
+        <h2 class="style5">{{ . | markdownify }}</h2>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+<div id="container13" class="container default full">
+  <div class="wrapper">
+    <div class="inner">
+      {{ if not .Params.coverImage }}
+      <h1 class="style4">{{ .Title | markdownify }}</h1>
+      {{ with .Params.subtitle }}
+      <h2 class="style5">{{ . | markdownify }}</h2>
+      {{ end }}
+      {{ end }}
+      
+      {{ with .Params.description }}
+      <p class="style5">{{ . | markdownify }}</p>
+      {{ end }}
+
+      <div class="txt style6">
+      {{ .Content }}
+      </div>
+      
+      {{ if .Params.showCloseButton }}
+      <ul id="buttons14" class="style6 buttons">
+        <li>
+          <a href="{{ .Site.BaseURL }}" class="button n01" role="button">
+            <svg aria-labelledby="buttons14-icon-1-title">
+              <title id="buttons14-icon-1-title">Cancel (Light)</title>
+              <use xlink:href="{{ "/icons.svg#cancel-light" | relURL }}"></use>
+            </svg>
+            <span class="label">Close</span>
+          </a>
+        </li>
+      </ul>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{ end }}

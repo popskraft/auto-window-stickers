@@ -14,7 +14,13 @@
 {{- $seoTitle := or .Params.seoTitle (printf "%s - %s" (or $productSeoTitle .Title) $siteName) -}}
 {{- $seoTitle = $seoTitle | markdownify | plainify -}}
 
-{{- $description := or (.Params.seoDescription) (.Params.description) (.Content) (.Description) (.Site.Params.description) -}}
+{{/* Get product description from data file if available */}}
+{{- $productDescription := "" -}}
+{{- if and $productID (isset site.Data.products $productID) -}}
+  {{- $productDescription = index site.Data.products $productID "description" | default "" -}}
+{{- end -}}
+
+{{- $description := or .Params.seoDescription .Params.description $productDescription .Description .Site.Params.description -}}
 {{- $description = $description | markdownify | plainify | truncate 164 -}}
 
 <!DOCTYPE html>
@@ -35,10 +41,24 @@
 	<meta property="og:description" content="{{ $description }}">
 	<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 	<meta property="og:url" content="{{ .Permalink }}">
-	{{ with .Params.ogImage | default .Site.Params.ogImage }}
+	
+	{{/* Get product OG image from data file if available */}}
+	{{- $productOgImage := "" -}}
+	{{- if and $productID (isset site.Data.products $productID) -}}
+		{{- if isset (index site.Data.products $productID) "ogImage" -}}
+			{{- $productOgImage = index site.Data.products $productID "ogImage" -}}
+		{{- else if isset (index site.Data.products $productID) "images" -}}
+			{{- $productOgImage = (index (index site.Data.products $productID "images") 0).src -}}
+		{{- end -}}
+	{{- end -}}
+	
+	{{- $ogImagePath := or .Params.ogImage $productOgImage .Site.Params.ogImage -}}
+	{{ with $ogImagePath }}
 	{{ $ogImage := resources.Get . }}
 	{{ with $ogImage }}
 	<meta property="og:image" content="{{ $ogImage.Permalink }}">
+	{{ else }}
+	<meta property="og:image" content="{{ . | absURL }}">
 	{{ end }}
 	{{ end }}
 

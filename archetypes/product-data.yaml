@@ -1,4 +1,5 @@
-title: "{{ replace .Name \"-\" \" \" | title }}"
+title: "{{ replace .Name '-' ' ' | title }}"
+weight: 10
 size: "8.5 x 11\""
 description: >-
   Detailed description of the product goes here. This should be a few sentences that explain what the product is and its main benefits.
@@ -15,9 +16,9 @@ price: 0.00
 price_note: "per item (min quantity)"
 # best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
-  - name: "Buy on AK Dealer Services"
+  - name: # "Buy on AK Dealer Services"
     url: "https://akdealerservices.com/product/1000000-product-name"
-  - name: "Buy on Amazon"
+  - name: # "Buy on Amazon"
     # url: "#"
 images:
   - src: "images/CATEGORY/product-image-1.jpg"

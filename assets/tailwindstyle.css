@@ -1,115 +1,43 @@
 /* @tailwind base; */
 
-hr {
-  margin-top: 0;
-  margin-bottom: 0;
+.visible {
+  visibility: visible
 }
 
-/* Article Typography Styles */
-
-/* ========================= */
-
-.txt {
-  color: #555555;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1em;
-  line-height: 1.5;
-  font-weight: 400;
+.collapse {
+  visibility: collapse
 }
 
-.txt p:not(:last-child) {
-  margin-bottom: var(--spacing);
+.absolute {
+  position: absolute
 }
 
-.txt p strong {
-  color: #222222;
-  font-weight: 600;
+.mt-80 {
+  margin-top: 20rem
 }
 
-.txt h2 {
-  margin-top: 2.5rem !important;
-  margin-bottom: var(--spacing) !important;
-  color: #222222;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1.5em;
-  line-height: 1.125;
-  font-weight: 600;
+.block {
+  display: block
 }
 
-.txt h3 {
-  margin-top: 2.25rem !important;
-  margin-bottom: var(--spacing) !important;
-  color: #222;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1.125em;
-  line-height: 1.25;
-  font-weight: 600;
+.contents {
+  display: contents
 }
 
-/* OL */
-
-.txt > ol {
-  margin-top: 2rem !important;
-  margin-bottom: 2rem !important;
+.hidden {
+  display: none
 }
 
-.txt > ol li {
-  direction: var(--site-language-direction);
-  display: flex;
-  position: relative;
-  margin-top: .75rem;
-  counter-increment: item;
+.transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
-.txt > ol li p {
-  flex-grow: 1;
-  flex-shrink: 1;
-  order: 3;
-  margin-bottom: .75rem;
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 }
 
-.txt > ol li:before {
-  color: #FFFFFF;
-  font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 0.75rem;
-  font-weight: 400;
-  content: counter(item);
-  border-radius: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 55%;
-  height: 1.5rem;
-  margin-top: 0.0625rem;
-  margin-right: 1rem;
-  min-width: 1.5rem;
-  padding: 0 0.1875rem;
-  text-align: center;
-  background-color: #222222;
-  line-height: calc(1.5rem - 1px);
-}
-
-/* UL */
-
-.txt > ul {
-  margin-top: 1rem !important;
-  margin-bottom: 1rem !important;
-  padding-left: 0;
-  list-style: none;
-}
-
-.txt > ul li {
-  position: relative;
-  padding-left: 2.5rem;
-  margin-bottom: 0.75rem;
-  line-height: 1.5;
-}
-
-.txt > ul li:before {
-  content: '•';
-  position: absolute;
-  left: .5rem;
-  top: -0.1em;
-  font-size: 200%;
-  line-height: 0.75;
-  color: #222222;
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
