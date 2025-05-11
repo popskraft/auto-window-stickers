@@ -20,8 +20,8 @@ purchase_links:
     url: https://akdealerservices.com/product/1001150-exterior-buyers-guide-pa-backer-printing-only
   # - name: "Buy on Amazon"
   #   url: "#"
-ogImage: "images/EXTERIOR/1-blank-1.jpg"
+ogImage: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-1.jpg"
 images:
-  - src: "images/EXTERIOR/1-blank-1.jpg"
-  - src: "images/EXTERIOR/1-blank-2.jpg"
-  - src: "images/EXTERIOR/3-bg-back-3.jpg"
+  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-1.jpg"
+  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-2.jpg"
+  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-3.jpg"

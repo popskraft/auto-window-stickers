@@ -1,5 +1,6 @@
 {{ $product := .product }}
 {{ $productID := .id }}
+{{ $section := cond (hasPrefix $productID "exterior") "exterior" (cond (hasPrefix $productID "interior") "interior" "") }}
 <div>
 	<h2 id="text10" class="style5">{{ $product.title | markdownify }}
 		{{ if $product.size }}<span style="color: #bbbbbb"> –&nbsp;{{ $product.size }}</span>{{ end }}
@@ -17,7 +18,8 @@
 					{{ $processedImg = $image.src | relURL }}
 				{{ end }}
 				<div role="img" aria-label="{{ $image.alt | default $product.title }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
-					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
+				style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
+					<a class="absolute h-full w-full left-0 top-0" href="{{ $productID }}"></a>
 				</div>
 				{{ end }}
 			</div>
@@ -51,7 +53,6 @@
 	</ul>
 	<ul class="style2 links">
 		<li class="n01">
-			{{ $section := cond (hasPrefix $productID "exterior") "exterior" (cond (hasPrefix $productID "interior") "interior" "") }}
 			<a href="/{{ $section }}/{{ $productID }}/">More details</a>
 		</li>
 	</ul>

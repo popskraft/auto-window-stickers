@@ -35,7 +35,9 @@
                   {{ end }}
                 </span></a>
                 <div class="caption">
-                  <p>{{ $item.caption }}</p>
+                  <p>
+                    <a class="no-underline hover:text-[#2ec0ff]" href="{{ $item.link | default "#" | relURL }}">{{ $item.caption }}</a>
+                  </p>
                 </div>
               </li>
               {{ end }}
@@ -91,7 +93,9 @@
                   {{ end }}
                 </span></a>
                 <div class="caption">
-                  <p>{{ $item.caption }}</p>
+                  <p>
+                    <a class="no-underline hover:text-[#2ec0ff]" href="{{ $item.link | default "#" | relURL }}">{{ $item.caption }}</a>
+                  </p>
                 </div>
               </li>
               {{ end }}
