@@ -18,6 +18,11 @@
       min-height: 100% !important;
       width: 100% !important;
   }
+  /* Fix header do not jump */
+  #container04.columns>.wrapper>.inner {
+    min-height: 72px;
+  }
+  
 }
 
 
