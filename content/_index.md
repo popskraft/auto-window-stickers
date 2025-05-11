@@ -1,7 +1,8 @@
 ---
-title: ""
+# title: "Auto & Dealership Window Stickers"
+seoTitle: "Auto & Dealership Window Stickers near You. Best price!"
 layout: "home"
-description: "AK Dealer Services - Professional vehicle photography, window labels, videography, and more for auto dealerships."
+description: "Auto Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership."
 
 hero:
   exterior:

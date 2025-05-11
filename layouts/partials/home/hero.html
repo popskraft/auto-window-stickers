@@ -6,7 +6,7 @@
       {{/* --- Exterior Column --- */}}
       {{ with .exterior }}
       <div>
-        {{ with .button }}<h2 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h2>{{ end }}
+        {{ with .button }}<h1 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h1>{{ end }}
         {{ with .description }}<p class="style3">{{ . }}</p>{{ end }}
         {{ with .image }}
         <div id="image04" class="style2 image">
