@@ -14,7 +14,11 @@
           {{ $heroImage := resources.Get . }}
           {{ with $heroImage }}
             {{ $processed := .Fill "1200x636 webp picture Center" }}
-            <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.exterior.heading | plainify }}" loading="lazy">
+            <img 
+              src="{{ $processed.RelPermalink }}" 
+              alt="{{ $.Params.hero.exterior.heading | plainify }}" 
+              loading="lazy"
+            >
           {{ end }}
           {{ with $.Params.hero.exterior.button }}</a>{{ end }}
         </div>

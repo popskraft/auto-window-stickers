@@ -595,68 +595,6 @@
 			// Expose scrollToElement.
 				window._scrollToTop = scrollToTop;
 	
-	// "On Load" animation.
-		// Set loader timeout.
-			var loaderTimeout = setTimeout(function() {
-				$body.classList.add('with-loader');
-			}, 500);
-		
-		// Create loader element.
-			var $loaderElement = document.createElement('div');
-				$loaderElement.id = 'loader';
-		
-			// Add to body.
-				$body.appendChild($loaderElement);
-		
-		// Create load handler.
-			var loadHandler = function() {
-				setTimeout(function() {
-		
-					// Stop loader.
-						clearTimeout(loaderTimeout);
-		
-					// Unmark as loading.
-						$body.classList.remove('is-loading');
-		
-					// Mark as playing.
-						$body.classList.add('is-playing');
-		
-					// Wait for animation to complete.
-						setTimeout(function() {
-		
-							// Remove loader.
-								$body.classList.remove('with-loader');
-		
-							// Unmark as playing.
-								$body.classList.remove('is-playing');
-		
-							// Mark as ready.
-								$body.classList.add('is-ready');
-		
-							// Remove loader element (after delay).
-								setTimeout(function() {
-									$body.removeChild($loaderElement);
-								}, 1000);
-		
-						}, 875);
-		
-				}, 100);
-			};
-		
-		// Load event.
-			on('load', loadHandler);
-		
-		// Set wait timeout.
-			setTimeout(function() {
-		
-				// Remove load event.
-					off('load', loadHandler);
-		
-				// Call load handler.
-					(loadHandler)();
-		
-			}, 1000);
-	
 	// Sections.
 		(function() {
 		
@@ -965,173 +903,95 @@
 								if (location.hash == '#home')
 									history.replaceState(null, null, '#');
 		
-						// Get options.
-							name = (section ? section.id.replace(/-section$/, '') : null);
-							hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-							hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-							disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
+							// Get options.
+								name = (section ? section.id.replace(/-section$/, '') : null);
+								hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
+								hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
+								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
 		
-						// Deactivate current section.
+							// Deactivate current section.
 		
-							// Hide header and/or footer (if necessary).
+								// Hide header and/or footer (if necessary).
 		
-								// Header.
-									if (header && hideHeader) {
+									// Header.
+										if (header && hideHeader) {
 		
-										header.classList.add('hidden');
-		
-										setTimeout(function() {
+											header.classList.add('hidden');
 											header.style.display = 'none';
-										}, 187.5);
 		
-									}
+										}
 		
-								// Footer.
-									if (footer && hideFooter) {
+									// Footer.
+										if (footer && hideFooter) {
 		
-										footer.classList.add('hidden');
-		
-										setTimeout(function() {
+											footer.classList.add('hidden');
 											footer.style.display = 'none';
-										}, 187.5);
 		
-									}
+										}
 		
-							// Deactivate.
-								currentSection = $('#main > .inner > section:not(.inactive)');
+								// Deactivate.
+									currentSection = $('#main > .inner > section:not(.inactive)');
+									currentSection.classList.add('inactive');
+									currentSection.classList.remove('active');
+									currentSection.style.display = 'none';
 		
-								if (currentSection) {
+								// Reset title.
+									document.title = title;
 		
-									// Get current height.
-										currentSectionHeight = currentSection.offsetHeight;
+								// Unload elements.
+									unloadElements(currentSection);
 		
-									// Deactivate.
-										currentSection.classList.add('inactive');
+								// Reset section change elements.
+									resetSectionChangeElements(currentSection);
 		
-									// Reset title.
-										document.title = title;
+								// Clear timeout (if present).
+									clearTimeout(window._sectionTimeoutId);
 		
-									// Unload elements.
-										unloadElements(currentSection);
+							// Activate target section.
 		
-									// Reset section change elements.
-										resetSectionChangeElements(currentSection);
+								// Show header and/or footer (if necessary).
 		
-									// Clear timeout (if present).
-										clearTimeout(window._sectionTimeoutId);
+									// Header.
+										if (header && !hideHeader) {
 		
-										// Hide.
-											setTimeout(function() {
-												currentSection.style.display = 'none';
-												currentSection.classList.remove('active');
-											}, 187.5);
+											header.style.display = '';
+											header.classList.remove('hidden');
 		
-									}
+										}
+		
+									// Footer.
+										if (footer && !hideFooter) {
+		
+											footer.style.display = '';
+											footer.classList.remove('hidden');
+		
+										}
+		
+								// Activate.
+									section.classList.remove('inactive');
+									section.classList.add('active');
+									section.style.display = '';
+		
+							// Trigger 'resize' event.
+								trigger('resize');
 		
 							// Update title.
 								if (section.dataset.title)
 									document.title = section.dataset.title + ' - ' + title;
 		
-							// Activate target section.
-								setTimeout(function() {
+							// Load elements.
+								loadElements(section);
 		
-									// Show header and/or footer (if necessary).
+							// Scroll to scroll point (if applicable).
+								if (scrollPoint)
+									scrollToElement(scrollPoint, 'instant');
 		
-										// Header.
-											if (header && !hideHeader) {
+							// Otherwise, just scroll to top (if not disabled for this section).
+								else if (!disableAutoScroll)
+									scrollToElement(null, 'instant');
 		
-												header.style.display = '';
-		
-												setTimeout(function() {
-													header.classList.remove('hidden');
-												}, 0);
-		
-											}
-		
-										// Footer.
-											if (footer && !hideFooter) {
-		
-												footer.style.display = '';
-		
-												setTimeout(function() {
-													footer.classList.remove('hidden');
-												}, 0);
-		
-											}
-		
-									// Activate.
-		
-										// Show.
-											section.style.display = '';
-		
-										// Trigger 'resize' event.
-											trigger('resize');
-		
-										// Scroll to top (if not disabled for this section).
-											if (!disableAutoScroll)
-												scrollToElement(null, 'instant');
-		
-										// Get target height.
-											sectionHeight = section.offsetHeight;
-		
-										// Set target heights.
-											if (sectionHeight > currentSectionHeight) {
-		
-												section.style.maxHeight = currentSectionHeight + 'px';
-												section.style.minHeight = '0';
-		
-											}
-											else {
-		
-												section.style.maxHeight = '';
-												section.style.minHeight = currentSectionHeight + 'px';
-		
-											}
-		
-										// Delay.
-											setTimeout(function() {
-		
-												// Activate.
-													section.classList.remove('inactive');
-													section.classList.add('active');
-		
-												// Temporarily restore target heights.
-													section.style.minHeight = sectionHeight + 'px';
-													section.style.maxHeight = sectionHeight + 'px';
-		
-												// Delay.
-													setTimeout(function() {
-		
-														// Turn off transitions.
-															section.style.transition = 'none';
-		
-														// Clear target heights.
-															section.style.minHeight = '';
-															section.style.maxHeight = '';
-		
-														// Load elements.
-															loadElements(section);
-		
-													 	// Scroll to scroll point (if applicable).
-													 		if (scrollPoint)
-																scrollToElement(scrollPoint, 'instant');
-		
-														// Delay.
-															setTimeout(function() {
-		
-																// Turn on transitions.
-																	section.style.transition = '';
-		
-																// Unlock.
-																	locked = false;
-		
-															}, 75);
-		
-													}, 375 + 187.5);
-		
-											}, 75);
-		
-								}, 187.5);
+							// Unlock.
+								locked = false;
 		
 						}
 		
@@ -4441,13 +4301,10 @@
 	
 	// Initialize "On Visible" animations.
 		onvisible.add('.image.style1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
-		onvisible.add('h1.style3, h2.style3, h3.style3, p.style3', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style14, h2.style14, h3.style14, p.style14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style1, h2.style1, h3.style1, p.style1', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style8, h2.style8, h3.style8, p.style8', { style: 'zoom-in', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.video.style1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.container.style12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
-		onvisible.add('.image.style2', { style: 'pop-in', speed: 500, intensity: 1, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons.style2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image.style6', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
 		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
