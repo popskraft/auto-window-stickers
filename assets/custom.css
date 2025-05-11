@@ -81,12 +81,7 @@ body {
 #faqBody .style2 {
   cursor: pointer;
   position: relative;
-  padding: 12px 40px 12px 15px;
-  margin-top: 10px;
 }
-
-/* #faqBody .style2.active {
-} */
 
 #faqBody .style2::after {
   content: '+';
@@ -106,22 +101,26 @@ body {
 
 /* Hide all answers by default */
 #faqBody .collapse-target {
-  display: none;
-  padding: 0 15px 0 20px;
-  margin: 0 0 15px 15px;
-  overflow: visible;
+  height: 0;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: all 0.4s ease-out;
+  will-change: opacity, transform, height;
+  pointer-events: none;
 }
 
 /* Show answers when they have the visible class */
 #faqBody .collapse-target.visible {
   display: block;
+  height: auto;
   opacity: 1;
   transform: translateY(0);
   padding-top: 10px;
   padding-bottom: 15px;
+  margin-bottom: 15px;
+  overflow: visible;
+  pointer-events: auto;
 }
 
 
