@@ -18,8 +18,8 @@ price_note: "per blank (min 1000)"
 purchase_links:
   - name: # "Buy on AK Dealer Services"
     url: https://akdealerservices.com/product/1000537-exterior-window-sticker-custom
-  - name: # "Buy on Amazon"
-    # url: "#"
+  # - name: # "Buy on Amazon"
+  # url: "#"
 ogImage: "images/EXTERIOR/2-custom-1.jpg"
 images:
   - src: "images/EXTERIOR/2-custom-1.jpg"

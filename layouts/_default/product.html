@@ -26,23 +26,19 @@
 								{{ range $index, $image := $product.images }}
 								{{ if and (gt $index 0) (lt $index 3) }}
 								<li>
-									{{ if eq $index 1 }}
-									<span class="frame">
-									{{ else }}
-									<a href="#{{ if hasPrefix $productID "exterior" }}exterior{{ else }}interior{{ end }}" class="thumbnail n0{{ $index }}">
-									<span class="frame">
-									{{ end }}
-									{{ $thumbImage := resources.Get $image.src }}
-									{{ if $thumbImage }}
-										{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-										{{ $processed := $thumbImage.Filter $filter }}
-										{{ $final := $processed.Fill "724x543 webp picture Center" }}
-										<img src="{{ $final.RelPermalink }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
-									{{ else }}
-										<img src="{{ $image.src | relURL }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" />
-									{{ end }}
-									</span>
-									{{ if ne $index 1 }}</a>{{ end }}
+									<a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="thumbnail n0{{ $index }}">
+										<span class="frame">
+										{{ $thumbImage := resources.Get $image.src }}
+										{{ if $thumbImage }}
+											{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+											{{ $processed := $thumbImage.Filter $filter }}
+											{{ $final := $processed.Fill "724x543 webp picture Center" }}
+											<img src="{{ $final.RelPermalink }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+										{{ else }}
+											<img src="{{ $image.src | relURL }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" />
+										{{ end }}
+										</span>
+									</a>
 								</li>
 								{{ end }}
 								{{ end }}
@@ -110,5 +106,5 @@
 			</div>
 		</div>
 	</div>
-
+<hr class="style2">
 {{ end }}

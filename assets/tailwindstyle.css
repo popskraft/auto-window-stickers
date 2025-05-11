@@ -58,11 +58,6 @@
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
 
-.hover\:text-blue-400:hover {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity, 1))
-}
-
 .hover\:text-\[\#2ec0ff\]:hover {
   --tw-text-opacity: 1;
   color: rgb(46 192 255 / var(--tw-text-opacity, 1))

@@ -1,5 +1,5 @@
 title: "Exterior **Buyers Guide Backer Printing Only**"
-weight: 3
+weight: 4
 size: "8.5 x 11\""
 description: >-
   These fade-resistant Buyers Guides have "Permanent Adhesive On All 4 Sides" to adhere to the outside of the vehicle window. Stay in compliance with current FTC regulations with these easy to use forms. These popular forms are laser compatible and easy to remove.
@@ -14,14 +14,13 @@ features:
   - "Permanent Adhesive On All 4 Sides"
 price: 0.42
 price_note: "per blank (min 1000)"
-# best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
   - name: "Buy on AK Dealer Services"
-    url: https://akdealerservices.com/product/1001150-exterior-buyers-guide-pa-backer-printing-only
+    url: https://akdealerservices.com/product/1001148-interior-buyers-guide-pa-backer-printing-only
   # - name: "Buy on Amazon"
   #   url: "#"
-ogImage: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-1.jpg"
+ogImage: "images/EXTERIOR/3-byersguide-blank-1.jpg"
 images:
-  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-1.jpg"
-  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-2.jpg"
-  - src: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-3.jpg"
+  - src: "images/EXTERIOR/3-byersguide-blank-1.jpg"
+  - src: "images/EXTERIOR/3-byersguide-blank-2.jpg"
+  - src: "images/EXTERIOR/3-byersguide-blank-3.jpg"

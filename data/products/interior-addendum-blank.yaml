@@ -1,0 +1,23 @@
+title: "Interior **Addendum - Blank**"
+weight: 5
+size: "4.25 x 11\""
+description: >-
+  This form has peel off boarder on all four sides to be adhered to the window on the inside of the vehicle. Simply print, peel and seal
+features:
+  - "Heavy white stock"
+  - "Laser compatible"
+  - "Fade resistant"
+  - "1-part, self-adhesive, 4 sides"
+  - "4.25 x 11"
+price: 0.09
+price_note: "per blank (min 1000)"
+purchase_links:
+  - name: "Buy on AK Dealer Services"
+    url: "https://akdealerservices.com/product/1000542-interior-addendum-blank"
+  # - name: # "Buy on Amazon"
+  # url: "#"
+ogImage: "images/INTERIOR/4-addendum-blank-1.jpg"
+images:
+  - src: "images/INTERIOR/4-addendum-blank-1.jpg"
+  - src: "images/INTERIOR/4-addendum-blank-2.jpg"
+  - src: "images/INTERIOR/4-addendum-blank-3.jpg"
