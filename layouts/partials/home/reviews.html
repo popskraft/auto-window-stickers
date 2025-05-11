@@ -34,7 +34,7 @@
                 <img src="{{ "/stars.svg" | relURL }}" alt="Stars" loading="lazy">
               </span>
             </div>
-            <h2 class="style2">{{ $review.heading  }}</h2>
+            {{ with $review.heading }}<h2 class="style2">{{ . }}</h2>{{ end }}
             <p class="style3">
               <strong>{{ $review.title }}</strong><br />
               {{ $review.text  }}

@@ -13,7 +13,7 @@ price: 0.47
 price_note: "per blank (min 1000)"
 purchase_links:
   - name: # "Buy on AK Dealer Services"
-    url: "https://akdealerservices.com/product/1000539-interior-window-sticker-custom"
+    url: https://akdealerservices.com/product/1000539-interior-window-sticker-custom
   # - name: # "Buy on Amazon"
   #   url: "#"
 ogImage: "images/INTERIOR/2-custom-1.jpg"

@@ -20,6 +20,10 @@
   top: 0px
 }
 
+.mt-5 {
+  margin-top: 1.25rem
+}
+
 .block {
   display: block
 }
@@ -50,6 +54,14 @@
   white-space: nowrap
 }
 
+.pt-5 {
+  padding-top: 1.25rem
+}
+
+.\!pt-5 {
+  padding-top: 1.25rem !important
+}
+
 .no-underline {
   text-decoration-line: none
 }
@@ -61,4 +73,20 @@
 .hover\:text-\[\#2ec0ff\]:hover {
   --tw-text-opacity: 1;
   color: rgb(46 192 255 / var(--tw-text-opacity, 1))
+}
+
+@media (min-width: 768px) {
+  .md\:pt-0 {
+    padding-top: 0px
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:mt-0 {
+    margin-top: 0px
+  }
+
+  .lg\:pt-0 {
+    padding-top: 0px
+  }
 }

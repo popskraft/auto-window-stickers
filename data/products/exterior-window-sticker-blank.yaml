@@ -17,7 +17,7 @@ price_note: "per blank (min 1000)"
 # best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
   - name: # "Buy on AK Dealer Services"
-    url: "https://akdealerservices.com/product/1000535-exterior-window-sticker-blank"
+    url: https://akdealerservices.com/product/1000535-exterior-window-sticker-blank
   # - name: # "Buy on Amazon"
   # url: "#"
 ogImage: "images/EXTERIOR/1-blank-1.jpg"

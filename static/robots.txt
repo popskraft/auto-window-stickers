@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://nutcrackerpro.com/sitemap.xml
+Sitemap: https://autowindowstickers.com/sitemap.xml
 
 # Allow all robots complete access
 # Sitemap location is based on your baseURL from hugo.yaml

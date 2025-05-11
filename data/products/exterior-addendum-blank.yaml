@@ -13,7 +13,7 @@ price: "0.18"
 price_note: "per blank (min 1000)"
 purchase_links:
   - name: "Buy on AK Dealer Services"
-    url: "https://akdealerservices.com/product/1001913-exterior-addendum-blank"
+    url: https://akdealerservices.com/product/1001913-exterior-addendum-blank
   # - name: "Buy on Amazon"
   #   url: ""
 ogImage: "images/EXTERIOR/4-addendum-blank-1.jpg"

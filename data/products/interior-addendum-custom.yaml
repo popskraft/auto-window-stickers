@@ -13,7 +13,7 @@ price: 0.27
 price_note: "per blank (min 1000)"
 purchase_links:
   - name: "Buy on AK Dealer Services"
-    url: "https://akdealerservices.com/product/1000540-interior-addendum-custom"
+    url: https://akdealerservices.com/product/1000540-interior-addendum-custom
 # - name: # "Buy on Amazon"
   # url: "#"
 ogImage: "images/INTERIOR/6-addendum-custom-1.jpg"

@@ -14,7 +14,7 @@ price: 0.17
 price_note: "per blank (min 1000)"
 purchase_links:
   - name: "Request a Quote"
-    url: "https://akdealerservices.com/product/1001148-interior-buyers-guide-pa-backer-printing-only"
+    url: https://akdealerservices.com/product/1001148-interior-buyers-guide-pa-backer-printing-only
   # - name: # "Buy on Amazon"
   # url: "#"
 ogImage: "images/INTERIOR/3-byersguide-blank-1.jpg"

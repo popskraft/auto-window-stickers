@@ -2,6 +2,7 @@
   <div id="container04" class="container columns">
     <div class="wrapper">
       <div class="inner">
+        
         <div>
           <div id="image06" class="image full">
             {{ if not $.IsHome }}
@@ -17,7 +18,9 @@
           {{- end }}
         </div>
       </div>
+      
       <div>
+        <div class="pt-5 md:pt-0">
         <ul id="links02" class="style1 main-nav links">
           {{ range .Site.Params.mainNav }}
             <li class="{{ .class }}">
@@ -26,6 +29,8 @@
           {{ end }}
         </ul>
       </div>
+      </div>
+
       <div>
         <ul id="buttons06" class="style9 buttons">
           <li>
