@@ -159,7 +159,7 @@ minify:
   minifyOutput: true
 
 # Analytics
-googleAnalytics: "G-XXXXXXXXXX" # Placeholder - replace with actual GA ID when available
+googleAnalytics: "G-3Z75BG9NCE" # Placeholder - replace with actual GA ID when available
 
 # Security Headers
 server:
