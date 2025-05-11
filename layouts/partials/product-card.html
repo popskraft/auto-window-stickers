@@ -2,8 +2,9 @@
 {{ $productID := .id }}
 {{ $section := cond (hasPrefix $productID "exterior") "exterior" (cond (hasPrefix $productID "interior") "interior" "") }}
 <div>
-	<h2 id="text10" class="style5">{{ $product.title | markdownify }}
-		{{ if $product.size }}<span style="color: #bbbbbb"> –&nbsp;{{ $product.size }}</span>{{ end }}
+	<h2 id="text10" class="style5">
+		{{ $product.title | markdownify }}
+		{{ if $product.size }}<span style="color: #bbbbbb" class="text-nowrap"> – {{ $product.size }}</span>{{ end }}
 	</h2>
 	<div id="{{ $productID }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
 		ondragstart="return false;">
