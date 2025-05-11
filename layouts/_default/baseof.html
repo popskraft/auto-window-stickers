@@ -88,6 +88,20 @@
 
 	{{ partialCached "schema-org.html" . .Permalink }}
 
+	<!-- Prefetch/Preload for key sections and wholesale website -->
+	<link rel="prefetch" href="{{ "/exterior/" | relURL }}">
+	<link rel="prefetch" href="{{ "/interior/" | relURL }}">
+	<link rel="prefetch" href="https://akdealerservices.com">
+	<link rel="dns-prefetch" href="https://akdealerservices.com">
+	<link rel="preconnect" href="https://akdealerservices.com" crossorigin>
+	<link rel="prefetch" href="https://forms.ju.mp/#aws-wholesale">
+	<link rel="dns-prefetch" href="https://forms.ju.mp">
+	<link rel="preconnect" href="https://forms.ju.mp" crossorigin>
+
+	<!-- Preload critical resources -->
+	<link rel="preload" href="{{ "/images/og-image.jpg" | relURL }}" as="image">
+	<link rel="preload" href="{{ "/akdslogo.png" | relURL }}" as="image">
+	<link rel="preload" href="{{ "/logo.svg" | relURL }}" as="image">
 </head>
 {{/* Added body classes similar to old theme for potential compatibility */}}
 
