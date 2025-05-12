@@ -16,13 +16,13 @@
 				{{ if $imgResource }}
 					{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
 					{{ $processed := $imgResource.Filter $filter }}
-					{{ $final := $processed.Resize "900x webp picture Center" }}
+					{{ $final := $processed.Resize "900x webp" }}
 					{{ $processedImg = $final.RelPermalink }}
 				{{ else }}
 					{{ $processedImg = $image.src | relURL }}
 				{{ end }}
-				<div role="img" aria-label="{{ $image.alt | default $product.title }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
-				style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
+				<div role="img" aria-label="{{ or $image.alt $product.title | markdownify | plainify }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
+					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
 					<a class="absolute h-full w-full left-0 top-0" href="{{ $productID }}"></a>
 				</div>
 				{{ end }}
@@ -37,11 +37,13 @@
 		{{ range $linkIndex, $link := $product.purchase_links }}
 		{{ if $link.url }}
 		<li>
-			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}"
-				role="button"><svg aria-labelledby="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">
+			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}" role="button">
+				<svg aria-labelledby="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">
 					<title id="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">Cart</title>
 					<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-				</svg><span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $linkIndex }}{{ end }}</span></a>
+				</svg>
+				<span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $linkIndex }}{{ end }}</span>
+			</a>
 		</li>
 		{{ end }}
 		{{ end }}
@@ -55,5 +57,7 @@
 			</a>
 		</li>
 	</ul>
-	<p id="text61" class="style3" style="opacity: 1; transform: none;"><a href="/{{ $section }}/{{ $productID }}/">More details</a></p>
+	<p id="text61" class="style3">
+		<a href="/{{ $section }}/{{ $productID }}/">More details</a>
+	</p>
 </div>

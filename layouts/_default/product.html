@@ -72,7 +72,7 @@
               title="{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}">
               <svg aria-labelledby="buttons16-icon-{{ add $index 1 }}-title">
                 <title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
-                <use xlink:href="{{ " /icons.svg#cart" | relURL }}"></use>
+                <use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
               </svg>
               <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end
                 }}</span>
@@ -84,7 +84,7 @@
             <a href="{{ $.Site.Params.wholesaleFormUrl }}" class="button n03" role="button">
               <svg aria-labelledby="buttons16-icon-wholesale-title">
                 <title id="buttons16-icon-wholesale-title">Wholesale Inquiry</title>
-                <use xlink:href="{{ " /icons.svg#cart" | relURL }}"></use>
+                <use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
               </svg>
               <span class="label">Wholesale Inquiry</span>
             </a>
