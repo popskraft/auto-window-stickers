@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="inner">
       <div id="video01" class="style1 video">
-        <video src="/videos/video01.mp4" poster="/videos/video01.mp4.jpg" preload="auto" playsinline webkit-playsinline muted autoplay loop controls></video>
+        <video src="{{ .Params.about.video.src | default "/videos/video-main.mp4" }}" poster="{{ .Params.about.video.poster | default "/videos/video-main.jpg" }}" preload="auto" playsinline webkit-playsinline muted autoplay loop controls></video>
       </div>
     </div>
   </div>
