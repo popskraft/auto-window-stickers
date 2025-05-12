@@ -99,5 +99,50 @@
                 }
             });
         }
+        
+        // Sticky Navigation functionality
+        const navSticky = document.getElementById('navSticky');
+        if (navSticky) {
+            // Create a standalone sticky nav container that will be fixed to the top
+            const stickyNavContainer = document.createElement('div');
+            stickyNavContainer.id = 'stickyNavContainer';
+            stickyNavContainer.className = 'sticky-nav-container';
+            
+            // Clone the navigation for the sticky version
+            const navClone = navSticky.cloneNode(true);
+            navClone.id = 'navStickyClone';
+            stickyNavContainer.appendChild(navClone);
+            document.body.appendChild(stickyNavContainer);
+            
+            // Calculate threshold as 1.5 times the viewport height
+            let scrollThreshold = window.innerHeight * 1.5;
+            
+            // Function to handle scroll event
+            function handleScroll() {
+                // Only show sticky nav when scrolled past 1.5 times the viewport height
+                if (window.scrollY > scrollThreshold) {
+                    stickyNavContainer.classList.add('visible');
+                } else {
+                    stickyNavContainer.classList.remove('visible');
+                }
+            }
+            
+            // Add scroll event listener
+            window.addEventListener('scroll', handleScroll);
+            
+            // Initial check in case page is loaded scrolled down
+            handleScroll();
+            
+            // Handle window resize to recalculate threshold
+            window.addEventListener('resize', function() {
+                // Recalculate threshold on window resize
+                scrollThreshold = window.innerHeight * 1.5;
+                
+                // Re-check scroll position
+                handleScroll();
+            });
+            
+            console.log('Sticky Navigation initialized with 1.5x viewport threshold');
+        }
     });
 })();
