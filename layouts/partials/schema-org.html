@@ -2,13 +2,13 @@
 {{- $baseURL := .Site.BaseURL -}}
 {{- $permalink := .Permalink -}}
 {{- $siteTitle := .Site.Title -}}
-{{- $siteDesc := .Site.Params.description | default "Auto Window Stickers for car dealerships" -}}
-{{- $langCode := .Site.LanguageCode | default "en-US" -}}
-{{- $siteLogo := .Site.Params.seo.logo | absURL -}}
-{{- $companyName := .Site.Params.companyName | default $siteTitle -}}
-{{- $phone := .Site.Params.contact.phone | default "555-555-5555" -}}
-{{- $tagline := .Site.Params.tagline | default "Quality Auto Window Stickers" -}}
-{{- $ogImage := .Site.Params.seo.ogImage | absURL -}}
+{{- $siteDesc := .Site.Params.description -}}
+{{- $langCode := .Site.LanguageCode -}}
+{{- $siteLogo := .Site.Params.schema.seo.logo | default .Site.Params.logo | absURL -}}
+{{- $companyName := .Site.Params.company.name | default $siteTitle -}}
+{{- $phone := .Site.Params.contact.phone -}}
+{{- $tagline := .Site.Params.company.tagline | default .Site.Params.tagline -}}
+{{- $ogImage := .Site.Params.schema.seo.ogImage | default .Site.Params.ogImage | absURL -}}
 {{- $pageTitle := cond .IsHome $siteTitle (cond (ne .Title "") (printf "%s | %s" .Title $siteTitle) $siteTitle) -}}
 {{- $pageDesc := cond (ne .Description "") .Description $siteDesc -}}
 
@@ -49,66 +49,113 @@
 "target": [
 "{{ $permalink }}"
 ]
+},
+"video": {
+"@id": "{{ $permalink }}#aboutvideo"
 }
 },
-{{- if eq .Type "product" -}}
+{{- if .IsHome -}}
+{
+"@type": "VideoObject",
+"@id": "{{ $permalink }}#aboutvideo",
+"name": "{{ $siteTitle }} - About Video",
+"description": "{{ with .Params.about.video.description }}{{ . }}{{ else }}{{ .Site.Params.schema.video.default.description }}{{ end }}",
+"thumbnailUrl": "{{ $baseURL }}{{ .Params.about.video.poster | default .Site.Params.schema.video.default.poster }}",
+"contentUrl": "{{ $baseURL }}{{ .Params.about.video.src | default .Site.Params.schema.video.default.src }}",
+"uploadDate": "{{ now.Format "2006-01-02T15:04:05Z07:00" }}",
+"duration": "{{ with .Params.about.video.duration }}{{ . }}{{ else }}{{ .Site.Params.schema.video.default.duration }}{{ end }}",
+"embedUrl": "{{ $baseURL }}#about"
+},
+{
+"@type": "WebSite",
+"@id": "{{ $baseURL }}#website",
+"url": "{{ $baseURL }}",
+"name": "{{ $siteTitle | plainify | safeJS }}",
+"description": "{{ $siteDesc | plainify | safeJS }}",
+"publisher": {
+"@id": "{{ $baseURL }}#organization"
+},
+"potentialAction": {
+"@type": "SearchAction",
+"target": "{{ $baseURL }}search?q={search_term_string}",
+"query-input": "required name=search_term_string"
+},
+"inLanguage": "{{ $langCode }}"
+},
+{{- end -}}
+{{- if or (eq .Type "product") (eq .Layout "product") -}}
 {{- $productId := .File.ContentBaseName -}}
 {{- $productData := index .Site.Data.products $productId -}}
 {{- $price := $productData.price | default "99.99" -}}
 {{- $priceFormatted := replace $price "$" "" -}}
+{{- $brandName := .Site.Params.company.brandName | default .Site.Params.company.name -}}
 {{- $images := slice -}}
-{{- range $productData.images -}}
-  {{- $images = $images | append (printf "%s%s" $baseURL .src) -}}
+{{- if isset $productData "images" -}}
+  {{- range $productData.images -}}
+    {{- $images = $images | append (printf "%s%s" $baseURL .src) -}}
+  {{- end -}}
+{{- else -}}
+  {{- $images = $images | append (printf "%s%s" $baseURL "/images/placeholder.jpg") -}}
 {{- end -}}
 {
 "@type": "Product",
 "@id": "{{ $permalink }}#product",
-"name": "{{ .Title | markdownify | plainify | safeJS }}",
+"name": "{{ with .Title }}{{ . | markdownify | plainify | safeJS }}{{ else }}{{ $productData.title | markdownify | plainify | safeJS }}{{ end }}",
 "description": "{{ with .Description }}{{ . | markdownify | plainify | safeJS }}{{ else }}{{ $productData.description | markdownify | plainify | safeJS }}{{ end }}",
-"image": [
-  {{- range $index, $img := $images -}}
-  "{{ $img }}"{{ if lt (add $index 1) (len $images) }},{{ end }}
-  {{- end -}}
-],
-"sku": "{{ $productData.sku | default $productId }}",
 "brand": {
   "@type": "Brand",
-  "name": "{{ $siteTitle }}"
+  "name": "{{ $brandName }}"
 },
+"sku": "{{ $productData.SKU | default $productData.sku | default $productId }}",
+"image": [
+  {{- if gt (len $images) 0 -}}
+    {{- range $index, $img := $images -}}
+    "{{ $img }}"{{ if lt (add $index 1) (len $images) }},{{ end }}
+    {{- end -}}
+  {{- else -}}
+    "{{ $baseURL }}/images/placeholder.jpg"
+  {{- end -}}
+],
 "offers": {
 "@type": "Offer",
 "url": "{{ $permalink }}",
-"priceCurrency": "USD",
+"priceCurrency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}",
 "price": "{{ $priceFormatted }}",
-"priceValidUntil": "{{ now.AddDate 1 0 0 | time.Format "2006-01-02" }}",
-"itemCondition": "https://schema.org/NewCondition",
-"availability": "https://schema.org/InStock",
+"priceValidUntil": "{{ .Site.Params.schema.priceValidUntil | default (now.AddDate 1 0 0 | time.Format "2006-01-02") }}",
+"itemCondition": "{{ .Site.Params.schema.itemCondition | default "https://schema.org/NewCondition" }}",
+"availability": "{{ .Site.Params.schema.availability | default "https://schema.org/InStock" }}",
 "seller": {
   "@id": "{{ $baseURL }}#organization"
+},
+"priceSpecification": {
+  "@type": "PriceSpecification",
+  "price": "{{ $priceFormatted }}",
+  "priceCurrency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}",
+  "valueAddedTaxIncluded": "false"
 },
 "shippingDetails": {
   "@type": "OfferShippingDetails",
   "shippingRate": {
     "@type": "MonetaryAmount",
-    "value": "{{ $productData.shipping.rate | default "5.99" }}",
-    "currency": "USD"
+    "value": "{{ with $productData.shipping }}{{ .rate }}{{ else }}{{ .Site.Params.schema.shipping.baseRate | default "n/a" }}{{ end }}",
+    "currency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}"
   },
   "shippingDestination": {
     "@type": "DefinedRegion",
-    "addressCountry": "US"
+    "addressCountry": "{{ .Site.Params.schema.shipping.destination.country | default "US" }}"
   },
   "deliveryTime": {
     "@type": "ShippingDeliveryTime",
     "handlingTime": {
       "@type": "QuantitativeValue",
-      "minValue": 0,
-      "maxValue": 1,
+      "minValue": {{ .Site.Params.schema.shipping.delivery.handling.minDays | default 0 }},
+      "maxValue": {{ .Site.Params.schema.shipping.delivery.handling.maxDays | default 1 }},
       "unitCode": "DAY"
     },
     "transitTime": {
       "@type": "QuantitativeValue",
-      "minValue": 1,
-      "maxValue": 5,
+      "minValue": {{ .Site.Params.schema.shipping.delivery.transit.minDays | default 1 }},
+      "maxValue": {{ .Site.Params.schema.shipping.delivery.transit.maxDays | default 5 }},
       "unitCode": "DAY"
     }
   }
@@ -152,6 +199,23 @@
 "areaServed": "US",
 "availableLanguage": "English"
 },
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "{{ .Site.Params.address.street }}",
+"addressLocality": "{{ .Site.Params.address.city }}",
+"addressRegion": "{{ .Site.Params.address.state }}",
+"postalCode": "{{ .Site.Params.address.zip }}",
+"addressCountry": "{{ .Site.Params.address.country }}"
+},
+"sameAs": [
+{{- with .Site.Params.social -}}
+  {{- with .facebook -}}"{{ . }}"{{- if or .twitter .instagram .linkedin .youtube -}},{{- end -}}{{- end -}}
+  {{- with .twitter -}}"{{ . }}"{{- if or .instagram .linkedin .youtube -}},{{- end -}}{{- end -}}
+  {{- with .instagram -}}"{{ . }}"{{- if or .linkedin .youtube -}},{{- end -}}{{- end -}}
+  {{- with .linkedin -}}"{{ . }}"{{- if .youtube -}},{{- end -}}{{- end -}}
+  {{- with .youtube -}}"{{ . }}"{{- end -}}
+{{- end -}}
+],
 "slogan": "{{ $tagline | safeJS }}"
 },
 {
@@ -165,20 +229,53 @@
 },
 "inLanguage": "{{ $langCode }}"
 },
-{{- if and .Params.faq (or (isset .Params.faq "questions") (and (reflect.IsSlice .Params.faq) (gt (len .Params.faq) 0) (isset (index .Params.faq 0) "question"))) -}}
+{{- if and .Params.faq -}}
 {
 "@type": "FAQPage",
 "@id": "{{ $permalink }}#faqpage",
 "mainEntity": [
-{{- $questions := .Params.faq -}}
-{{- if reflect.IsMap .Params.faq -}}
-  {{- if isset .Params.faq "questions" -}}
-    {{- $questions = .Params.faq.questions -}}
+{{- /* Handle standard FAQ structure with direct questions array */ -}}
+{{- if and (isset .Params.faq "questions") (reflect.IsSlice .Params.faq.questions) -}}
+  {{- $questionCount := len .Params.faq.questions -}}
+  {{- range $index, $question := .Params.faq.questions -}}
+    {{- if and (isset $question "question") (isset $question "answer") -}}
+    {
+    "@type": "Question",
+    "name": {{ $question.question | plainify | jsonify }},
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": {{ $question.answer | plainify | jsonify }}
+    }
+    }{{ if lt (add $index 1) $questionCount }},{{ end }}
+    {{- end -}}
   {{- end -}}
-{{- end -}}
-{{- if reflect.IsSlice $questions -}}
-  {{- $questionCount := len $questions -}}
-  {{- range $index, $question := $questions -}}
+{{- /* Handle home page FAQ structure with categories */ -}}
+{{- else if and (isset .Params.faq "categories") (reflect.IsSlice .Params.faq.categories) -}}
+  {{- $allQuestions := slice -}}
+  {{- range $catIndex, $category := .Params.faq.categories -}}
+    {{- if and (isset $category "questions") (reflect.IsSlice $category.questions) -}}
+      {{- range $category.questions -}}
+        {{- $allQuestions = $allQuestions | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $questionCount := len $allQuestions -}}
+  {{- range $index, $question := $allQuestions -}}
+    {{- if and (isset $question "question") (isset $question "answer") -}}
+    {
+    "@type": "Question",
+    "name": {{ $question.question | plainify | jsonify }},
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": {{ $question.answer | plainify | jsonify }}
+    }
+    }{{ if lt (add $index 1) $questionCount }},{{ end }}
+    {{- end -}}
+  {{- end -}}
+{{- /* Handle simple FAQ array structure */ -}}
+{{- else if reflect.IsSlice .Params.faq -}}
+  {{- $questionCount := len .Params.faq -}}
+  {{- range $index, $question := .Params.faq -}}
     {{- if and (isset $question "question") (isset $question "answer") -}}
     {
     "@type": "Question",

@@ -1,7 +1,8 @@
 # Base Configuration
 baseURL: "https://autowindowstickers.com/"
 title: "Auto Window Stickers"
-languageCode: "en"
+languageCode: "en-US"
+description: "Auto Window Stickers for car dealerships"
 
 # Site Parameters
 params:
@@ -13,8 +14,9 @@ params:
   # Company Information
   company:
     name: "Auto Window Stickers"
-    tagline: "Quality window stickers for auto dealerships"
+    tagline: "Quality Auto Window Stickers"
     description: "Your source for quality auto window stickers for vehicle exteriors and interiors."
+    brandName: "Auto Window Stickers"
   
   # Distributor Information
   distributor:
@@ -89,6 +91,26 @@ params:
       description: "30-day return policy on unused products in original packaging."
     shipping:
       description: "Free shipping on orders over $100. Standard shipping available for all orders."
+      baseRate: "5.99"
+      currency: "USD"
+      destination:
+        country: "US"
+      delivery:
+        handling:
+          minDays: 0
+          maxDays: 1
+        transit:
+          minDays: 1
+          maxDays: 5
+    seo:
+      logo: "/images/logo.svg"
+      ogImage: "/images/og-image.jpg"
+    video:
+      default:
+        description: "Video showcasing Auto Window Stickers products and services"
+        poster: "/videos/video-main.jpg"
+        src: "/videos/video-main.mp4"
+        duration: "PT1M30S"
   
   # UI Components  
   orderSection:
