@@ -112,7 +112,7 @@ ul.links li a:hover {
     top: 0;
     border-radius: 0;
     padding: 8px 0;
-    transform: translateX(-50%) translateY(-100%);
+    transform: translateX(-50%) translateY(-150%);
   }
   
   .sticky-nav-container.visible {
