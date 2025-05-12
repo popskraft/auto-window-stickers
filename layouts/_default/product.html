@@ -3,108 +3,111 @@
 {{ $productID := .File.ContentBaseName }}
 {{ $product := index site.Data.products $productID }}
 
-	<div id="container12" class="style3 container columns">
-		<div class="wrapper">
-			<div class="inner">
-				<div>
-					<div id="image11" class="style5 image">
-						<a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
-							{{ $mainImage := resources.Get (index $product.images 0).src }}
-							{{ if $mainImage }}
-								{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-								{{ $processed := $mainImage.Filter $filter }}
-								{{ $final := $processed.Fill "1086x814 webp picture Center" }}
-								<img src="{{ $final.RelPermalink }}" alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}" title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
-							{{ else }}
-								<img src="{{ (index $product.images 0).src | relURL }}" alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}" title="Buy {{ $product.title | markdownify | plainify }}" />
-							{{ end }}
-						</a>
-					</div>
-					<div id="gallery05" class="style5 productGallery gallery">
-						<div class="inner">
-							<ul>
-								{{ range $index, $image := $product.images }}
-								{{ if and (gt $index 0) (lt $index 3) }}
-								<li>
-									<a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="thumbnail n0{{ $index }}">
-										<span class="frame">
-										{{ $thumbImage := resources.Get $image.src }}
-										{{ if $thumbImage }}
-											{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-											{{ $processed := $thumbImage.Filter $filter }}
-											{{ $final := $processed.Fill "724x543 webp picture Center" }}
-											<img src="{{ $final.RelPermalink }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
-										{{ else }}
-											<img src="{{ $image.src | relURL }}" alt="{{ or $image.alt $product.title | markdownify | plainify }}" />
-										{{ end }}
-										</span>
-									</a>
-								</li>
-								{{ end }}
-								{{ end }}
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div>
-					<p id="text61" class="style3" style="opacity: 1; transform: none;">
-						<a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
-					</p>
-					<p id="text27" class="style12">{{ or $pageParams.size $product.size }}</p>
-					<h1 id="text52" class="style5">{{ or $pageParams.title $product.title | markdownify }}</h1>
-					<p id="text53" class="style3">{{ or $pageParams.description $product.description | markdownify }}</p>
-					<div id="list03" class="style3 list">
-						<ul>
-							{{ range or $pageParams.features $product.features }}
-							<li>
-								<p>{{ . }}</p>
-							</li>
-							{{ end }}
-						</ul>
-					</div>
-					<p id="text54" class="style11">${{ $product.price }}{{/*  <span style="color: #03A4FF">*</span>  */}}</p>
-					<p id="text58">{{ $product.price_note }}</p>
-					<ul id="buttons16" class="style5 buttons">
-						{{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" }}
-						{{ range $index, $link := $product.purchase_links }}
-						{{ if $link.url }}
-						<li>
-							<a href="{{ $link.url }}" class="button n0{{ add $index 1 }}" role="button" title="{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}">
-								<svg aria-labelledby="buttons16-icon-{{ add $index 1 }}-title">
-									<title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
-									<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-								</svg>
-								<span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}</span>
-							</a>
-						</li>
-						{{ end }}
-						{{ end }}
-						<li>
-							<a href="{{ $.Site.Params.wholesaleFormUrl }}" class="button n03" role="button">
-								<svg aria-labelledby="buttons16-icon-wholesale-title">
-									<title id="buttons16-icon-wholesale-title">Wholesale Inquiry</title>
-									<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
-								</svg>
-								<span class="label">Wholesale Inquiry</span>
-							</a>
-						</li>
-					</ul>
-					{{ $validPurchaseLinks := 0 }}
-					{{ range $product.purchase_links }}
-						{{ if .url }}
-							{{ $validPurchaseLinks = add $validPurchaseLinks 1 }}
-						{{ end }}
-					{{ end }}
-					{{ $hasManyPurchaseLinks := gt $validPurchaseLinks 2 }}
-					{{ if $hasManyPurchaseLinks }}
-					<p id="text61" class="style13">
-						<a href="{{ with $product.purchase_links }}{{ with index . 0 }}{{ .url }}{{ end }}{{ end }}">${{ $product.price }} — {{ $product.best_price_note | default "Best Price for AK Dealer Services" }}</a>
-					</p>
-					{{ end }}
-					<hr id="divider20" class="style3">
-				</div>
-			</div>
-		</div>
-	</div>
+<div id="container12" class="style3 container columns">
+  <div class="wrapper">
+    <div class="inner">
+    
+      <div>
+        <div id="image11" class="style5 image">
+          <a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
+            {{ $mainImage := resources.Get (index $product.images 0).src }}
+            {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+            {{ $processed := $mainImage.Filter $filter }}
+            {{ $final := $processed.Fill "1086x814 webp picture Center" }}
+            <img src="{{ $final.RelPermalink }}"
+              alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
+              title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+          </a>
+        </div>
+        <div id="gallery05" class="style5 productGallery gallery">
+          <div class="inner">
+            <ul>
+              {{ range $index, $image := $product.images }}
+              {{ if and (gt $index 0) (lt $index 3) }}
+              <li>
+                <a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}"
+                  class="thumbnail n0{{ $index }}">
+                  <span class="frame">
+                    {{ $thumbImage := resources.Get $image.src }}
+                    {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+                    {{ $processed := $thumbImage.Filter $filter }}
+                    {{ $final := $processed.Fill "724x543 webp picture Center" }}
+                    <img src="{{ $final.RelPermalink }}"
+                      alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                  </span>
+                </a>
+              </li>
+              {{ end }}
+              {{ end }}
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+      <div>
+        <p id="text61" class="style3" style="opacity: 1; transform: none;">
+          <a href="{{ if hasPrefix $productID " exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL
+            }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
+        </p>
+        <p id="text27" class="style12">{{ or $pageParams.size $product.size }}</p>
+        <h1 id="text52" class="style5">{{ or $pageParams.title $product.title | markdownify }}</h1>
+        <p id="text53" class="style3">{{ or $pageParams.description $product.description | markdownify }}</p>
+        <div id="list03" class="style3 list">
+          <ul>
+            {{ range or $pageParams.features $product.features }}
+            <li>
+              <p>{{ . }}</p>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+        <p id="text54" class="style11">${{ $product.price }}{{/* <span style="color: #03A4FF">*</span> */}}</p>
+        <p id="text58">{{ $product.price_note }}</p>
+        <ul id="buttons16" class="style5 buttons">
+          {{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" }}
+          {{ range $index, $link := $product.purchase_links }}
+          {{ if $link.url }}
+          <li>
+            <a href="{{ $link.url }}" class="button n0{{ add $index 1 }}" role="button"
+              title="{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}">
+              <svg aria-labelledby="buttons16-icon-{{ add $index 1 }}-title">
+                <title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
+                <use xlink:href="{{ " /icons.svg#cart" | relURL }}"></use>
+              </svg>
+              <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end
+                }}</span>
+            </a>
+          </li>
+          {{ end }}
+          {{ end }}
+          <li>
+            <a href="{{ $.Site.Params.wholesaleFormUrl }}" class="button n03" role="button">
+              <svg aria-labelledby="buttons16-icon-wholesale-title">
+                <title id="buttons16-icon-wholesale-title">Wholesale Inquiry</title>
+                <use xlink:href="{{ " /icons.svg#cart" | relURL }}"></use>
+              </svg>
+              <span class="label">Wholesale Inquiry</span>
+            </a>
+          </li>
+        </ul>
+        {{ $validPurchaseLinks := 0 }}
+        {{ range $product.purchase_links }}
+        {{ if .url }}
+        {{ $validPurchaseLinks = add $validPurchaseLinks 1 }}
+        {{ end }}
+        {{ end }}
+        {{ $hasManyPurchaseLinks := gt $validPurchaseLinks 2 }}
+        {{ if $hasManyPurchaseLinks }}
+        <p id="text61" class="style13">
+          <a href="{{ with $product.purchase_links }}{{ with index . 0 }}{{ .url }}{{ end }}{{ end }}">${{
+            $product.price }} — {{ $product.best_price_note | default "Best Price for AK Dealer Services" }}</a>
+        </p>
+        {{ end }}
+        <hr id="divider20" class="style3">
+      </div>
+    
+    </div>
+  </div>
+</div>
 <hr class="style2">
 {{ end }}

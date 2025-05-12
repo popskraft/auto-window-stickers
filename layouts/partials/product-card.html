@@ -14,7 +14,10 @@
 				{{ $imgResource := resources.Get $image.src }}
 				{{ $processedImg := "" }}
 				{{ if $imgResource }}
-					{{ $processedImg = $imgResource.Permalink }}
+					{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+					{{ $processed := $imgResource.Filter $filter }}
+					{{ $final := $processed.Resize "900x webp picture Center" }}
+					{{ $processedImg = $final.RelPermalink }}
 				{{ else }}
 					{{ $processedImg = $image.src | relURL }}
 				{{ end }}

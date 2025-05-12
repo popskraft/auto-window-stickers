@@ -13,11 +13,11 @@
           {{ with $.Params.hero.exterior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
           {{ with $heroImage }}
-            {{ $processed := .Fill "1200x636 webp picture Center" }}
+            {{ $processed := .Fill "900x476 webp picture Center" }}
             <img 
               src="{{ $processed.RelPermalink }}" 
               alt="{{ $.Params.hero.exterior.heading | plainify }}" 
-              loading="lazy"
+              loading="eager"
             >
           {{ end }}
           {{ with $.Params.hero.exterior.button }}</a>{{ end }}
@@ -34,8 +34,8 @@
                   {{ with $image }}
                     {{ $filter := images.UnsharpMask .5 .5 0 }}
                     {{ $processed := $image.Filter $filter }}
-                    {{ $final := $processed.Fill "568x568 webp picture Center" }}
-                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="lazy">
+                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
                   {{ end }}
                 </span></a>
                 <div class="caption">
@@ -75,8 +75,8 @@
           {{ with $.Params.hero.interior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
           {{ with $heroImage }}
-            {{ $processed := .Fill "1200x636 webp picture Center" }}
-            <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="lazy">
+            {{ $processed := .Fill "900x476 webp picture Center" }}
+            <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="eager">
           {{ end }}
           {{ with $.Params.hero.interior.button }}</a>{{ end }}
         </div>
@@ -92,8 +92,8 @@
                   {{ with $image }}
                     {{ $filter := images.UnsharpMask .5 .5 0 }}
                     {{ $processed := $image.Filter $filter }}
-                    {{ $final := $processed.Fill "568x568 webp picture Center" }}
-                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="lazy">
+                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
                   {{ end }}
                 </span></a>
                 <div class="caption">
