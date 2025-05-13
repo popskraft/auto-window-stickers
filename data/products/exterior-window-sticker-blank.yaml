@@ -14,7 +14,7 @@ features:
   - "No set up charge"
   - "1-part, self-adhesive, 4 sides"
 price: 0.39
-price_note: "per blank (min 1000)"
+price_note: "each"
 # best_price_note: "Best Price for AK Dealer Services"
 purchase_links:
   - name: # "Buy on AK Dealer Services"
