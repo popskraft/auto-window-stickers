@@ -1,8 +1,8 @@
 ---
 # title: "Auto & Dealership Window Stickers"
-seoTitle: "Auto & Dealership Window Stickers near You. Best price!"
+seoTitle: "Car Window Stickers near You. Best price!"
 layout: "home"
-description: "Auto Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership."
+description: "Car Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership."
 
 hero:
   exterior:
@@ -51,10 +51,10 @@ about:
   video:
     src: "/videos/video-main.mp4"
     poster: "/videos/video-main.jpg"
-    description: "Auto Window Stickers product showcase video featuring exterior and interior window stickers for car dealerships"
+    description: "Car Window Stickers product showcase video featuring exterior and interior window stickers for car dealerships"
     duration: "PT1M30S"
   text: >
-    You know these. No dealership lot operates without them. Autodealer Window Stickers meet Monroney Label requirements and give vehicles a clean professional look. Made from tough coated paper, they install in minutes, survive sunlight, rain and pressure washing, and peel off cleanly with no residue. We offer a complete set of sticker variants including blank forms, custom-print templates, Buyers Guides and Addendums so your inventory stays compliant, organized and ready to sell.
+    You know these. No dealership lot operates without them. Car Window Stickers meet Monroney Label requirements and give vehicles a clean professional look. Made from tough coated paper, they install in minutes, survive sunlight, rain and pressure washing, and peel off cleanly with no residue. We offer a complete set of sticker variants including blank forms, custom-print templates, Buyers Guides and Addendums so your inventory stays compliant, organized and ready to sell.
 
 features:
   columns:

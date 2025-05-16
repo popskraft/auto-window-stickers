@@ -1,4 +1,4 @@
 ---
 title: "Interior Window Stickers"
-description: "High-quality interior window stickers for automotive applications"
+description: "High-quality interior car window stickers for automotive applications"
 ---
