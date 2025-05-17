@@ -13,8 +13,8 @@ hero:
     image: "images/home/exterior-cover.jpg"
     gallery:
       - image: "images/home/exterior-cover-frag-1.png"
-        alt: "Exterior Custom"
-        caption: "Exterior Custom"
+        alt: "Exterior Sticker"
+        caption: "Exterior Sticker"
         link: "exterior/#product-row-1"
       - image: "images/home/exterior-cover-frag-2.png"
         alt: "Exterior Buyers Guide"
@@ -34,8 +34,8 @@ hero:
     image: "images/home/interior-cover.jpg"
     gallery:
       - image: "images/home/interior-cover-frag-1.png"
-        alt: "Interior Custom Blank"
-        caption: "Interior Custom"
+        alt: "Interior Sticker"
+        caption: "Interior Sticker"
         link: "interior/#product-row-1"
       - image: "images/home/interior-cover-frag-2.png"
         alt: "Interior Buyers Guide"
