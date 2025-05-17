@@ -40,10 +40,6 @@
   width: 100%
 }
 
-.transform {
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
-}
-
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,5 +70,11 @@
 @media (min-width: 768px) {
   .md\:pt-0 {
     padding-top: 0px
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:min-h-\[86px\] {
+    min-height: 86px
   }
 }
