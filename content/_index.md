@@ -2,12 +2,14 @@
 # title: "Auto & Dealership Window Stickers"
 seoTitle: "Car Window Stickers near You. Best price!"
 layout: "home"
-description: "Car Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership."
+description: >-
+  Car Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership.
 
 hero:
   exterior:
     heading: "<strong>Exterior</strong> Products"
-    description: "Resist rain, snow, heat, and pressure washing. Applied outside windows, they stay clear, peel off without damaging tint, and boost your lot's professional look."
+    description: >- 
+      Applied outside of the vehicle’s windows. Resist rain, snow, heat, and pressure washing. These stickers stay clean, peel off without residue, and boost your lot's professional look.
     image: "images/home/exterior-cover.jpg"
     gallery:
       - image: "images/home/exterior-cover-frag-1.png"
@@ -27,7 +29,8 @@ hero:
       link: "/exterior/"
   interior:
     heading: "<strong>Interior</strong> Products"
-    description: "Applied inside the vehicle's window, these stickers deliver a clean, professional look. Ideal for standard conditions and provide clear visibility from outside."
+    description: >-
+      Applied inside the vehicle's window, these stickers deliver a clean, professional look. Ideal for standard conditions and provide clear visibility from outside.
     image: "images/home/interior-cover.jpg"
     gallery:
       - image: "images/home/interior-cover-frag-1.png"
