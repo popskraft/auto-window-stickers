@@ -10,13 +10,25 @@
       <div>
         <div id="image11" class="style5 image">
           <a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
-            {{ $mainImage := resources.Get (index $product.images 0).src }}
-            {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-            {{ $processed := $mainImage.Filter $filter }}
-            {{ $final := $processed.Fill "1086x814 webp picture Center" }}
-            <img src="{{ $final.RelPermalink }}"
-              alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
-              title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+            {{ if and $product.images (index $product.images 0) (index $product.images 0).src }}
+              {{ $mainImage := resources.Get (index $product.images 0).src }}
+              {{ if $mainImage }}
+                {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+                {{ $processed := $mainImage.Filter $filter }}
+                {{ $final := $processed.Fill "1086x814 webp picture Center" }}
+                <img src="{{ $final.RelPermalink }}"
+                  alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
+                  title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+              {{ else }}
+                <img src="/images/placeholder.jpg" 
+                  alt="{{ $product.title | markdownify | plainify }}" 
+                  title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+              {{ end }}
+            {{ else }}
+              <img src="/images/placeholder.jpg" 
+                alt="{{ $product.title | markdownify | plainify }}" 
+                title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+            {{ end }}
           </a>
         </div>
         <div id="gallery05" class="style5 productGallery gallery">
@@ -28,12 +40,22 @@
                 <a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}"
                   class="thumbnail n0{{ $index }}">
                   <span class="frame">
-                    {{ $thumbImage := resources.Get $image.src }}
-                    {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-                    {{ $processed := $thumbImage.Filter $filter }}
-                    {{ $final := $processed.Fill "724x543 webp picture Center" }}
-                    <img src="{{ $final.RelPermalink }}"
-                      alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                    {{ if $image.src }}
+                      {{ $thumbImage := resources.Get $image.src }}
+                      {{ if $thumbImage }}
+                        {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+                        {{ $processed := $thumbImage.Filter $filter }}
+                        {{ $final := $processed.Fill "724x543 webp picture Center" }}
+                        <img src="{{ $final.RelPermalink }}"
+                          alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                      {{ else }}
+                        <img src="/images/placeholder-thumb.jpg" 
+                          alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                      {{ end }}
+                    {{ else }}
+                      <img src="/images/placeholder-thumb.jpg" 
+                        alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                    {{ end }}
                   </span>
                 </a>
               </li>
@@ -74,8 +96,7 @@
                 <title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
                 <use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
               </svg>
-              <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end
-                }}</span>
+              <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}</span>
             </a>
           </li>
           {{ end }}

@@ -12,10 +12,16 @@
         <div id="image04" class="style2 image">
           {{ with $.Params.hero.exterior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
-          {{ with $heroImage }}
-            {{ $processed := .Fill "900x476 webp picture Center" }}
+          {{ if $heroImage }}
+            {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
             <img 
               src="{{ $processed.RelPermalink }}" 
+              alt="{{ $.Params.hero.exterior.heading | plainify }}" 
+              loading="eager"
+            >
+          {{ else }}
+            <img 
+              src="/images/placeholder.jpg" 
               alt="{{ $.Params.hero.exterior.heading | plainify }}" 
               loading="eager"
             >
@@ -30,12 +36,18 @@
               {{ range $index, $item := . }}
               <li>
                 <a href="{{ $item.link | default "#" | relURL }}" class="thumbnail n{{ printf "%02d" (add $index 1) }}"><span class="frame">
-                  {{ $image := resources.Get $item.image }}
-                  {{ with $image }}
-                    {{ $filter := images.UnsharpMask .5 .5 0 }}
-                    {{ $processed := $image.Filter $filter }}
-                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
-                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
+                  {{ if $item.image }}
+                    {{ $image := resources.Get $item.image }}
+                    {{ if $image }}
+                      {{ $filter := images.UnsharpMask .5 .5 0 }}
+                      {{ $processed := $image.Filter $filter }}
+                      {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                      <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
+                    {{ else }}
+                      <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
+                    {{ end }}
+                  {{ else }}
+                    <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
                   {{ end }}
                 </span></a>
                 <div class="caption">
@@ -74,9 +86,11 @@
         <div id="image03" class="style2 image">
           {{ with $.Params.hero.interior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
-          {{ with $heroImage }}
-            {{ $processed := .Fill "900x476 webp picture Center" }}
+          {{ if $heroImage }}
+            {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
             <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="eager">
+          {{ else }}
+            <img src="/images/placeholder.jpg" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="eager">
           {{ end }}
           {{ with $.Params.hero.interior.button }}</a>{{ end }}
         </div>
@@ -88,12 +102,18 @@
               {{ range $index, $item := . }}
                <li>
                 <a href="{{ $item.link | default "#" | relURL }}" class="thumbnail n{{ printf "%02d" (add $index 1) }}"><span class="frame">
-                  {{ $image := resources.Get $item.image }}
-                  {{ with $image }}
-                    {{ $filter := images.UnsharpMask .5 .5 0 }}
-                    {{ $processed := $image.Filter $filter }}
-                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
-                    <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
+                  {{ if $item.image }}
+                    {{ $image := resources.Get $item.image }}
+                    {{ if $image }}
+                      {{ $filter := images.UnsharpMask .5 .5 0 }}
+                      {{ $processed := $image.Filter $filter }}
+                      {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                      <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
+                    {{ else }}
+                      <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
+                    {{ end }}
+                  {{ else }}
+                    <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
                   {{ end }}
                 </span></a>
                 <div class="caption">
