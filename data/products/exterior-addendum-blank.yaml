@@ -15,8 +15,8 @@ price_note: "each (1000 min)"
 purchase_links:
   - name: "Buy on AK Dealer Services"
     url: https://akdealerservices.com/product/1001913-exterior-addendum-blank
-  # - name: "Buy on Amazon"
-  #   url: ""
+  - name: "Buy on Amazon"
+    url: "https://www.amazon.com/dp/B0FF78XHTV"
 ogImage: "images/EXTERIOR/5-addendum-blank-1.jpg"
 images:
   - src: "images/EXTERIOR/5-addendum-blank-1.jpg"
