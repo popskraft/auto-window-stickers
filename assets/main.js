@@ -595,25 +595,83 @@
 			// Expose scrollToElement.
 				window._scrollToTop = scrollToTop;
 	
-	// Sections.
+	// "On Load" animation.
+		// Set loader timeout.
+			var loaderTimeout = setTimeout(function() {
+				$body.classList.add('with-loader');
+			}, 500);
+		
+		// Create loader element.
+			var $loaderElement = document.createElement('div');
+				$loaderElement.id = 'loader';
+		
+			// Add to body.
+				$body.appendChild($loaderElement);
+		
+		// Create load handler.
+			var loadHandler = function() {
+				setTimeout(function() {
+		
+					// Stop loader.
+						clearTimeout(loaderTimeout);
+		
+					// Unmark as loading.
+						$body.classList.remove('is-loading');
+		
+					// Mark as playing.
+						$body.classList.add('is-playing');
+		
+					// Wait for animation to complete.
+						setTimeout(function() {
+		
+							// Remove loader.
+								$body.classList.remove('with-loader');
+		
+							// Unmark as playing.
+								$body.classList.remove('is-playing');
+		
+							// Mark as ready.
+								$body.classList.add('is-ready');
+		
+							// Remove loader element (after delay).
+								setTimeout(function() {
+									$body.removeChild($loaderElement);
+								}, 1000);
+		
+						}, 125);
+		
+				}, 100);
+			};
+		
+		// Load event.
+			on('load', loadHandler);
+		
+		// Set wait timeout.
+			setTimeout(function() {
+		
+				// Remove load event.
+					off('load', loadHandler);
+		
+				// Call load handler.
+					(loadHandler)();
+		
+			}, 1000);
+	
+	// Load elements.
+		// Load elements (if needed).
+			loadElements(document.body);
+	
+	// Scroll points.
 		(function() {
 		
-			var initialSection, initialScrollPoint, initialId,
-				header, footer, name, hideHeader, hideFooter, disableAutoScroll,
-				h, e, ee, k,
-				locked = false,
-				title = document.title,
-				scrollPointParent = function(target) {
+			var	scrollPointParent = function(target) {
 		
-					while (target) {
+					var inner;
 		
-						if (target.parentElement
-						&&	target.parentElement.tagName == 'SECTION')
-							break;
+					inner = $('#main > .inner');
 		
+					while (target && target.parentElement != inner)
 						target = target.parentElement;
-		
-					}
 		
 					return target;
 		
@@ -788,218 +846,6 @@
 						else
 							location.href = '#' + id;
 		
-				},
-				doNextSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').nextElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doPreviousSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section.active').previousElementSibling;
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + (section.matches(':first-child') ? '' : section.id.replace(/-section$/, ''));
-		
-				},
-				doFirstSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:first-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				doLastSection = function() {
-		
-					var section;
-		
-					section = $('#main > .inner > section:last-of-type');
-		
-					if (!section || section.tagName != 'SECTION')
-						return;
-		
-					location.href = '#' + section.id.replace(/-section$/, '');
-		
-				},
-				resetSectionChangeElements = function(section) {
-		
-					var ee, e, x;
-		
-					// Get elements with data-reset-on-section-change attribute.
-						ee = section.querySelectorAll('[data-reset-on-section-change="1"]');
-		
-					// Step through elements.
-						for (e of ee) {
-		
-							// Determine type.
-								x = e ? e.tagName : null;
-		
-								switch (x) {
-		
-									case 'FORM':
-		
-										// Reset.
-											e.reset();
-		
-										break;
-		
-									default:
-										break;
-		
-								}
-		
-						}
-		
-				},
-				activateSection = function(section, scrollPoint) {
-		
-					var sectionHeight, currentSection, currentSectionHeight,
-						name, hideHeader, hideFooter, disableAutoScroll,
-						ee, k;
-		
-					// Section already active?
-						if (!section.classList.contains('inactive')) {
-		
-							// Get options.
-								name = (section ? section.id.replace(/-section$/, '') : null);
-								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-							// Scroll to scroll point (if applicable).
-								if (scrollPoint)
-									scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-							// Otherwise, just scroll to top (if not disabled for this section).
-								else if (!disableAutoScroll)
-									scrollToElement(null);
-		
-							// Bail.
-								return false;
-		
-						}
-		
-					// Otherwise, activate it.
-						else {
-		
-							// Lock.
-								locked = true;
-		
-							// Clear index URL hash.
-								if (location.hash == '#home')
-									history.replaceState(null, null, '#');
-		
-							// Get options.
-								name = (section ? section.id.replace(/-section$/, '') : null);
-								hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-								hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-								disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-							// Deactivate current section.
-		
-								// Hide header and/or footer (if necessary).
-		
-									// Header.
-										if (header && hideHeader) {
-		
-											header.classList.add('hidden');
-											header.style.display = 'none';
-		
-										}
-		
-									// Footer.
-										if (footer && hideFooter) {
-		
-											footer.classList.add('hidden');
-											footer.style.display = 'none';
-		
-										}
-		
-								// Deactivate.
-									currentSection = $('#main > .inner > section:not(.inactive)');
-									currentSection.classList.add('inactive');
-									currentSection.classList.remove('active');
-									currentSection.style.display = 'none';
-		
-								// Reset title.
-									document.title = title;
-		
-								// Unload elements.
-									unloadElements(currentSection);
-		
-								// Reset section change elements.
-									resetSectionChangeElements(currentSection);
-		
-								// Clear timeout (if present).
-									clearTimeout(window._sectionTimeoutId);
-		
-							// Activate target section.
-		
-								// Show header and/or footer (if necessary).
-		
-									// Header.
-										if (header && !hideHeader) {
-		
-											header.style.display = '';
-											header.classList.remove('hidden');
-		
-										}
-		
-									// Footer.
-										if (footer && !hideFooter) {
-		
-											footer.style.display = '';
-											footer.classList.remove('hidden');
-		
-										}
-		
-								// Activate.
-									section.classList.remove('inactive');
-									section.classList.add('active');
-									section.style.display = '';
-		
-							// Trigger 'resize' event.
-								trigger('resize');
-		
-							// Update title.
-								if (section.dataset.title)
-									document.title = section.dataset.title + ' - ' + title;
-		
-							// Load elements.
-								loadElements(section);
-		
-							// Scroll to scroll point (if applicable).
-								if (scrollPoint)
-									scrollToElement(scrollPoint, 'instant');
-		
-							// Otherwise, just scroll to top (if not disabled for this section).
-								else if (!disableAutoScroll)
-									scrollToElement(null, 'instant');
-		
-							// Unlock.
-								locked = false;
-		
-						}
-		
-				},
-				sections = {
-					'hidden': {
-						disableAutoScroll: true,
-					},
 				};
 		
 			// Expose doNextScrollPoint, doPreviousScrollPoint, doFirstScrollPoint, doLastScrollPoint.
@@ -1008,32 +854,17 @@
 				window._firstScrollPoint = doFirstScrollPoint;
 				window._lastScrollPoint = doLastScrollPoint;
 		
-			// Expose doNextSection, doPreviousSection, doFirstSection, doLastSection.
-				window._nextSection = doNextSection;
-				window._previousSection = doPreviousSection;
-				window._firstSection = doFirstSection;
-				window._lastSection = doLastSection;
-		
 			// Override exposed scrollToTop.
 				window._scrollToTop = function() {
-		
-					var section, id;
 		
 					// Scroll to top.
 						scrollToElement(null);
 		
-					// Section active?
-						if (!!(section = $('section.active'))) {
+					// Scroll point active?
+						if (window.location.hash) {
 		
-							// Get name.
-								id = section.id.replace(/-section$/, '');
-		
-								// Index section? Clear.
-									if (id == 'home')
-										id = '';
-		
-							// Reset hash to section name (via new state).
-								history.pushState(null, null, '#' + id);
+							// Reset hash (via new state).
+								history.pushState(null, null, '.');
 		
 						}
 		
@@ -1045,117 +876,24 @@
 					if ('scrollRestoration' in history)
 						history.scrollRestoration = 'manual';
 		
-				// Header, footer.
-					header = $('#header');
-					footer = $('#footer');
-		
-				// Show initial section.
-		
-					// Determine target.
-						h = thisHash();
-		
-						// Contains invalid characters? Might be a third-party hashbang, so ignore it.
-							if (h
-							&&	!h.match(/^[a-zA-Z0-9\-]+$/))
-								h = null;
-		
-						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
-		
-								initialScrollPoint = e;
-								initialSection = initialScrollPoint.parentElement;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								initialScrollPoint = null;
-								initialSection = e;
-								initialId = initialSection.id;
-		
-							}
-		
-						// Missing initial section?
-							if (!initialSection) {
-		
-								// Default to index.
-									initialScrollPoint = null;
-									initialSection = $('#' + 'home' + '-section');
-									initialId = initialSection.id;
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// Get options.
-						name = (h ? h : 'home');
-						hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
-						hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
-						disableAutoScroll = name ? ((name in sections) && ('disableAutoScroll' in sections[name]) && sections[name].disableAutoScroll) : false;
-		
-					// Deactivate all sections (except initial).
-		
-						// Initially hide header and/or footer (if necessary).
-		
-							// Header.
-								if (header && hideHeader) {
-		
-									header.classList.add('hidden');
-									header.style.display = 'none';
-		
-								}
-		
-							// Footer.
-								if (footer && hideFooter) {
-		
-									footer.classList.add('hidden');
-									footer.style.display = 'none';
-		
-								}
-		
-						// Deactivate.
-							ee = $$('#main > .inner > section:not([id="' + initialId + '"])');
-		
-							for (k = 0; k < ee.length; k++) {
-		
-								ee[k].className = 'inactive';
-								ee[k].style.display = 'none';
-		
-							}
-		
-					// Activate initial section.
-						initialSection.classList.add('active');
-		
-					// Add ready event.
-						ready.add(() => {
-		
-							// Update title.
-								if (initialSection.dataset.title)
-									document.title = initialSection.dataset.title + ' - ' + title;
-		
-							// Load elements.
-								loadElements(initialSection);
-		
-								if (header)
-									loadElements(header);
-		
-								if (footer)
-									loadElements(footer);
-		
-							// Scroll to top (if not disabled for this section).
-								if (!disableAutoScroll)
-									scrollToElement(null, 'instant');
-		
-						});
-		
 				// Load event.
 					on('load', function() {
 		
-						// Scroll to initial scroll point (if applicable).
-					 		if (initialScrollPoint)
+						var initialScrollPoint, h;
+		
+						// Determine target.
+							h = thisHash();
+		
+							// Contains invalid characters? Might be a third-party hashbang, so ignore it.
+								if (h
+								&&	!h.match(/^[a-zA-Z0-9\-]+$/))
+									h = null;
+		
+							// Scroll point.
+								initialScrollPoint = $('[data-scroll-id="' + h + '"]');
+		
+						// Scroll to scroll point (if applicable).
+							if (initialScrollPoint)
 								scrollToElement(initialScrollPoint, 'instant');
 		
 					});
@@ -1163,12 +901,7 @@
 			// Hashchange event.
 				on('hashchange', function(event) {
 		
-					var section, scrollPoint,
-						h, e;
-		
-					// Lock.
-						if (locked)
-							return false;
+					var scrollPoint, h, pos;
 		
 					// Determine target.
 						h = thisHash();
@@ -1179,41 +912,18 @@
 								return false;
 		
 						// Scroll point.
-							if (e = $('[data-scroll-id="' + h + '"]')) {
+							scrollPoint = $('[data-scroll-id="' + h + '"]');
 		
-								scrollPoint = e;
-								section = scrollPoint.parentElement;
+					// Scroll to scroll point (if applicable).
+						if (scrollPoint)
+							scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
-							}
+					// Otherwise, just scroll to top.
+						else
+							scrollToElement(null);
 		
-						// Section.
-							else if (e = $('#' + (h ? h : 'home') + '-section')) {
-		
-								scrollPoint = null;
-								section = e;
-		
-							}
-		
-						// Anything else.
-							else {
-		
-								// Default to index.
-									scrollPoint = null;
-									section = $('#' + 'home' + '-section');
-		
-								// Clear index URL hash.
-									history.replaceState(undefined, undefined, '#');
-		
-							}
-		
-					// No section? Bail.
-						if (!section)
-							return false;
-		
-					// Activate section.
-						activateSection(section, scrollPoint);
-		
-					return false;
+					// Bail.
+						return false;
 		
 				});
 		
@@ -1222,7 +932,7 @@
 		
 						var t = event.target,
 							tagName = t.tagName.toUpperCase(),
-							scrollPoint, section;
+							scrollPoint;
 		
 						// Find real target.
 							switch (tagName) {
@@ -1265,27 +975,8 @@
 										// Prevent default.
 											event.preventDefault();
 		
-										// Get section.
-											section = scrollPoint.parentElement;
-		
-										// Section is inactive?
-											if (section.classList.contains('inactive')) {
-		
-												// Reset hash to section name (via new state).
-													history.pushState(null, null, '#' + section.id.replace(/-section$/, ''));
-		
-												// Activate section.
-													activateSection(section, scrollPoint);
-		
-											}
-		
-										// Otherwise ...
-											else {
-		
-												// Scroll to scroll point.
-													scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
-		
-											}
+										// Scroll to element.
+											scrollToElement(scrollPoint, 'smooth', scrollPointSpeed(scrollPoint));
 		
 									}
 		
@@ -1782,110 +1473,6 @@
 		
 		// Initialize.
 			scrollEvents.init();
-	
-	// Deferred.
-		(function() {
-		
-			var items = $$('.deferred'),
-				loadHandler, enterHandler;
-		
-			// Handlers.
-		
-				/**
-				 * "On Load" handler.
-				 */
-				loadHandler = function() {
-		
-					var i = this,
-						p = this.parentElement,
-						duration = 375;
-		
-					// Not "done" yet? Bail.
-						if (i.dataset.src !== 'done')
-							return;
-		
-					// Image loaded faster than expected? Reduce transition duration.
-						if (Date.now() - i._startLoad < duration)
-							duration = 175;
-		
-					// Set transition duration.
-						i.style.transitionDuration = (duration / 1000.00) + 's';
-		
-					// Show image.
-						p.classList.remove('loading');
-						i.style.opacity = 1;
-		
-						setTimeout(function() {
-		
-							// Clear background image.
-								i.style.backgroundImage = 'none';
-		
-							// Clear transition properties.
-								i.style.transitionProperty = '';
-								i.style.transitionTimingFunction = '';
-								i.style.transitionDuration = '';
-		
-						}, duration);
-		
-				};
-		
-				/**
-				 * "On Enter" handler.
-				 */
-				enterHandler = function() {
-		
-					var	i = this,
-						p = this.parentElement,
-						src;
-		
-					// Get src, mark as "done".
-						src = i.dataset.src;
-						i.dataset.src = 'done';
-		
-					// Mark parent as loading.
-						p.classList.add('loading');
-		
-					// Swap placeholder for real image src.
-						i._startLoad = Date.now();
-						i.src = src;
-		
-				};
-		
-			// Initialize items.
-				items.forEach(function(p) {
-		
-					var i = p.firstElementChild;
-		
-					// Set parent to placeholder.
-						if (!p.classList.contains('enclosed')) {
-		
-							p.style.backgroundImage = 'url(' + i.src + ')';
-							p.style.backgroundSize = '100% 100%';
-							p.style.backgroundPosition = 'top left';
-							p.style.backgroundRepeat = 'no-repeat';
-		
-						}
-		
-					// Hide image.
-						i.style.opacity = 0;
-		
-					// Set transition properties.
-						i.style.transitionProperty = 'opacity';
-						i.style.transitionTimingFunction = 'ease-in-out';
-		
-					// Load event.
-						i.addEventListener('load', loadHandler);
-		
-					// Add to scroll events.
-						scrollEvents.add({
-							element: i,
-							enter: enterHandler,
-							offset: 250,
-						});
-		
-				});
-		
-		})();
 	
 	// "On Visible" animation.
 		var onvisible = {
@@ -3771,270 +3358,6 @@
 		
 			};
 	
-	// Slideshow: slideshow13.
-		(function() {
-		
-			new slideshowBackground('slideshow13', {
-				target: '#slideshow13 .bg',
-				wrapper: '#slideshow13 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow13-f1bcb199.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow13-a3df0b59.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow13-57abd0e7.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow08.
-		(function() {
-		
-			new slideshowBackground('slideshow08', {
-				target: '#slideshow08 .bg',
-				wrapper: '#slideshow08 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow08-630151ce.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow08-9f68dfa7.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow08-5861232d.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow02.
-		(function() {
-		
-			new slideshowBackground('slideshow02', {
-				target: '#slideshow02 .bg',
-				wrapper: '#slideshow02 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow02-1463d418.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Blank',
-					},
-					{
-						src: 'assets/images/slideshow02-2af97d76.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Blank',
-					},
-					{
-						src: 'assets/images/slideshow02-5714e993.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Blank',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow01.
-		(function() {
-		
-			new slideshowBackground('slideshow01', {
-				target: '#slideshow01 .bg',
-				wrapper: '#slideshow01 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow01-c077c686.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Implied Warranty',
-					},
-					{
-						src: 'assets/images/slideshow01-7282c174.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Implied Warranty',
-					},
-					{
-						src: 'assets/images/slideshow01-41bb8746.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Buyers Guide Implied Warranty',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow07.
-		(function() {
-		
-			new slideshowBackground('slideshow07', {
-				target: '#slideshow07 .bg',
-				wrapper: '#slideshow07 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow07-ff08ecd2.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow07-a61b19ad.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow07-ec840742.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow10.
-		(function() {
-		
-			new slideshowBackground('slideshow10', {
-				target: '#slideshow10 .bg',
-				wrapper: '#slideshow10 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow10-a2989f5e.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow10-aaeca508.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow10-2f556c73.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
 	// Slideshow: slideshow05.
 		(function() {
 		
@@ -4079,235 +3402,18 @@
 		
 		})();
 	
-	// Slideshow: slideshow06.
-		(function() {
-		
-			new slideshowBackground('slideshow06', {
-				target: '#slideshow06 .bg',
-				wrapper: '#slideshow06 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow06-816d7ea1.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Window Sticker Custom',
-					},
-					{
-						src: 'assets/images/slideshow06-f74c3c8c.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Window Sticker Custom',
-					},
-					{
-						src: 'assets/images/slideshow06-40899e5c.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Exterior Window Sticker Custom',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow11.
-		(function() {
-		
-			new slideshowBackground('slideshow11', {
-				target: '#slideshow11 .bg',
-				wrapper: '#slideshow11 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow11-6aa3e3b5.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow11-2a8e3128.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow11-868a9238.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow12.
-		(function() {
-		
-			new slideshowBackground('slideshow12', {
-				target: '#slideshow12 .bg',
-				wrapper: '#slideshow12 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow12-c2effbaa.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow12-59139bcb.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow12-43177755.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow03.
-		(function() {
-		
-			new slideshowBackground('slideshow03', {
-				target: '#slideshow03 .bg',
-				wrapper: '#slideshow03 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow03-dcae9fdb.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow03-320bc2af.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow03-c8bd553a.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
-	// Slideshow: slideshow04.
-		(function() {
-		
-			new slideshowBackground('slideshow04', {
-				target: '#slideshow04 .bg',
-				wrapper: '#slideshow04 .content',
-				wait: 0,
-				defer: false,
-				navigation: true,
-				order: 'default',
-				preserveImageAspectRatio: true,
-				transition: {
-					style: 'crossfade',
-					speed: 500,
-					delay: 3000,
-					resume: 3000,
-				},
-				images: [
-					{
-						src: 'assets/images/slideshow04-871cde3b.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow04-12ef1623.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-					{
-						src: 'assets/images/slideshow04-c6b12b07.jpg',
-						position: 'center',
-						motion: 'none',
-						speed: 2,
-						caption: 'Untitled',
-					},
-				]
-			});
-		
-		})();
-	
 	// Initialize "On Visible" animations.
 		onvisible.add('.image.style1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
+		onvisible.add('h1.style3, h2.style3, h3.style3, p.style3', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style14, h2.style14, h3.style14, p.style14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.video.style1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
+		onvisible.add('h1.style1, h2.style1, h3.style1, p.style1', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('h1.style8, h2.style8, h3.style8, p.style8', { style: 'zoom-in', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.container.style12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
+		onvisible.add('.image.style2', { style: 'pop-in', speed: 500, intensity: 1, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons.style2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image.style6', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-in', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style1', { style: 'fade-right', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('h1.style5, h2.style5, h3.style5, p.style5', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons.style5', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
@@ -4320,12 +3426,7 @@
 		onvisible.add('.list.style3', { style: 'fade-up', speed: 750, intensity: 5, threshold: 2, delay: 0, stagger: 125, staggerSelector: ':scope ul > li, :scope ol > li', replay: false });
 		onvisible.add('h1.style11, h2.style11, h3.style11, p.style11', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('#text58', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('#text37', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style13, h2.style13, h3.style13, p.style13', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('#text39', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('#text79', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('#text66', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('#text97', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style15, h2.style15, h3.style15, p.style15', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style8', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
 	

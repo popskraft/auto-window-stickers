@@ -40,6 +40,10 @@
   width: 100%
 }
 
+.justify-center {
+  justify-content: center
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
