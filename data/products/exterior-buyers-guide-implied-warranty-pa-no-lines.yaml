@@ -17,9 +17,9 @@ price_note: "each (1000 min)"
 purchase_links:
   - name: "Buy on AK Dealer Services"
     url: https://akdealerservices.com/product/1001112-exterior-buyers-guide-implied-warranty-pa-no-lines
-  # - name: "Buy on Amazon"
-  #   url: "#"
-ogImage: "images/EXTERIOR/4-byersguide-implied-warrant-1.jpg"
+  - name: "Buy on Amazon"
+    url: https://www.amazon.com/dp/B0FHFCZK9X
+ogImage: "images/EXTERIOR/4-byersguide-blank-Backer-Printing-1.jpg"
 images:
   - src: "images/EXTERIOR/4-byersguide-implied-warrant-1.jpg"
   - src: "images/EXTERIOR/4-byersguide-implied-warrant-2.jpg"
