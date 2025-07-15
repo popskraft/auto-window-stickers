@@ -20,8 +20,8 @@ purchase_links:
     url: https://akdealerservices.com/product/1001148-interior-buyers-guide-pa-backer-printing-only
   # - name: "Buy on Amazon"
   #   url: "#"
-ogImage: "images/EXTERIOR/3-byersguide-blank-1.jpg"
+ogImage: "images/EXTERIOR/3-byersguide-backprinted-1.jpg"
 images:
-  - src: "images/EXTERIOR/3-byersguide-blank-1.jpg"
-  - src: "images/EXTERIOR/3-byersguide-blank-2.jpg"
-  - src: "images/EXTERIOR/3-byersguide-blank-3.jpg"
+  - src: "images/EXTERIOR/3-byersguide-backprinted-1.jpg"
+  - src: "images/EXTERIOR/3-byersguide-backprinted-2.jpg"
+  - src: "images/EXTERIOR/3-byersguide-backprinted-3.jpg"
