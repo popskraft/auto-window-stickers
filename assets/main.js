@@ -3342,16 +3342,14 @@
 	
 	// Initialize "On Visible" animations.
 		onvisible.add('.image.style1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
-		onvisible.add('h1.style3, h2.style3, h3.style3, p.style3', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('h1.style14, h2.style14, h3.style14, p.style14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.video.style1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.container.style12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
 		onvisible.add('.buttons.style2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image.style6', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-down', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('hr.style1', { style: 'fade-right', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style5, h2.style5, h3.style5, p.style5', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons.style5', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image.style3', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
 		onvisible.add('h1.style4, h2.style4, h3.style4, p.style4', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
