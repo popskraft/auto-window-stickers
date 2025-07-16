@@ -27,7 +27,7 @@
 {{ range $rowIndex := seq 1 $rowCount }}
 <div id="product-row-{{ $rowIndex }}" class="style5 product-row container columns">
 	<div class="wrapper">
-		<div class="inner justify-center">
+		<div class="inner justify-left">
 			{{ $product1Index := sub (mul $rowIndex 2) 2 }}
 			{{ $product2Index := sub (mul $rowIndex 2) 1 }}
 			
