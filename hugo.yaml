@@ -1,4 +1,5 @@
 # Base Configuration
+uglyURLs: false
 baseURL: "https://autowindowstickers.com/"
 title: "Car Window Stickers"
 languageCode: "en-US"
