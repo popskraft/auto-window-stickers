@@ -1,7 +1,7 @@
 # Base Configuration
 uglyURLs: false
 baseURL: "https://autowindowstickers.com/"
-title: "Car Window Stickers"
+title: "Auto Window Stickers"
 languageCode: "en-US"
 description: "Car Window Stickers for auto dealerships"
 
@@ -15,8 +15,8 @@ params:
   # Company Information
   company:
     name: "Auto Window Stickers"
-    tagline: "Quality Car Window Stickers"
-    description: "Your source for quality car window stickers for vehicle exteriors and interiors."
+    tagline: "Quality Auto Window Stickers"
+    description: "Your source for quality auto window stickers for vehicle exteriors and interiors."
     brandName: "Auto Window Stickers"
   
   # Distributor Information

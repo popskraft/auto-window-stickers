@@ -1,145 +1,230 @@
-# Руководство по управлению контентом
+# Auto Window Stickers - Hugo Website
 
-## Оглавление
-1. [Добавление нового продукта](#добавление-нового-продукта)
-2. [Редактирование существующего продукта](#редактирование-существующего-продукта)
-3. [Добавление или обновление ссылки на Amazon](#добавление-ссылки-на-покупку)
-4. [Структура файлов продукта](#структура-файлов-продукта)
-5. [Запуск сервера для разработки и рендеринга](#запуск-сервера-для-разработки-и-рендеринга)
+## Quick Start Guide
 
-## Добавление нового продукта
+This is a [Hugo](https://gohugo.io)-based website that uses templates and YAML data files to generate product pages for window stickers. 
 
-1. **Создание файлов продукта**
-   - Откройте терминал в корневой директории проекта
-   - Выполните команду:
-     ```bash
-     ./create-product.sh "Название продукта"
-     ```
-   - Скрипт автоматически создаст два файла:
-     - `content/products/название-продукта.md` - страница продукта
-     - `data/products/название-продукта.yaml` - данные продукта
+### Core Concepts
 
-2. **Заполнение данных продукта**
-   - Откройте файл `data/products/название-продукта.yaml`
-   - Заполните все необходимые поля:
-     ```yaml
-     title: Название продукта
-     description: Описание продукта
-     price: 0.00
-     amazon_url: https://www.amazon.com/...
-     image: /images/products/имя-изображения.jpg
-     categories:
-       - категория1
-       - категория2
-     features:
-       - Характеристика 1
-       - Характеристика 2
-     ```
+1. **Templates & Content Separation**
+   - Site uses Hugo templates (`layouts/`) to define page structure
+   - Content is stored separately in Markdown files (`content/`)
+   - Product data is centralized in YAML files (`data/`)
 
-3. **Добавление изображения**
-   - Поместите изображение продукта в директорию `static/images/products/`
-   - Укажите правильный путь к изображению в поле `image`
+2. **Important Rules**
+   - YAML formatting must be exact (spaces, not tabs)
+   - Images go in `assets/images/` or `static/images/`
+   - Follow the exact frontmatter structure in content files
 
-## Редактирование существующего продукта
+### Quick Links
+- [Hugo Content Management Guide](https://gohugo.io/content-management/organization/)
+- [Hugo Template Guide](https://gohugo.io/templates/introduction/)
+- [YAML Syntax Guide](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html)
 
-1. **Найдите файл продукта**
-   - Перейдите в директорию `data/products/`
-   - Найдите файл с названием продукта (например, `название-продукта.yaml`)
+### Common Tasks
+```bash
+# Add new product
+1. Create data file:    data/products/new-product.yaml
+2. Add content:         content/new-product.md
+3. Add category pages:  content/*/new-product.md
 
-2. **Внесите изменения**
-   - Откройте файл в текстовом редакторе
-   - Внесите необходимые изменения в данные
-   - Сохраните файл
+# Add new category
+1. Create category folder: content/new-category/
+2. Copy product pages:  content/*.md → content/new-category/
+```
 
-3. **Проверьте изменения**
-   - Запустите локальный сервер для предпросмотра:
-     ```bash
-     hugo server -D
-     ```
-   - Откройте `http://localhost:1313/` в браузере
+## Table of Contents
+- [Project Structure](#project-structure)
+- [Managing Product Data](#managing-product-data)
+- [Content Management](#content-management)
+- [Adding New Pages](#adding-new-pages)
+- [Development](#development)
 
-## Добавление ссылок на покупку
+## Project Structure
 
-1. **Для нового продукта**
-   - В файле данных продукта (`data/products/название-продукта.yaml`) добавьте секцию `purchase_links`
-   - Укажите все доступные ссылки для покупки, включая Amazon
+```
+auto-window-stickers/
+├── data/           # Product data files (YAML)
+├── content/        # Markdown content files
+├── layouts/        # HTML templates
+├── assets/         # CSS, JS, and images
+└── static/         # Static files
+```
 
-2. **Для существующего продукта**
-   - Откройте соответствующий YAML-файл в `data/products/`
-   - Найдите или добавьте секцию `purchase_links`
-   - Добавьте или обновите ссылки на покупку
-   - Пример:
-     ```yaml
-     purchase_links:
-       - name: "Buy on AK Dealer Services"
-         url: https://akdealerservices.com/product/1000535-exterior-window-sticker-blank
-       - name: "Buy on Amazon"
-         url: "https://www.amazon.com/dp/B0FF4YM1H7"
-     ```
+## Managing Product Data
 
-## Структура файлов продукта
+### Why Data is Stored in the `data/` Directory
 
-- **Файл контента** (`content/products/название-продукта.md`):
-  - Содержит метаданные и основной текст страницы
-  - Автоматически генерируется скриптом
-  - Не требует ручного редактирования в большинстве случаев
+The `data/` directory serves as a central storage for product information:
 
-- **Файл данных** (`data/products/название-продукта.yaml`):
-  - Содержит всю информацию о продукте
-  - Используется для отображения на странице
-  - Основной файл для редактирования
+**Key Point:** Product data is stored in ONE place (`data/products/*.yaml`) while having many category-specific pages in the `content/` directory.
 
-## Важные примечания
+Example structure:
+```
+data/products/
+└── exterior-window-sticker-blank.yaml         # ONE product data file
+    
+content/                      # Category pages using same data
+├── exterior/exterior-window-sticker-blank.md
+└── interior/exterior-window-sticker-blank.md
+```
 
-- Названия файлов должны быть на английском языке, в нижнем регистре, с дефисами вместо пробелов
-- Все ссылки должны быть полными (включая https://)
-- После внесения изменений не забудьте закоммитить их в систему контроля версий
+**When to Edit Files:**
+- To change product info (prices, features, images) → edit `data/products/*.yaml`
+- To change category-specific content → edit files in `content/[category]/*.md`
 
-## Запуск сервера для разработки и рендеринга
+### Product Data Files Location
+All product data is stored in YAML files under the `data/products/` directory:
+```
+data/products/
+├── exterior-window-sticker-blank.yaml
+├── exterior-window-sticker-custom.yaml
+├── exterior-buyers-guide-asis.yaml
+└── [other products...]
+```
 
-1. **Запуск сервера разработки**
-   - Для запуска сервера разработки с автоматическим обновлением страницы при изменениях:
-     ```bash
-     npm run dev
-     ```
-   - Или с помощью Hugo напрямую:
-     ```bash
-     hugo server --disableFastRender
-     ```
-   - Для просмотра черновиков (страниц с параметром `draft: true`):
-     ```bash
-     hugo server -D
-     ```
-   - Сайт будет доступен по адресу `http://localhost:1313/`
+Each product file contains:
+- Basic product information (name, price, SKU)
+- Media assets and images
+- Product features and benefits
+- Pricing information
+- Marketing content
 
-2. **Запуск с Tailwind CSS**
-   - Для одновременного запуска сервера и компиляции Tailwind CSS:
-     ```bash
-     npm run dev:all
-     ```
-   - Это запустит сервер Hugo и будет отслеживать изменения в CSS файлах
+### Product YAML Structure
+Below is the complete structure for a product data file with all available fields:
 
-3. **Сборка для продакшена**
-   - Для создания оптимизированной версии сайта для публикации:
-     ```bash
-     npm run build
-     ```
-   - Или с помощью Hugo напрямую:
-     ```bash
-     hugo --gc --minify
-     ```
-   - Результат сборки будет находиться в директории `public/`
+```yaml
+# Basic Product Information
+weight: 1                     # Product weight for sorting
+title: "Product Name"         # Full product name
+description: "Description"    # Product description
+price: 0.39                  # Base price
+price_note: "each (1000 min)" # Additional pricing info
+size: "8.5 x 11\""           # Physical dimensions
+SKU: "1000535"              # Stock Keeping Unit
 
-4. **Работа с Tailwind CSS**
-   - Для компиляции Tailwind CSS при разработке:
-     ```bash
-     npm run tailwind:watch
-     ```
-   - Для создания минифицированной версии CSS для продакшена:
-     ```bash
-     npm run tailwind:build
-     ```
+# Media Assets
+ogImage: "images/EXTERIOR/1-blank-1.jpg"  # Main social sharing image
+images:                      # Gallery images
+  - src: "images/example.jpg"
+    alt: "Image description"
 
-## Получение помощи
+# Product Features
+features:
+  - "Waterproof"
+  - "Fade resistant"
+  - "Easy to apply"
 
-Если у вас возникли вопросы или проблемы, обратитесь к документации Hugo или к разработчику проекта.
+# Purchase Links
+purchase_links:
+  - name: "Vendor Name"
+    url: "https://example.com/product"
+```
+
+## Content Management
+
+### Product Pages
+Product pages are stored in two locations:
+
+1. Base product pages in `content/`:
+   ```
+   content/
+   ├── exterior-window-sticker-blank.md
+   ├── exterior-window-sticker-custom.md
+   └── [other products...]
+   ```
+
+2. Category-specific product pages in `content/[category]/`:
+   ```
+   content/exterior/
+   ├── _index.md
+   ├── exterior-window-sticker-blank.md
+   └── exterior-window-sticker-custom.md
+   ```
+
+### Product Page Frontmatter
+Here's the complete frontmatter structure for product pages:
+
+```yaml
+---
+title: "Window Sticker"
+description: "High-quality window sticker for automotive use"
+date: 2024-01-01
+draft: false
+---
+```
+
+## Adding New Pages
+
+### Adding a New Product
+
+1. Create product data file in `data/products/`:
+   ```bash
+   touch data/products/new-product.yaml
+   ```
+
+2. Create base product page:
+   ```bash
+   touch content/new-product.md
+   ```
+
+3. Create category-specific product pages:
+   ```bash
+   for category in content/*/; do
+     touch "$category/new-product.md"
+   done
+   ```
+
+### Adding a New Category
+
+1. Create category directory:
+   ```bash
+   mkdir content/new-category
+   ```
+
+2. Create category index:
+   ```bash
+   touch content/new-category/_index.md
+   ```
+
+3. Copy product pages:
+   ```bash
+   for product in content/*.md; do
+     if [ -f "$product" ]; then
+       cp "$product" "content/new-category/"
+     fi
+   done
+   ```
+
+## Development
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+hugo server -D --disableFastRender
+```
+
+### Building for Production
+```bash
+# Build with minification
+hugo --minify
+
+# Or using npm script
+npm run build
+```
+
+The built site will be in the `public/` directory, ready for deployment.
+
+### Working with Tailwind CSS
+```bash
+# Watch for changes during development
+npm run tailwind:watch
+
+# Build minified CSS for production
+npm run tailwind:build
+```
+
+For more information about Hugo, visit the [official Hugo documentation](https://gohugo.io/documentation/).

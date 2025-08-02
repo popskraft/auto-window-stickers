@@ -1,6 +1,6 @@
 ---
 # title: "Auto & Dealership Window Stickers"
-seoTitle: "Car Window Stickers near You. Best price!"
+seoTitle: "Car Window Stickers near You. Auto Window Stickers"
 layout: "home"
 description: >-
   Car Window Stickers supplies blank and custom Window Stickers, Buyers Guides, and Addendums for new and used vehicles. We deliver professional presentation, full compliance, and pricing that works for every dealership.
