@@ -9,7 +9,9 @@ description: "Car Window Stickers for auto dealerships"
 params:
   # Global Settings
   ogImage: "/images/og-image.jpg"
-  logo: "logo.svg"
+  logo: "logo-orange-asterics.png"
+  favicon: "/favicon-2.png"
+  appleTouchIcon: "/apple-touch-icon-2.png"
   wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale" # Referenced in multiple places
   
   # Company Information
