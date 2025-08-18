@@ -5,8 +5,7 @@
 # - Placeholder substitutions: [[product]], [[state]], [[keyword]]
 # - Deterministic randomness controlled by --seed parameter
 
-layout: "product-state"
-description: "Details about the {{ replace .Name "-" " " | lower }} product."
+layout: "product"
 date: {{ .Date }}
 # draft: false
 seoTitle: ""  # Composed from: [product title: from data/products/product-file.md] — [random keyword from data/content-generator/keywords-seotitle.yaml] [state name from data/content-generator/states.yaml]
