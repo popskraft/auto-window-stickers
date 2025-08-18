@@ -12,26 +12,30 @@ Self-contained Hugo page generator for the Auto Window Stickers site. This folde
 - Python 3.10+ recommended
 - If you use the helper: bash and venv available on your system
 
-## Quick Start (recommended)
-From `tools/page-generator/`:
+## Quick Start (recommended): use the repo root venv
+From the repo root (`/path/to/auto-window-stickers`), install deps into the root venv and run via the root wrapper:
+```bash
+./.venv/bin/python -m pip install -r tools/page-generator/requirements.txt
+./.venv/bin/python generate-pages.py --dry-run --limit 5
+./.venv/bin/python generate-pages.py
+```
+
+This uses a single virtual environment at the repo root and delegates to this portable generator internally.
+
+## Alternative: portable helper (creates a nested venv)
+From `tools/page-generator/` you can use the helper that sets up a local venv only for this tool:
 ```bash
 chmod +x run.sh
 ./run.sh --dry-run --limit 5
-# then full run
 ./run.sh
 ```
 
-The helper will:
-1) Create `.venv/` in this folder (if missing)
-2) Install `requirements.txt`
-3) Run `generate-pages.py --config config.yaml` with your CLI args
+What it does:
+1) Creates `tools/page-generator/.venv/` if missing
+2) Installs `requirements.txt`
+3) Runs `generate-pages.py --config config.yaml` with your CLI args
 
-## Alternative: use project-level venv
-If you already have a venv at the repo root (e.g., `.venv/`), run directly:
-```bash
-../../.venv/bin/python generate-pages.py --config config.yaml --dry-run --limit 5
-../../.venv/bin/python generate-pages.py --config config.yaml
-```
+Note: This uses a nested venv distinct from the repo root venv. Avoid mixing both approaches in the same session to prevent confusion.
 
 ## Alternative: run from repo root (wrapper)
 In the repo root there is a convenience wrapper `generate-pages.py` that delegates to this portable copy and forces the correct base path:
@@ -39,6 +43,35 @@ In the repo root there is a convenience wrapper `generate-pages.py` that delegat
 .venv/bin/python generate-pages.py --dry-run --limit 5
 .venv/bin/python generate-pages.py
 ```
+
+## Generating products vs articles
+
+The generator supports two modes via `--type`:
+
+- `product` (default): generates state-by-product pages.
+- `article`: generates per-product articles using article blocks and titles.
+
+Commands (using the root venv and wrapper):
+
+```bash
+# Products only
+./.venv/bin/python generate-pages.py --type product --dry-run --limit 5
+./.venv/bin/python generate-pages.py --type product
+
+# Articles only
+./.venv/bin/python generate-pages.py --type product --dry-run --limit 5
+./.venv/bin/python generate-pages.py --type article
+```
+
+Outputs:
+
+- Products: `content/states/{state-slug}/{product-key}/index.md` (controlled by `pages.filename_pattern` in `tools/page-generator/config.yaml`).
+- Articles: `content/articles/<product-slug>/<article-slug>/index.md`.
+
+Article inputs:
+
+- Titles list: `data/content-generator/articles.yaml` (YAML key: `articles: ["Title 1", ...]`).
+- Block files: `data/content-generator/content/article/*.yaml` (numbered files; one item is chosen from each file).
 
 ## Configuration Reference (`config.yaml`)
 
@@ -88,20 +121,13 @@ The script accepts these arguments (they override the config values):
 
 Examples:
 ```bash
-# Preview 3 pages without writing files
-./run.sh --dry-run --limit 3
+# Root venv (recommended)
+./.venv/bin/python -m pip install -r tools/page-generator/requirements.txt
+./.venv/bin/python generate-pages.py --dry-run --limit 5
+./.venv/bin/python generate-pages.py
 
-# Full run (writes pages)
-./run.sh
-
-# Custom seed for reproducible selection
-./run.sh --seed 123
-
-# Run directly with project venv
-../../.venv/bin/python generate-pages.py --config config.yaml --dry-run --limit 5
-
-# Run from repo root (wrapper)
-.venv/bin/python generate-pages.py --dry-run --limit 5
+# Portable helper (nested venv)
+cd tools/page-generator && ./run.sh --dry-run --limit 3 && ./run.sh
 ```
 
 ## Troubleshooting
