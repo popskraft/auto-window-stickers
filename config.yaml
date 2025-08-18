@@ -1,0 +1,127 @@
+# Configuration file for generate-pages.py script
+# Hugo Auto Window Stickers Page Generation Settings
+
+# Script execution settings
+execution:
+  # Random seed for reproducible generation (null for random)
+  seed: 42
+  
+  # Maximum number of pages to generate (null for unlimited)
+  limit: 2
+  
+  # Dry run mode - show what would be generated without creating files
+  dry_run: false
+  
+  # Base path to Hugo site directory
+  base_path: "."
+  
+  # Output directory for generated pages (relative to base_path)
+  output_dir: "content"
+
+# Content generation settings
+content:
+  # Number of items to select from each content pool
+  savings_count: 1
+  benefits_count: 6
+  faq_count: 10
+  testimonials_count: 3
+  
+  # Default saving number if not found in product data
+  default_saving_number: "3500"
+
+# SEO and keyword settings
+seo:
+  # Use keywords-seotitle.yaml for SEO titles only
+  seo_keywords_file: "data/content-generator/keywords-seotitle.yaml"
+  
+  # Use keywords.yaml for content placeholder substitutions
+  content_keywords_file: "data/content-generator/keywords.yaml"
+  
+  # SEO title template: {product_title} — {keyword} {state}
+  title_template: "{product_title} — {keyword} {state}"
+
+# Data source files
+data_sources:
+  products_dir: "data/products"
+  states_file: "data/content-generator/states.yaml"
+  content_pools_dir: "data/content-generator/content/product"
+
+# Page generation settings
+pages:
+  # Layout to use for generated pages
+  layout: "product"
+  
+  # Directory pattern: {state_slug}/{product_key}/index.md
+  # Full path will be: content/{state_slug}/{product_key}/index.md
+  filename_pattern: "{state_slug}/{product_key}/index.md"
+  
+  # Include generated timestamp in front matter
+  include_timestamp: true
+  
+  # Add generation comment to markdown files
+  add_generation_comment: true
+
+# Article generation settings (for future use)
+articles:
+  # Layout to use for generated articles
+  layout: "article"
+  
+  # Directory pattern: articles/{article_name}/index.md
+  # Full path will be: content/articles/{article_name}/index.md
+  filename_pattern: "articles/{article_name}/index.md"
+  
+  # Article content pools directory
+  content_pools_dir: "data/content-generator/content/article"
+
+# Logging and output settings
+logging:
+  # Show progress every N pages
+  progress_interval: 50
+  
+  # Verbose output
+  verbose: false
+  
+  # Log file path (null to disable file logging)
+  log_file: null
+
+# Advanced settings
+advanced:
+  # Skip products with missing required fields
+  skip_invalid_products: true
+  
+  # Required product fields for generation
+  required_product_fields:
+    - "title"
+    - "description"
+    - "saving_number"
+  
+  # Placeholder patterns to replace in content
+  placeholders:
+    product: "[[product]]"
+    state: "[[state]]"
+    keyword: "[[keyword]]"
+    saving_number: "[[saving_number]]"
+  
+  # File encoding for reading/writing
+  file_encoding: "utf-8"
+  
+  # YAML dump settings
+  yaml_settings:
+    default_flow_style: false
+    allow_unicode: true
+    sort_keys: false
+    indent: 2
+
+# Quality control settings
+quality:
+  # Minimum content length for generated text blocks
+  min_content_length: 10
+  
+  # Maximum content length for generated text blocks
+  max_content_length: 8000
+  
+  # Validate generated YAML front matter
+  validate_yaml: true
+  
+  # Check for placeholder substitution completeness
+  check_placeholders: true
