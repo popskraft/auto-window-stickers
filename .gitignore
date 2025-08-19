@@ -22,3 +22,6 @@ __pycache__/
 
 # Local venv for portable generator
 tools/page-generator/.venv/
+
+# AWS export 
+carrd-aws-to-hugo-20250818
