@@ -1,0 +1,56 @@
+{{/* layouts/shortcodes/figureproc.html */}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $title := .Get "title" | default "" -}}
+
+{{/* If src is empty or contains unevaluated template markers, fall back to page params */}}
+{{- if or (not $src) (eq $src "") (strings.Contains $src "{{") -}}
+  {{- with .Page.Params.image_body -}}
+    {{- $src = . -}}
+  {{- end -}}
+  {{- if and (eq $alt "") (.Page.Params.image_body_alt) -}}
+    {{- $alt = .Page.Params.image_body_alt -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Normalize path to be relative to the assets/ directory.
+   Accept src like:
+   - /assets/images/articles/1.jpg
+   - assets/images/articles/1.jpg
+   - images/articles/1.jpg
+*/}}
+{{- $path := strings.TrimSpace $src -}}
+{{- if strings.HasPrefix $path "/" -}}
+  {{- $path = strings.TrimPrefix $path "/" -}}
+{{- end -}}
+{{- if strings.HasPrefix $path "assets/" -}}
+  {{- $path = strings.TrimPrefix $path "assets/" -}}
+{{- end -}}
+
+{{/* debug logging removed */}}
+
+{{/* Retrieve from Hugo Pipes assets (must be under assets/) */}}
+{{- $img := resources.Get $path -}}
+{{- if not $img -}}
+  {{/* Try with assets/ prefix as a fallback */}}
+  {{- $altPath := printf "assets/%s" $path -}}
+  {{- $img = resources.Get $altPath -}}
+{{- end -}}
+{{- if and (not $img) (ne $path $src) -}}
+  {{/* As a last resort, try the raw src unmodified */}}
+  {{- $img = resources.Get (strings.TrimSpace $src) -}}
+{{- end -}}
+{{- if not $img -}}
+  {{- errorf "figureproc: image not found: %s (normalized: %s) (expected under assets/)" $src $path -}}
+{{- end -}}
+
+{{/* Ensure the resource is an image before resizing */}}
+{{- if ne $img.MediaType.MainType "image" -}}
+  {{- errorf "figureproc: resource is not an image: %s (media: %s/%s)" $path $img.MediaType.MainType $img.MediaType.SubType -}}
+{{- end -}}
+
+{{/* Process to width=1000 (exact width), auto height, convert to webp. You can tweak quality like "1000x q80 webp" */}}
+{{- $processed := $img.Resize "1000x webp" -}}
+
+<img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" title="{{ $title }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" loading="lazy" decoding="async" class="{{ $class }}">

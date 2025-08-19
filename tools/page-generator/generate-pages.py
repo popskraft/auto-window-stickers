@@ -13,7 +13,7 @@ import sys
 import yaml
 import random
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 import re
 
@@ -270,6 +270,7 @@ class PageGenerator:
                 product_data, state, content_keyword
             ),
             'date': datetime.now().isoformat(),
+            'publishDate': (datetime.now() - timedelta(minutes=1)).isoformat(),
             'seoTitle': seo_title,
             'savings': {
                 'headline': savings.get('headline', ''),
@@ -340,6 +341,28 @@ class PageGenerator:
         choice = random.choice(candidates)
         return str(Path('assets') / 'images' / 'articles' / choice.name)
 
+    def _pick_cover_and_body_images(self):
+        """Pick two distinct random images for cover and body. Return (cover, body).
+
+        Paths are relative like 'assets/images/articles/<file>'. Empty strings if none.
+        """
+        images_dir = self.base_path / 'assets' / 'images' / 'articles'
+        exts = {'.jpg', '.jpeg', '.png', '.webp'}
+        if not images_dir.exists() or not images_dir.is_dir():
+            return "", ""
+        candidates = [p for p in images_dir.iterdir() if p.is_file() and p.suffix.lower() in exts]
+        if not candidates:
+            return "", ""
+        if len(candidates) == 1:
+            rel = str(Path('assets') / 'images' / 'articles' / candidates[0].name)
+            return rel, ""
+        cover_p = random.choice(candidates)
+        remaining = [p for p in candidates if p.name != cover_p.name]
+        body_p = random.choice(remaining)
+        cover = str(Path('assets') / 'images' / 'articles' / cover_p.name)
+        body = str(Path('assets') / 'images' / 'articles' / body_p.name)
+        return cover, body
+
     def _render_article_item_md(self, item: dict, product_title: str) -> str:
         """Render a single selected article item (dict) to Markdown with substitutions."""
         lines = []
@@ -390,7 +413,7 @@ class PageGenerator:
         """Pick one item from each numbered article block file and render to Markdown."""
         product_title = (product_data.get('title') or '').replace('**', '')
         parts = []
-        for f in self._iter_article_block_files():
+        for idx, f in enumerate(self._iter_article_block_files()):
             items = self._load_yaml_list(f)
             if not items:
                 continue
@@ -399,6 +422,9 @@ class PageGenerator:
             md = self._render_article_item_md(chosen, product_title)
             if md:
                 parts.append(md)
+            # After second block (index 1), inject body image shortcode
+            if idx == 1:
+                parts.append('{{< figureproc src="/{{< param image_body >}}" alt="{{< param image_body_alt >}}" >}}\n')
         return "\n".join(parts).strip() + "\n"
 
     def _read_archetype_article(self):
@@ -447,9 +473,17 @@ class PageGenerator:
         fm = dict(fm_default)
         fm['title'] = article_title
         fm.setdefault('date', datetime.now().isoformat())
-        # Ensure image_cover is present; auto-pick from assets/images/articles if available
-        cover = self._find_article_cover_image()
+        fm.setdefault('publishDate', (datetime.now() - timedelta(minutes=1)).isoformat())
+        # Ensure image_cover and image_body are present; auto-pick distinct images if available
+        cover, body_img = self._pick_cover_and_body_images()
         fm.setdefault('image_cover', cover or "")
+        # Avoid accidental equality; set only if distinct
+        if body_img and body_img != fm.get('image_cover'):
+            fm.setdefault('image_body', body_img)
+        else:
+            fm.setdefault('image_body', "")
+        # Set alt text for body image to the page title if not provided
+        fm.setdefault('image_body_alt', fm.get('title', article_title))
         # Ensure directories
         filepath.parent.mkdir(parents=True, exist_ok=True)
         with open(filepath, 'w', encoding='utf-8') as f:

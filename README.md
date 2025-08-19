@@ -227,4 +227,39 @@ npm run tailwind:watch
 npm run tailwind:build
 ```
 
+## Automation Scripts and Generators
+
+Keep all of the following; use whichever fits your workflow:
+
+- **Root wrapper — `generate-pages.py`**
+  - Convenience entrypoint that delegates to `tools/page-generator/generate-pages.py` with the correct config.
+  - Run from repo root using the root venv:
+    ```bash
+    ./.venv/bin/python generate-pages.py --dry-run --limit 5
+    ./.venv/bin/python generate-pages.py --type article --dry-run --limit 5
+    ./.venv/bin/python generate-pages.py --type product
+    ```
+
+- **Portable generator — `tools/page-generator/generate-pages.py`**
+  - Self-contained generator with its own `config.yaml` and optional `run.sh` helper.
+  - Outputs:
+    - Products → `content/states/{state-slug}/{product-key}/index.md`
+    - Articles → `content/articles/<product-slug>/<article-slug>/index.md`
+  - Articles include `image_cover`, `image_body`, and `image_body_alt` (auto-set to the article title) and inject a `figureproc` shortcode using that alt text.
+
+- **Data-only bootstrap — `product-data-generator.sh`**
+  - Creates starter YAML in `data/products/` from `archetypes/product-data.yaml`.
+  - Use when adding a new product’s data file only.
+
+- **Content + data bootstrap — `create-product.sh`**
+  - Creates both a content page (from `archetypes/product.md`) and a matching data YAML under `data/products/`.
+  - Use if you still maintain manual per-product content files alongside data.
+
+Notes:
+- The article shortcode injected by the generator passes the image alt from front matter:
+  ```go
+  {{< figureproc src="/{{< param image_body >}}" alt="{{< param image_body_alt >}}" >}}
+  ```
+  The shortcode then resizes and converts images to WebP (1000px width) via Hugo Pipes.
+
 For more information about Hugo, visit the [official Hugo documentation](https://gohugo.io/documentation/).

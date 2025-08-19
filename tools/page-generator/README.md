@@ -59,7 +59,7 @@ Commands (using the root venv and wrapper):
 ./.venv/bin/python generate-pages.py --type product
 
 # Articles only
-./.venv/bin/python generate-pages.py --type product --dry-run --limit 5
+./.venv/bin/python generate-pages.py --type article --dry-run --limit 5
 ./.venv/bin/python generate-pages.py --type article
 ```
 
@@ -72,6 +72,12 @@ Article inputs:
 
 - Titles list: `data/content-generator/articles.yaml` (YAML key: `articles: ["Title 1", ...]`).
 - Block files: `data/content-generator/content/article/*.yaml` (numbered files; one item is chosen from each file).
+
+Article rendering details:
+
+- Generated article front matter includes `image_cover`, `image_body`, and `image_body_alt` (defaults to the article title).
+- The article body injects the `figureproc` shortcode after block 2 and passes `alt` from `image_body_alt`:
+  `{{< figureproc src="/{{< param image_body >}}" alt="{{< param image_body_alt >}}" >}}`
 
 ## Configuration Reference (`config.yaml`)
 

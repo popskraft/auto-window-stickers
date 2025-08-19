@@ -99,9 +99,9 @@
 	<link rel="preconnect" href="https://forms.ju.mp" crossorigin>
 
 	<!-- Preload critical resources -->
-	<link rel="preload" href="{{ "/images/og-image.jpg" | relURL }}" as="image">
-	<link rel="preload" href="{{ "/akdslogo.png" | relURL }}" as="image">
-	<link rel="preload" href="{{ "/logo.svg" | relURL }}" as="image">
+	<link rel="prefetch" href="{{ "/images/og-image.jpg" | relURL }}">
+	<link rel="prefetch" href="{{ "/akdslogo.png" | relURL }}">
+	<link rel="prefetch" href="{{ "/logo.svg" | relURL }}">
 </head>
 {{/* Added body classes similar to old theme for potential compatibility */}}
 
@@ -138,7 +138,9 @@
 	{{ $customJS := resources.Get "js/theme.js" | minify | fingerprint }}
 	<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
 
+	{{ if hugo.IsProduction }}
 	{{ template "_internal/google_analytics.html" . }}
+	{{ end }}
 
 </body>
 </html>
