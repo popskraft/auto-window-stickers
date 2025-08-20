@@ -24,4 +24,5 @@ __pycache__/
 tools/page-generator/.venv/
 
 # AWS export 
-carrd-aws-to-hugo-20250818
+carrd-aws-to-hugo-20250818/
+carrd-aws-to-hugo-20250818.zip
