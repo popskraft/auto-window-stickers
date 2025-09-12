@@ -54,6 +54,12 @@ ul.links li.active a {
   transition: all 0.3s ease;
   cursor: default;
 }
+/* Do not change appearance on hover for active link */
+ul.links li.active a:hover {
+  color: #ffffff !important; /* override base hover color */
+  opacity: 0.5;              /* keep dimmed */
+  cursor: default;
+}
 /* Inactive (other pages) appear as normal bright links */
 ul.links li.inactive a {
   color: #ffffff !important;
@@ -61,8 +67,10 @@ ul.links li.inactive a {
   transition: all 0.3s ease;
 }
 /* Hover effect only for inactive links */
-ul.links li.inactive a:hover {
+ul.links li.inactive a:hover,
+#links02 li:not(.active) a:hover {
   opacity: 1;
+  color: #75d6ff !important; /* requested hover color */
 }
 
 /* Slideshow */
