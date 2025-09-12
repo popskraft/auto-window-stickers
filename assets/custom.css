@@ -48,16 +48,20 @@
 }
 
 /* Navigation active/inactive states */
+/* Active (current page) appears dimmed */
 ul.links li.active a {
-  color: #ffffff !important;
+  opacity: 0.5;
   transition: all 0.3s ease;
   cursor: default;
 }
+/* Inactive (other pages) appear as normal bright links */
 ul.links li.inactive a {
-  opacity: 0.5;
+  color: #ffffff !important;
+  opacity: 1;
   transition: all 0.3s ease;
 }
-ul.links li a:hover {
+/* Hover effect only for inactive links */
+ul.links li.inactive a:hover {
   opacity: 1;
 }
 
