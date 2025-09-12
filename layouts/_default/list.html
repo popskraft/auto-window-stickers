@@ -3,6 +3,24 @@
 {{ $section := .Section }}
 {{ $products := slice }}
 
+{{/* Special handling: the Articles section lists articles, not products */}}
+{{ if eq $section "articles" }}
+  <div class="container">
+    <div class="wrapper">
+      <div class="inner">
+        {{ range .Pages }}
+          <article class="mb-8">
+            <h2 class="text-2xl font-semibold"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ with .Params.description }}<p class="opacity-80">{{ . }}</p>{{ end }}
+          </article>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  {{- /* Do not attempt product card rendering for articles */ -}}
+  {{- return -}}
+{{ end }}
+
 {{ range $page := where .Site.RegularPages "Section" $section }}
   {{ $productID := $page.File.ContentBaseName }}
   {{ if isset site.Data.products $productID }}
@@ -33,14 +51,18 @@
 			
 			{{ if lt $product1Index $totalProducts }}
 			{{ $product1ID := index $products $product1Index }}
-			{{ $product1 := index site.Data.products $product1ID }}
-			{{ partial "product-card.html" (dict "product" $product1 "id" $product1ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+{{ if and $product1ID (index site.Data.products $product1ID) }}
+{{ $product1 := index site.Data.products $product1ID }}
+{{ partial "product-card.html" (dict "product" $product1 "id" $product1ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+{{ end }}
 			{{ end }}
 			
 			{{ if lt $product2Index $totalProducts }}
 			{{ $product2ID := index $products $product2Index }}
-			{{ $product2 := index site.Data.products $product2ID }}
-			{{ partial "product-card.html" (dict "product" $product2 "id" $product2ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+{{ if and $product2ID (index site.Data.products $product2ID) }}
+{{ $product2 := index site.Data.products $product2ID }}
+{{ partial "product-card.html" (dict "product" $product2 "id" $product2ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
+{{ end }}
 			{{ end }}
 		</div>
 	</div>

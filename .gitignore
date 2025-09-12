@@ -14,3 +14,15 @@ hugo.linux
 
 # Mac OS
 .DS_Store
+_ArchiveStable.zip
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local venv for portable generator
+tools/page-generator/.venv/
+
+# AWS export 
+carrd-aws-to-hugo-20250818/
+carrd-aws-to-hugo-20250818.zip

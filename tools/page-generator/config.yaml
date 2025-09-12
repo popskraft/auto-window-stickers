@@ -1,0 +1,28 @@
+# Portable config for tools/page-generator
+
+execution:
+  seed: 42
+  limit: 2
+  dry_run: false
+  base_path: "../.."            # root of the Hugo site
+  output_dir: "content"         # relative to base_path
+
+content:
+  savings_count: 1
+  benefits_count: 6
+  faq_count: 10
+  testimonials_count: 3
+  default_saving_number: "3500"
+
+seo:
+  seo_keywords_file: "data/content-generator/keywords-seotitle.yaml"
+  content_keywords_file: "data/content-generator/keywords.yaml"
+  title_template: "{product_title} — {keyword} {state}"
+
+pages:
+  layout: "product"
+  filename_pattern: "states/{state_slug}/{product_key}/index.md"
+
+data_sources:
+  products_dir: "data/products"
+  states_file: "data/content-generator/states.yaml"
