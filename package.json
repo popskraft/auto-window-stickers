@@ -8,8 +8,8 @@
     "tailwind:watch": "npx tailwindcss -i ./assets/tailwind/src/base.css -o ./assets/tailwindstyle.css --watch --config ./assets/tailwind/tailwind.config.js",
     "tailwind:build": "npx tailwindcss -i ./assets/tailwind/src/base.css -o ./assets/tailwindstyle.css --minify --config ./assets/tailwind/tailwind.config.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run tailwind:watch\"",
-    "generate:content": "node scripts/content-generator.js",
-    "generate:content:dry": "node scripts/content-generator.js --dry-run"
+    "generate:pages": "python3 generate-pages.py",
+    "generate:pages:dry": "python3 generate-pages.py --dry-run --limit 5"
   },
   "repository": {
     "type": "git",
