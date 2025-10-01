@@ -72,19 +72,27 @@
 	<link rel="apple-touch-icon" href="{{ .Site.Params.appleTouchIcon | relURL }}" />
 
 	{{/* --- CSS --- */}}
-	{{ $mainCSS := resources.Get "main.css" | resources.Minify | fingerprint }}
-	<link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}">
+	{{ with resources.Get "main.css" }}
+		{{ $mainCSS := . | minify | fingerprint }}
+		<link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}">
+	{{ end }}
 
-	{{ $noscriptCSS := resources.Get "noscript.css" | resources.Minify | fingerprint }}
-	<noscript>
-		<link rel="stylesheet" href="{{ $noscriptCSS.RelPermalink }}" integrity="{{ $noscriptCSS.Data.Integrity }}">
-	</noscript>
+	{{ with resources.Get "noscript.css" }}
+		{{ $noscriptCSS := . | minify | fingerprint }}
+		<noscript>
+			<link rel="stylesheet" href="{{ $noscriptCSS.RelPermalink }}" integrity="{{ $noscriptCSS.Data.Integrity }}">
+		</noscript>
+	{{ end }}
 
-	{{ $customCSS := resources.Get "custom.css" | resources.Minify | fingerprint }}
-	<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
+	{{ with resources.Get "custom.css" }}
+		{{ $customCSS := . | minify | fingerprint }}
+		<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
+	{{ end }}
 
-	{{ $tailwind := resources.Get "tailwindstyle.css" | resources.Minify | fingerprint }}
-	<link rel="stylesheet" href="{{ $tailwind.RelPermalink }}" integrity="{{ $tailwind.Data.Integrity }}">
+	{{ with resources.Get "tailwindstyle.css" }}
+		{{ $tailwind := . | minify | fingerprint }}
+		<link rel="stylesheet" href="{{ $tailwind.RelPermalink }}" integrity="{{ $tailwind.Data.Integrity }}">
+	{{ end }}
 
 	{{ partialCached "schema-org.html" . .Permalink }}
 
@@ -122,26 +130,30 @@
 	</div>
 
 	{{/* --- JS --- */}}
-	{{ if resources.Get "js/animateprevent.js" }}
-	{{ $animatePreventJS := resources.Get "js/animateprevent.js" | resources.Minify | fingerprint }}
-	<script src="{{ $animatePreventJS.RelPermalink }}" integrity="{{ $animatePreventJS.Data.Integrity }}"></script>
+	{{ with resources.Get "js/animateprevent.js" }}
+		{{ $animatePreventJS := . | minify | fingerprint }}
+		<script src="{{ $animatePreventJS.RelPermalink }}" integrity="{{ $animatePreventJS.Data.Integrity }}"></script>
 	{{ end }}
 
-	{{ $mainJS := resources.Get "main.js" | resources.Minify | fingerprint }}
-	<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
-
-	{{ if resources.Get "js/error-fix.js" }}
-	{{ $errorFixJS := resources.Get "js/error-fix.js" | resources.Minify | fingerprint }}
-	<script src="{{ $errorFixJS.RelPermalink }}" integrity="{{ $errorFixJS.Data.Integrity }}"></script>
+	{{ with resources.Get "main.js" }}
+		{{ $mainJS := . | minify | fingerprint }}
+		<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
 	{{ end }}
 
-	{{ if resources.Get "js/simple-slideshow.js" }}
-	{{ $slideshowJS := resources.Get "js/simple-slideshow.js" | resources.Minify | fingerprint }}
-	<script src="{{ $slideshowJS.RelPermalink }}" integrity="{{ $slideshowJS.Data.Integrity }}"></script>
+	{{ with resources.Get "js/error-fix.js" }}
+		{{ $errorFixJS := . | minify | fingerprint }}
+		<script src="{{ $errorFixJS.RelPermalink }}" integrity="{{ $errorFixJS.Data.Integrity }}"></script>
 	{{ end }}
 
-	{{ $customJS := resources.Get "js/theme.js" | resources.Minify | fingerprint }}
-	<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
+	{{ with resources.Get "js/simple-slideshow.js" }}
+		{{ $slideshowJS := . | minify | fingerprint }}
+		<script src="{{ $slideshowJS.RelPermalink }}" integrity="{{ $slideshowJS.Data.Integrity }}"></script>
+	{{ end }}
+
+	{{ with resources.Get "js/theme.js" }}
+		{{ $customJS := . | minify | fingerprint }}
+		<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
+	{{ end }}
 
 	{{ if hugo.IsProduction }}
 	{{ template "_internal/google_analytics.html" . }}

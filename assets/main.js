@@ -601,57 +601,6 @@
 			// Expose scrollToElement.
 				window._scrollToTop = scrollToTop;
 	
-	// "On Load" animation.
-		// Set loader timeout.
-			var loaderTimeout = setTimeout(function() {
-				$body.classList.add('with-loader');
-			}, 500);
-		
-		// Create loader element.
-			var $loaderElement = document.createElement('div');
-				$loaderElement.id = 'loader';
-		
-			// Add to body.
-				$body.appendChild($loaderElement);
-		
-		// Create load handler.
-			var loadHandler = function() {
-				setTimeout(function() {
-		
-					// Stop loader.
-						clearTimeout(loaderTimeout);
-		
-					// Unmark as loading.
-						$body.classList.remove('is-loading');
-		
-					// Mark as playing.
-						$body.classList.add('is-playing');
-		
-					// Wait for animation to complete.
-						setTimeout(function() {
-		
-							// Remove loader.
-								$body.classList.remove('with-loader');
-		
-							// Unmark as playing.
-								$body.classList.remove('is-playing');
-		
-							// Mark as ready.
-								$body.classList.add('is-ready');
-		
-							// Remove loader element (after delay).
-								setTimeout(function() {
-									$body.removeChild($loaderElement);
-								}, 1000);
-		
-						}, 500);
-		
-				}, 100);
-			};
-		
-		// Load event.
-			on('load', loadHandler);
-	
 	// Load elements.
 		// Load elements (if needed).
 			loadElements(document.body);
