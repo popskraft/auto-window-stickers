@@ -2,11 +2,11 @@
 {{ $productID := .id }}
 {{ $section := cond (hasPrefix $productID "exterior") "exterior" (cond (hasPrefix $productID "interior") "interior" "") }}
 <div>
-	<h2 id="text10" class="style5">
+	<h2 id="text10" class="text-component instance-10 style-5">
 		{{ $product.title | markdownify }}
 		{{ if $product.size }}<span style="color: #bbbbbb" class="text-nowrap"> – {{ $product.size }}</span>{{ end }}
 	</h2>
-	<div id="{{ $productID }}-slideshow" class="style1 productSlider slideshow" oncontextmenu="return false;"
+	<div id="{{ $productID }}-slideshow" class="slideshow-component instance-{{ $productID }} style-1 productSlider slideshow" oncontextmenu="return false;"
 		ondragstart="return false;">
 		<div class="content">
 			<div class="bg slideshow-background fade">
@@ -31,13 +31,13 @@
 			<div class="nav previous"></div>
 		</div>
 	</div>
-	<p class="style3"><strong>${{ $product.price }}</strong>&ensp;{{ $product.price_note }}</p>
-	<ul id="buttons02" class="style5 buttons product-buttons">
+	<p class="text-component style-3"><strong>${{ $product.price }}</strong>&ensp;{{ $product.price_note }}</p>
+	<ul id="buttons02" class="buttons-component instance-2 style-5 product-buttons">
 		{{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" "Wholesale Inquiry" }}
 		{{ range $linkIndex, $link := $product.purchase_links }}
 		{{ if $link.url }}
 		<li>
-			<a href="{{ $link.url }}" class="button n0{{ add $linkIndex 1 }}" role="button">
+			<a href="{{ $link.url }}" class="n0{{ add $linkIndex 1 }}" role="button">
 				<svg aria-labelledby="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">
 					<title id="product-icon-{{ $productID }}-{{ add $linkIndex 1 }}-title">Cart</title>
 					<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
@@ -48,7 +48,7 @@
 		{{ end }}
 		{{ end }}
 		<li>
-			<a href="{{ .wholesaleUrl }}" class="button n03" role="button">
+			<a href="{{ .wholesaleUrl }}" class="n03" role="button">
 				<svg aria-labelledby="buttons16-icon-wholesale-title">
 					<title id="buttons16-icon-wholesale-title">Wholesale Inquiry</title>
 					<use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
@@ -57,7 +57,7 @@
 			</a>
 		</li>
 	</ul>
-	<p id="text61" class="style3">
+	<p id="text61" class="text-component instance-61 style-3">
 		<a href="/{{ $section }}/{{ $productID }}/">More details</a>
 	</p>
 </div>

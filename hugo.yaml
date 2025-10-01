@@ -63,9 +63,8 @@ params:
       icon: "amazon"
     wholesale:
       title: "Wholesale Inquiry"
-      # Using the global wholesaleFormUrl variable
-      url: "{{ .Site.Params.wholesaleFormUrl }}"
       icon: "form"
+      # Note: URL is referenced directly via .Site.Params.wholesaleFormUrl in templates
   
   # Legal Information
   legal:
@@ -125,13 +124,11 @@ params:
         url: "#contacts"
       - label: "Wholesale Inquiry"
         icon: "form"
-        # Using the global wholesaleFormUrl variable
-        url: "{{ .Site.Params.wholesaleFormUrl }}"
+        # Note: URL is referenced directly via .Site.Params.wholesaleFormUrl in templates
   
   # Product Settings
   products:
-    # Using the global wholesaleFormUrl variable
-    wholesaleLink: "{{ .Site.Params.wholesaleFormUrl }}"
+    # Note: wholesaleLink is referenced directly via .Site.Params.wholesaleFormUrl in templates
   
   # Footer
   footer:

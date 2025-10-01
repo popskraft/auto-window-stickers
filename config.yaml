@@ -7,6 +7,8 @@ execution:
   seed: 42
   
   # Maximum number of pages to generate (null for unlimited)
+  # NOTE: Currently set to 2 for testing. Set to null or remove for production
+  # to generate all product-state combinations (14 products × 50 states = 700 pages)
   limit: 2
   
   # Dry run mode - show what would be generated without creating files

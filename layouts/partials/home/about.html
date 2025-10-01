@@ -1,5 +1,5 @@
 {{ with .Params.about.video }}
-<div id="video01" class="style1 video" style="opacity: 1;">
+<div id="video01" data-scroll-id="about" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="video-component instance-1 style-1">
   <div class="frame">
     <video class="player" src="{{ .src | default "/videos/video-main.mp4" }}" poster="{{ .poster | default "/videos/video-main.jpg" }}" preload="auto"
       playsinline webkit-playsinline autoplay muted loop></video>

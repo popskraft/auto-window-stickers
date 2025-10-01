@@ -1,15 +1,15 @@
 {{/* --- Hero/Product Categories Section --- */}}
 {{ with .Params.hero }}
-<div id="container07" class="container columns">
+<div id="container07" class="container-component instance-7 columns">
   <div class="wrapper">
     <div class="inner">
       {{/* --- Exterior Column --- */}}
       {{ with .exterior }}
       <div>
-        {{ with .button }}<h1 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h1>{{ end }}
-        {{ with .description }}<p class="style3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
+        {{ with .button }}<h1 class="text-component instance-63 style-1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h1>{{ end }}
+        {{ with .description }}<p class="text-component instance-120 style-3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
         {{ with .image }}
-        <div id="image04" class="style2 image">
+        <div id="image04" class="image-component instance-4 style-2">
           {{ with $.Params.hero.exterior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
           {{ if $heroImage }}
@@ -30,7 +30,7 @@
         </div>
         {{ end }}
         {{ with .gallery }}
-        <div id="gallery03" class="style3 productGallery gallery">
+        <div id="gallery03" class="gallery-component instance-3 style-3 productGallery">
           <div class="inner">
             <ul>
               {{ range $index, $item := . }}
@@ -62,9 +62,9 @@
         </div>
         {{ end }}
         {{ with .button }}
-        <ul id="buttons11" class="style2 buttons">
+        <ul id="buttons11" class="buttons-component instance-11 style-2">
           <li>
-            <a href="{{ .link | default "#" | relURL }}" class="button n01" role="button">
+            <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
               <svg aria-labelledby="buttons11-icon-1-title">
                   <title id="buttons11-icon-1-title">{{ $.Params.hero.exterior.button.text | plainify }}</title>
                   <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
@@ -74,16 +74,16 @@
           </li>
         </ul>
         {{ end }}
-        <hr id="divider02" class="style3" data-visibility="desktop">
+        <hr id="divider02" class="divider-component instance-2 style-3" data-visibility="desktop">
       </div>
       {{ end }}
       {{/* --- Interior Column --- */}}
       {{ with .interior }}
       <div>
-        {{ with .button }}<h2 class="style1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.interior.heading | safeHTML }}</a></h2>{{ end }}
-        {{ with .description }}<p class="style3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
+        {{ with .button }}<h2 class="text-component instance-64 style-1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.interior.heading | safeHTML }}</a></h2>{{ end }}
+        {{ with .description }}<p class="text-component instance-121 style-3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
         {{ with .image }}
-        <div id="image03" class="style2 image">
+        <div id="image03" class="image-component instance-3 style-2">
           {{ with $.Params.hero.interior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
           {{ $heroImage := resources.Get . }}
           {{ if $heroImage }}
@@ -96,7 +96,7 @@
         </div>
         {{ end }}
         {{ with .gallery }}
-        <div id="gallery02" class="style3 productGallery gallery">
+        <div id="gallery02" class="gallery-component instance-2 style-3 productGallery">
           <div class="inner">
             <ul>
               {{ range $index, $item := . }}
@@ -128,9 +128,9 @@
         </div>
         {{ end }}
         {{ with .button }}
-        <ul id="buttons03" class="style2 buttons">
+        <ul id="buttons03" class="buttons-component instance-3 style-2">
            <li>
-            <a href="{{ .link | default "#" | relURL }}" class="button n01" role="button">
+            <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
               <svg aria-labelledby="buttons03-icon-1-title">
                   <title id="buttons03-icon-1-title">{{ $.Params.hero.interior.button.text | plainify }}</title>
                   <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
@@ -140,11 +140,11 @@
           </li>
         </ul>
         {{ end }}
-        <hr class="style3" data-visibility="desktop">
+        <hr class="divider-component instance-3 style-3" data-visibility="desktop">
       </div>
       {{ end }}
     </div>
   </div>
 </div>
-<hr class="style2">
+<hr class="divider-component instance-7 style-2">
 {{ end }}

@@ -1,10 +1,10 @@
 <header id="header">
-  <div id="container04" class="container columns">
+  <div id="container04" class="container-component instance-4 columns">
     <div class="wrapper">
       <div class="inner">
         
         <div>
-          <div id="image06" class="image full">
+          <div id="image06" class="image-component instance-6 full">
             {{ if not $.IsHome }}
             <a class="frame" href="{{ .Site.BaseURL | absURL }}">
               {{- else }}
@@ -21,7 +21,7 @@
       
       <div>
         <div id="navSticky" class="pt-5 md:pt-0">
-        <ul id="links02" class="style1 main-nav links">
+        <ul id="links02" class="links-component instance-2 style-1 main-nav">
           {{ range .Site.Params.mainNav }}
             <li class="{{ .class }}">
               <a href="{{ .url | relURL }}">{{ .name }}</a>
@@ -32,12 +32,12 @@
       </div>
 
       <div>
-        <ul id="buttons06" class="style9 buttons">
+        <ul id="buttons06" class="buttons-component instance-6 style-9">
           <li>
-            <a href="{{ .Site.BaseURL | absURL }}#about" class="button n01" role="button">About</a>
+            <a href="{{ .Site.BaseURL | absURL }}#about" class="n01" role="button">About</a>
           </li>
           <li>
-            <a href="#contacts" class="button n02" role="button">Get in touch</a>
+            <a href="#contacts" class="n02" role="button">Get in touch</a>
           </li>
         </ul>
       </div>

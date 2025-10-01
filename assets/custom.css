@@ -1,306 +1,353 @@
-/* Normal screen size styles */
-.product-row > .wrapper > .inner > :nth-child(1) {
-    width: calc(50% + (var(--gutters) / 2));
-}
-
+/* Layout adjustments for product rows */
+.product-row > .wrapper > .inner > :nth-child(1),
 .product-row > .wrapper > .inner > :nth-child(2) {
-    width: calc(50% + (var(--gutters) / 2));
+	width: calc(50% + (var(--gutters) / 2));
 }
 
-/* Media query for smaller screens (max-width: 980px) */
+/* Stack product row columns on smaller screens */
 @media (max-width: 980px) {
-  .product-row > .wrapper > .inner > :nth-child(1) {
-      min-height: 100% !important;
-      width: 100% !important;
-  }
-  
-  .product-row > .wrapper > .inner > :nth-child(2) {
-      min-height: 100% !important;
-      width: 100% !important;
-  }
-  /* Fix header do not jump */
-  #container04.columns>.wrapper>.inner {
-    min-height: 72px;
-  }
-  
+	.product-row > .wrapper > .inner > :nth-child(1),
+	.product-row > .wrapper > .inner > :nth-child(2) {
+		min-height: 100% !important;
+		width: 100% !important;
+	}
+
+	/* Prevent header jump on mobile */
+	#container04.columns > .wrapper > .inner {
+		min-height: 72px;
+	}
 }
 
-
-/* Override the button colors for the product buttons */
-.product-buttons .n02 svg {
-  fill: #ff8a00;
-}
+/* Product CTA icon colors */
 .product-buttons .n01 svg {
-  fill: #2ec0ff;
+	fill: #2ec0ff;
 }
 
-/* Price larger */
+.product-buttons .n02 svg {
+	fill: #ff8a00;
+}
+
+/* Pricing emphasis */
 .style5 .style6 strong {
-  font-size: 130%;
-}
-.style5 .style3 strong {
-  font-size: 140%;
+	font-size: 130%;
 }
 
-/* Hide the cursor completely */
-[contenteditable], div, img {
-  caret-color: transparent;
+.style5 .style3 strong {
+	font-size: 140%;
+}
+
+/* Hide caret globally (mirrors Carrd export) */
+[contenteditable],
+div,
+img {
+	caret-color: transparent;
 }
 
 /* Navigation active/inactive states */
-/* Active (current page) appears dimmed */
-ul.links li.active a {
-  opacity: 0.5;
-  transition: all 0.3s ease;
-  cursor: default;
-}
-/* Do not change appearance on hover for active link */
-ul.links li.active a:hover {
-  color: #ffffff !important; /* override base hover color */
-  opacity: 0.5;              /* keep dimmed */
-  cursor: default;
-}
-/* Inactive (other pages) appear as normal bright links */
-ul.links li.inactive a {
-  color: #ffffff !important;
-  opacity: 1;
-  transition: all 0.3s ease;
-}
-/* Hover effect only for inactive links */
-ul.links li.inactive a:hover,
-#links02 li:not(.active) a:hover {
-  opacity: 1;
-  color: #75d6ff !important; /* requested hover color */
+.links-component.main-nav li.active a {
+	color: #ffffff !important;
+	opacity: 1;
+	transition: all 0.3s ease;
+	cursor: default;
 }
 
-/* Slideshow */
+.links-component.main-nav li.inactive a {
+	opacity: 0.5;
+	transition: all 0.3s ease;
+}
+
+.links-component.main-nav li a:hover {
+	opacity: 1;
+}
+
+/* Slideshow navigation offset */
 .slideshow.style1 .nav:before {
-  margin-right: -3.75rem;
+	margin-right: -3.75rem;
 }
 
-/* Galleries on home */
+/* Ensure gallery images remain contained */
 .productGallery .frame img {
-  object-fit: contain !important;
-}
-
-/* Sticky Navigation */
-.sticky-nav-container {
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-150%);
-  background-color: #000000;
-  z-index: 1000;
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  padding: 8px 20px;
-  border-radius: 8px;
-  width: auto;
-  max-width: 100%;
-}
-
-.sticky-nav-container.visible {
-  transform: translateX(-50%) translateY(0);
-}
-
-.sticky-nav-container ul.links {
-  justify-content: center;
-  margin: 0;
-}
-
-/* Ensure the sticky nav clone has the same styling as the original */
-#navStickyClone {
-  padding: 0;
-}
-
-#navStickyClone ul.links {
-  margin: 0;
-}
-
-/* Mobile styles for sticky navigation */
-@media (max-width: 736px) {
-  .sticky-nav-container {
-    width: 100%;
-    top: 0;
-    border-radius: 0;
-    padding: 8px 0;
-    transform: translateX(-50%) translateY(-150%);
-  }
-  
-  .sticky-nav-container.visible {
-    transform: translateX(-50%) translateY(0);
-  }
+	object-fit: contain !important;
 }
 
 @media (min-width: 737px) and (max-width: 1680px) {
-body {
-  font-size: 110%;
-/* font-size: clamp(calc(0.875rem* 1.25), 1.25vw, 5rem); */
-}
+	body {
+		font-size: 110%;
+	}
 }
 
-/* FAQ Styles */
+/* Collapsible FAQ helpers */
+.collapse {
+	cursor: pointer;
+}
+
+.collapse .collapse-target-self,
+.collapse .collapse-parent {
+	opacity: 0;
+	height: 0;
+	overflow: hidden;
+	transition: all 1s ease;
+}
+
+.collapse:not(.show) .collapse-target-self,
+.collapse:not(.show) .collapse-parent {
+	margin-bottom: -1rem;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.collapse.show .collapse-target-self,
+.collapse.show .collapse-parent {
+	opacity: 1;
+	height: auto;
+}
+
+.collapse:not(.show) > .wrapper > .inner > :nth-child(1) {
+	width: 100% !important;
+}
+
+/* FAQ accordion visuals */
 #faqBody {
-  width: 100%;
+	width: 100%;
 }
 
-#faqBody .style2 {
-  cursor: pointer;
-  position: relative;
+#faqBody .style-15 {
+	margin-top: 2em;
+	margin-bottom: 1em;
 }
 
-#faqBody .style2::after {
-  content: '+';
-  font-size: 24px;
-  font-weight: normal;
-  position: absolute;
-  right: -21px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #2EC0FF;
+#faqBody .style-2 {
+	cursor: pointer;
+	position: relative;
+	padding-right: 30px;
+	user-select: none;
 }
 
-#faqBody .style2.active::after {
-  content: '−';
-  transform: translateY(-50%);
+#faqBody .style-2::after {
+	content: '+';
+	font-size: 28px;
+	font-weight: normal;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: transform 0.3s ease;
+	color: #2EC0FF;
 }
 
-/* Hide all answers by default */
+#faqBody .style-2.active::after {
+	transform: translateY(-50%) rotate(45deg);
+}
+
+#faqBody .style-2:hover {
+	opacity: 0.85;
+}
+
+#faqBody .style-3 {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+}
+
+#faqBody .style-3.active {
+	max-height: 500px;
+	opacity: 1;
+	margin: 1em 0;
+	transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+}
+
 #faqBody .collapse-target {
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s ease-out;
-  will-change: opacity, transform, height;
-  pointer-events: none;
+	height: 0;
+	overflow: hidden;
+	opacity: 0;
+	transform: translateY(10px);
+	transition: all 0.4s ease-out;
+	will-change: opacity, transform, height;
+	pointer-events: none;
 }
 
-/* Show answers when they have the visible class */
+#faqBody .collapse-target.active,
 #faqBody .collapse-target.visible {
-  display: block;
-  height: auto;
-  opacity: 1;
-  transform: translateY(0);
-  padding-top: 10px;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  overflow: visible;
-  pointer-events: auto;
+	display: block;
+	height: auto;
+	opacity: 1;
+	transform: translateY(0);
+	padding-top: 10px;
+	padding-bottom: 15px;
+	margin-bottom: 15px;
+	overflow: visible;
+	pointer-events: auto;
 }
 
+/* Sticky navigation container */
+.sticky-nav-container {
+	position: fixed;
+	top: 15px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-150%);
+	background-color: #000000;
+	z-index: 1000;
+	transition: transform 0.3s ease;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	padding: 8px 20px;
+	border-radius: 8px;
+	width: auto;
+	max-width: 100%;
+}
 
+.sticky-nav-container.visible {
+	transform: translateX(-50%) translateY(0);
+}
 
-/* Article Typography Styles */
+.sticky-nav-container ul.links {
+	justify-content: center;
+	margin: 0;
+}
 
+#navStickyClone {
+	padding: 0;
+}
+
+#navStickyClone ul.links {
+	margin: 0;
+}
+
+@media (max-width: 736px) {
+	.sticky-nav-container {
+		width: 100%;
+		top: 0;
+		border-radius: 0;
+		padding: 8px 0;
+		transform: translateX(-50%) translateY(-150%);
+	}
+
+	.sticky-nav-container.visible {
+		transform: translateX(-50%) translateY(0);
+	}
+}
+
+/* Article typography helpers */
 hr {
-  margin-top: 0;
-  margin-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
-
-/* ========================= */
 
 .txt {
-  color: #666666;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1em;
-  line-height: 1.5;
-  font-weight: 400;
+	color: #666666;
+	font-family: 'Wix Madefor Display', sans-serif;
+	font-size: 1em;
+	line-height: 1.5;
+	font-weight: 400;
 }
 
 .txt p:not(:last-child) {
-  margin-bottom: .75em;
+	margin-bottom: 0.75em;
 }
 
 .txt p strong {
-  color: #222222;
-  font-weight: 600;
+	color: #222222;
+	font-weight: 600;
 }
 
 .txt h2 {
-  margin-top: 1.5em !important;
-  margin-bottom: .75em !important;
-  color: #222222;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1.5em;
-  line-height: 1.125;
-  font-weight: 600;
+	margin-top: 1.5em !important;
+	margin-bottom: 0.75em !important;
+	color: #222222;
+	font-family: 'Wix Madefor Display', sans-serif;
+	font-size: 1.5em;
+	line-height: 1.125;
+	font-weight: 600;
 }
 
 .txt h3 {
-  margin-top: 1.5em !important;
-  margin-bottom: .75em !important;
-  color: #222;
-  font-family: 'Wix Madefor Display', sans-serif;
-  font-size: 1.125em;
-  line-height: 1.25;
-  font-weight: 600;
+	margin-top: 1.5em !important;
+	margin-bottom: 0.5em !important;
+	color: #222222;
+	font-family: 'Wix Madefor Display', sans-serif;
+	font-size: 1.125em;
+	line-height: 1.25;
+	font-weight: 600;
 }
 
-/* OL */
+.txt ul,
+.txt ol {
+	margin-bottom: 1em;
+}
 
+.txt li {
+	margin-bottom: 0.5em;
+}
+
+.txt li strong {
+	display: inline-block;
+	margin-bottom: 0.25em;
+}
+
+/* Ordered lists */
 .txt > ol {
-  margin-top: 1.5em !important;
-  margin-bottom: 1.5em !important;
+	margin-top: 1.5em !important;
+	margin-bottom: 1.5em !important;
 }
 
 .txt > ol li {
-  direction: var(--site-language-direction);
-  display: flex;
-  position: relative;
-  margin-top: .75em;
-  counter-increment: item;
+	direction: var(--site-language-direction);
+	display: flex;
+	position: relative;
+	margin-top: 0.75em;
+	counter-increment: item;
 }
 
 .txt > ol li p {
-  flex-grow: 1;
-  flex-shrink: 1;
-  order: 3;
-  margin-bottom: .5em;
+	flex-grow: 1;
+	flex-shrink: 1;
+	order: 3;
+	margin-bottom: 0.5em;
 }
 
 .txt > ol li:before {
-  color: #FFFFFF;
-  font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 0.75rem;
-  font-weight: 400;
-  content: counter(item);
-  border-radius: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 55%;
-  height: 1.5rem;
-  margin-top: 0.0625rem;
-  margin-right: 1rem;
-  min-width: 1.5rem;
-  padding: 0 0.1875rem;
-  text-align: center;
-  background-color: #222222;
-  line-height: calc(1.5rem - 1px);
+	color: #ffffff;
+	font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	font-size: 0.75rem;
+	font-weight: 400;
+	content: counter(item);
+	border-radius: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 55%;
+	height: 1.5rem;
+	margin-top: 0.0625rem;
+	margin-right: 1rem;
+	min-width: 1.5rem;
+	padding: 0 0.1875rem;
+	text-align: center;
+	background-color: #222222;
+	line-height: calc(1.5rem - 1px);
 }
 
-/* UL */
-
+/* Unordered lists */
 .txt > ul {
-  margin-top: 1em !important;
-  margin-bottom: 1em !important;
-  padding-left: 0;
-  list-style: none;
+	margin-top: 1em !important;
+	margin-bottom: 1em !important;
+	padding-left: 0;
+	list-style: none;
 }
 
 .txt > ul li {
-  position: relative;
-  padding-left: 2.5rem;
-  margin-bottom: .5em;
-  line-height: 1.5;
+	position: relative;
+	padding-left: 2.5rem;
+	margin-bottom: 0.5em;
+	line-height: 1.5;
 }
 
 .txt > ul li:before {
-  content: '•';
-  position: absolute;
-  left: .5rem;
-  top: -0.1em;
-  font-size: 200%;
-  line-height: 0.875;
-  color: #222222;
+	content: '•';
+	position: absolute;
+	left: 0.5rem;
+	top: -0.1em;
+	font-size: 200%;
+	line-height: 0.875;
+	color: #222222;
 }

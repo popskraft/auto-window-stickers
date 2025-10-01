@@ -5,7 +5,7 @@
 
 {{/* Special handling: the Articles section lists articles, not products */}}
 {{ if eq $section "articles" }}
-  <div class="container">
+  <div class="container-component">
     <div class="wrapper">
       <div class="inner">
         {{ range .Pages }}
@@ -43,7 +43,7 @@
 {{ $rowCount := div (add $totalProducts 1) 2 }}
 
 {{ range $rowIndex := seq 1 $rowCount }}
-<div id="product-row-{{ $rowIndex }}" class="style5 product-row container columns">
+<div id="product-row-{{ $rowIndex }}" class="container-component style-5 product-row columns">
 	<div class="wrapper">
 		<div class="inner justify-left">
 			{{ $product1Index := sub (mul $rowIndex 2) 2 }}

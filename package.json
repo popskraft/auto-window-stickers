@@ -1,6 +1,7 @@
 {
-  "name": "nutcracker",
+  "name": "auto-window-stickers",
   "version": "1.0.0",
+  "description": "Hugo-based marketing site for exterior and interior car window stickers",
   "main": "index.js",
   "scripts": {
     "dev": "hugo server --disableFastRender",
@@ -13,16 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/popskraft/nutcracker.git"
+    "url": "git+https://github.com/popskraft/auto-window-stickers.git"
   },
-  "keywords": [],
+  "keywords": ["hugo", "auto", "window-stickers", "dealership", "marketing"],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/popskraft/nutcracker/issues"
+    "url": "https://github.com/popskraft/auto-window-stickers/issues"
   },
-  "homepage": "https://github.com/popskraft/nutcracker#readme",
-  "description": "",
+  "homepage": "https://github.com/popskraft/auto-window-stickers#readme",
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "concurrently": "^9.1.2",

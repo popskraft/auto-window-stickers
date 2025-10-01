@@ -402,6 +402,9 @@
 		
 				var a, e, x, i;
 		
+				// Trigger "startComponents" custom event.
+					$body.dispatchEvent(new CustomEvent('startComponents', { detail: { parent: parent } }));
+		
 				// IFRAMEs.
 		
 					// Get list of unloaded IFRAMEs.
@@ -512,6 +515,9 @@
 		
 				var a, e, x, i;
 		
+				// Trigger "stopComponents" custom event.
+					$body.dispatchEvent(new CustomEvent('stopComponents', { detail: { parent: parent } }));
+		
 				// IFRAMEs.
 		
 					// Get list of loaded IFRAMEs.
@@ -595,6 +601,57 @@
 			// Expose scrollToElement.
 				window._scrollToTop = scrollToTop;
 	
+	// "On Load" animation.
+		// Set loader timeout.
+			var loaderTimeout = setTimeout(function() {
+				$body.classList.add('with-loader');
+			}, 500);
+		
+		// Create loader element.
+			var $loaderElement = document.createElement('div');
+				$loaderElement.id = 'loader';
+		
+			// Add to body.
+				$body.appendChild($loaderElement);
+		
+		// Create load handler.
+			var loadHandler = function() {
+				setTimeout(function() {
+		
+					// Stop loader.
+						clearTimeout(loaderTimeout);
+		
+					// Unmark as loading.
+						$body.classList.remove('is-loading');
+		
+					// Mark as playing.
+						$body.classList.add('is-playing');
+		
+					// Wait for animation to complete.
+						setTimeout(function() {
+		
+							// Remove loader.
+								$body.classList.remove('with-loader');
+		
+							// Unmark as playing.
+								$body.classList.remove('is-playing');
+		
+							// Mark as ready.
+								$body.classList.add('is-ready');
+		
+							// Remove loader element (after delay).
+								setTimeout(function() {
+									$body.removeChild($loaderElement);
+								}, 1000);
+		
+						}, 875);
+		
+				}, 100);
+			};
+		
+		// Load event.
+			on('load', loadHandler);
+	
 	// Load elements.
 		// Load elements (if needed).
 			loadElements(document.body);
@@ -606,7 +663,7 @@
 		
 					var inner;
 		
-					inner = $('#main > .inner');
+					inner = $('.site-main > .inner');
 		
 					while (target && target.parentElement != inner)
 						target = target.parentElement;
@@ -1013,8 +1070,8 @@
 		
 					})();
 		
-				// Apply "is-touch" class to body.
-					$body.classList.add('is-touch');
+				// Apply "touch" class to body.
+					$body.classList.add('touch');
 		
 			}
 		
@@ -1059,8 +1116,8 @@
 		
 						})();
 		
-				// Apply "is-touch" class to body.
-					$body.classList.add('is-touch');
+				// Apply "touch" class to body.
+					$body.classList.add('touch');
 		
 			}
 	
@@ -2596,13 +2653,6 @@
 				this.preloadTimeout = null;
 				this.resumeTimeout = null;
 				this.transitionInterval = null;
-
-			// Target element missing? Abort initialization safely.
-			// This prevents errors like "Cannot read properties of null (reading 'classList')"
-			// on pages that don't include the expected slideshow markup.
-			if (!this.$target) {
-				return;
-			}
 		
 			// Using preserveImageAspectRatio and transition style is crossfade? Force to regular fade.
 				if (this.preserveImageAspectRatio
@@ -2635,7 +2685,7 @@
 			// Defer?
 				if (this.defer) {
 		
-					// Add to scroll events only if target exists (guarded above, but keep defensive).
+					// Add to scroll events.
 						scrollEvents.add({
 							element: this.$target,
 							enter: function() {
@@ -3308,7 +3358,7 @@
 		
 			new slideshowBackground('slideshow05', {
 				target: '#slideshow05 .bg',
-				wrapper: '#slideshow05 .content',
+				wrapper: '#slideshow05 > .content',
 				wait: 0,
 				defer: false,
 				navigation: true,
@@ -3348,28 +3398,28 @@
 		})();
 	
 	// Initialize "On Visible" animations.
-		onvisible.add('.image.style1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
-		onvisible.add('h1.style14, h2.style14, h3.style14, p.style14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('hr.style6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.video.style1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style4, h2.style4, h3.style4, p.style4', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style6, h2.style6, h3.style6, p.style6', { style: 'fade-in', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.buttons.style5', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
-		onvisible.add('.container.style12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
-		onvisible.add('.buttons.style2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
-		onvisible.add('.image.style6', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('.image.style3', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('h1.style2, h2.style2, h3.style2, p.style2', { style: 'fade-down', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('hr.style1', { style: 'fade-right', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.image.style5', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('.buttons.style1', { style: 'fade-in', speed: 1625, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('h1.style12, h2.style12, h3.style12, p.style12', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.list.style3', { style: 'fade-up', speed: 750, intensity: 5, threshold: 2, delay: 0, stagger: 125, staggerSelector: ':scope ul > li, :scope ol > li', replay: false });
-		onvisible.add('h1.style11, h2.style11, h3.style11, p.style11', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('#text58', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('h1.style13, h2.style13, h3.style13, p.style13', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
-		onvisible.add('h1.style15, h2.style15, h3.style15, p.style15', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('hr.style8', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.image-component.style-1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
+		onvisible.add('.text-component.style-14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.divider-component.style-6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.video-component.style-1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.text-component.style-4', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.text-component.style-6', { style: 'fade-in', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.buttons-component.style-5', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
+		onvisible.add('.image-component.style-6', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
+		onvisible.add('.text-component.style-2', { style: 'fade-down', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.divider-component.style-1', { style: 'fade-right', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.container-component.style-12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
+		onvisible.add('.buttons-component.style-2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
+		onvisible.add('.image-component.style-3', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
+		onvisible.add('.image-component.style-5', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
+		onvisible.add('.buttons-component.style-1', { style: 'fade-in', speed: 1625, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.text-component.style-12', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.list-component.style-3', { style: 'fade-up', speed: 750, intensity: 5, threshold: 2, delay: 0, stagger: 125, staggerSelector: ':scope > ul > li, :scope > ol > li', replay: false });
+		onvisible.add('.text-component.style-11', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.text-component.instance-58', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
+		onvisible.add('.text-component.style-13', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
+		onvisible.add('.text-component.style-15', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
+		onvisible.add('.divider-component.style-8', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
 	
 	// Run ready handlers.
 		ready.run();

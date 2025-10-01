@@ -1,15 +1,15 @@
 {{/* --- Reviews Section --- */}}
 {{ with .Params.reviews }}
-<hr class="style3">
-<div id="container08" class="style10 container default">
+<hr class="divider-component style-3">
+<div id="container08" class="container-component instance-8 style-10 default">
   <div class="wrapper">
     <div class="inner">
-      <hr class="style3" data-visibility="desktop">
-      <h2 class="style1">{{ .heading }}</h2>
+      <hr class="divider-component style-3" data-visibility="desktop">
+      <h2 class="text-component instance-reviews-heading style-1">{{ .heading }}</h2>
     </div>
   </div>
 </div>
-<div id="container02" class="style1 container columns">
+<div id="container02" class="container-component instance-2 style-1 columns">
   <div class="wrapper">
     <div class="inner">
       {{ $items := .items }}
@@ -27,19 +27,19 @@
         <div>
           {{ range $index, $review := (first (sub $end $start) (after $start $items)) }}
             {{ if gt $index 0 }}
-            <hr class="style6 full">
+            <hr class="divider-component style-6 full">
             {{ end }}
-            <div class="style1 image">
+            <div class="image-component style-1">
               <span class="frame">
                 <img src="{{ "/stars.svg" | relURL }}" alt="Stars" loading="lazy">
               </span>
             </div>
-            {{ with $review.heading }}<h2 class="style2">{{ . }}</h2>{{ end }}
-            <p class="style3">
+            {{ with $review.heading }}<h2 class="text-component style-2">{{ . }}</h2>{{ end }}
+            <p class="text-component style-3">
               <strong>{{ $review.title }}</strong><br />
               {{ $review.text  }}
             </p>
-            <p class="style14">
+            <p class="text-component style-14">
               {{ $review.author }}
             </p>
           {{ end }}

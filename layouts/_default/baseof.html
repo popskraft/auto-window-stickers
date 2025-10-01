@@ -72,18 +72,18 @@
 	<link rel="apple-touch-icon" href="{{ .Site.Params.appleTouchIcon | relURL }}" />
 
 	{{/* --- CSS --- */}}
-	{{ $mainCSS := resources.Get "main.css" | minify | fingerprint }}
+	{{ $mainCSS := resources.Get "main.css" | resources.Minify | fingerprint }}
 	<link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}">
 
-	{{ $noscriptCSS := resources.Get "noscript.css" | minify | fingerprint }}
+	{{ $noscriptCSS := resources.Get "noscript.css" | resources.Minify | fingerprint }}
 	<noscript>
 		<link rel="stylesheet" href="{{ $noscriptCSS.RelPermalink }}" integrity="{{ $noscriptCSS.Data.Integrity }}">
 	</noscript>
 
-	{{ $customCSS := resources.Get "custom.css" | minify | fingerprint }}
+	{{ $customCSS := resources.Get "custom.css" | resources.Minify | fingerprint }}
 	<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
 
-	{{ $tailwind := resources.Get "tailwindstyle.css" | minify | fingerprint }}
+	{{ $tailwind := resources.Get "tailwindstyle.css" | resources.Minify | fingerprint }}
 	<link rel="stylesheet" href="{{ $tailwind.RelPermalink }}" integrity="{{ $tailwind.Data.Integrity }}">
 
 	{{ partialCached "schema-org.html" . .Permalink }}
@@ -105,10 +105,10 @@
 </head>
 {{/* Added body classes similar to old theme for potential compatibility */}}
 
-<body class="is-loadin_g type-{{ .Type }} {{ with .Layout }}layout-{{.}}{{end}} {{ with .Section }}section-{{.}}{{end}}">
+<body class="is-loading type-{{ .Type }} {{ with .Layout }}layout-{{.}}{{end}} {{ with .Section }}section-{{.}}{{end}}">
 
-	<div id="wrapper">
-		<div id="main">
+	<div class="site-wrapper">
+		<div class="site-main">
 			<div class="inner">
 				{{ partial "header.html" . }}
 				<main>
@@ -122,20 +122,25 @@
 	</div>
 
 	{{/* --- JS --- */}}
+	{{ if resources.Get "js/animateprevent.js" }}
+	{{ $animatePreventJS := resources.Get "js/animateprevent.js" | resources.Minify | fingerprint }}
+	<script src="{{ $animatePreventJS.RelPermalink }}" integrity="{{ $animatePreventJS.Data.Integrity }}"></script>
+	{{ end }}
+
+	{{ $mainJS := resources.Get "main.js" | resources.Minify | fingerprint }}
+	<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
+
 	{{ if resources.Get "js/error-fix.js" }}
-	{{ $errorFixJS := resources.Get "js/error-fix.js" | minify | fingerprint }}
+	{{ $errorFixJS := resources.Get "js/error-fix.js" | resources.Minify | fingerprint }}
 	<script src="{{ $errorFixJS.RelPermalink }}" integrity="{{ $errorFixJS.Data.Integrity }}"></script>
 	{{ end }}
 
-	{{ $mainJS := resources.Get "main.js" | minify | fingerprint }}
-	<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}"></script>
-
 	{{ if resources.Get "js/simple-slideshow.js" }}
-	{{ $slideshowJS := resources.Get "js/simple-slideshow.js" | minify | fingerprint }}
+	{{ $slideshowJS := resources.Get "js/simple-slideshow.js" | resources.Minify | fingerprint }}
 	<script src="{{ $slideshowJS.RelPermalink }}" integrity="{{ $slideshowJS.Data.Integrity }}"></script>
 	{{ end }}
 
-	{{ $customJS := resources.Get "js/theme.js" | minify | fingerprint }}
+	{{ $customJS := resources.Get "js/theme.js" | resources.Minify | fingerprint }}
 	<script src="{{ $customJS.RelPermalink }}" integrity="{{ $customJS.Data.Integrity }}"></script>
 
 	{{ if hugo.IsProduction }}
