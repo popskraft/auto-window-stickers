@@ -23,8 +23,19 @@
         <div id="navSticky" class="pt-5 md:pt-0">
         <ul id="links02" class="links-component instance-2 style-1 main-nav">
           {{ range .Site.Params.mainNav }}
-            <li class="{{ .class }}">
-              <a href="{{ .url | relURL }}">{{ .name }}</a>
+            {{ $navURL := .url | relURL }}
+            {{ $isActive := or (eq $navURL $.Page.RelPermalink) (and (ne $navURL "/") (hasPrefix $.Page.RelPermalink $navURL)) }}
+            {{ $classes := slice }}
+            {{ with .class }}
+              {{ $classes = $classes | append . }}
+            {{ end }}
+            {{ if $isActive }}
+              {{ $classes = $classes | append "active" }}
+            {{ else }}
+              {{ $classes = $classes | append "inactive" }}
+            {{ end }}
+            <li class="{{ delimit $classes " " }}">
+              <a href="{{ $navURL }}">{{ .name }}</a>
             </li>
           {{ end }}
         </ul>
