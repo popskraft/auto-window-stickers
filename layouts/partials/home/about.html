@@ -1,23 +1,8 @@
-<div id="container21" data-scroll-id="about" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="container default">
-  <div class="wrapper">
-    <div class="inner">
-      <div id="video01" class="style1 video">
-        <video src="{{ .Params.about.video.src | default "/videos/video-main.mp4" }}" poster="{{ .Params.about.video.poster | default "/videos/video-main.jpg" }}" preload="auto" playsinline webkit-playsinline muted autoplay loop controls></video>
-      </div>
-      <div id="video01" class="style1 video">
-      </div>
-    </div>
+{{ with .Params.about.video }}
+<div id="video01" class="style1 video" style="opacity: 1;">
+  <div class="frame">
+    <video class="player" src="{{ .src | default "/videos/video-main.mp4" }}" poster="{{ .poster | default "/videos/video-main.jpg" }}" preload="auto"
+      playsinline webkit-playsinline autoplay muted loop></video>
   </div>
 </div>
-<div id="container20" class="style9 container columns">
-  <div class="wrapper">
-    <div class="inner">
-      <div>
-        <h2 id="text71" class="style1">{{ .Params.about.heading }}</h2>
-      </div>
-      <div>
-        <p id="text72" class="style6">{{ .Params.about.text | safeHTML }}</p>
-      </div>
-    </div>
-  </div>
-</div>
+{{ end }}
