@@ -323,7 +323,7 @@ unloaded-script {
 	position: relative;
 	text-align: var(--alignment);
 	z-index: 1;
-	transition: opacity 0.75s ease 0.125s,transform 0.75s ease 0.125s;
+	transition: opacity 0.5s ease 0s,transform 0.5s ease 0s;
 }
 
 .site-main > .inner {
@@ -382,7 +382,7 @@ unloaded-script {
 
 body.is-loading .site-main {
 	opacity: 0;
-	transform: translateY(2.475rem);
+	transform: translateY(2.7375rem);
 }
 
 body #loader {
