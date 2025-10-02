@@ -24,6 +24,17 @@
         return element;
     };
     
+    // Wrap querySelector to handle null returns safely
+    const originalQuerySelector = document.querySelector;
+    document.querySelector = function(selector) {
+        const element = originalQuerySelector.call(document, selector);
+        if (!element && (selector.includes('slideshow05') || selector.includes('slideshow06') || selector.includes('slideshow07'))) {
+            console.warn(`Error Prevention: Created virtual element for missing selector: ${selector}`);
+            return createVirtualElement(selector.replace(/[^a-zA-Z0-9]/g, '-'));
+        }
+        return element;
+    };
+    
     // Fix for removeChild errors
     const originalRemoveChild = Node.prototype.removeChild;
     Node.prototype.removeChild = function(child) {
@@ -41,6 +52,24 @@
         virtualElement.id = id || 'virtual-element';
         virtualElement.style.display = 'none';
         virtualElement.setAttribute('data-virtual', 'true');
+        
+        // Create a safe classList that accepts all operations without errors
+        const safeClassList = {
+            add: function() { return this; },
+            remove: function() { return this; },
+            toggle: function() { return false; },
+            contains: function() { return false; },
+            replace: function() { return false; },
+            item: function() { return null; },
+            toString: function() { return ''; },
+            length: 0
+        };
+        
+        // Override classList with safe version
+        Object.defineProperty(virtualElement, 'classList', {
+            get: function() { return safeClassList; },
+            configurable: true
+        });
         
         // Add it to the DOM but hidden, so it can be found but won't affect layout
         document.body.appendChild(virtualElement);
