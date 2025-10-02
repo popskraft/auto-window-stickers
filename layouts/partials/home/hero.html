@@ -88,9 +88,9 @@
           {{ $heroImage := resources.Get . }}
           {{ if $heroImage }}
             {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
-            <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="eager">
+            <img src="{{ $processed.RelPermalink }}" alt="{{ $.Params.hero.interior.heading | plainify }}" width="{{ $processed.Width }}" loading="eager">
           {{ else }}
-            <img src="/images/placeholder.jpg" alt="{{ $.Params.hero.interior.heading | plainify }}" loading="eager">
+            <img src="/images/placeholder.jpg" alt="{{ $.Params.hero.interior.heading | plainify }}" width="{{ $processed.Width }}" loading="eager">
           {{ end }}
           {{ with $.Params.hero.interior.button }}</a>{{ end }}
         </div>

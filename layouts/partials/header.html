@@ -10,7 +10,13 @@
               {{- else }}
               <div class="frame">
                 {{- end }}
-                <img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo">
+                {{ $logo := resources.Get $.Site.Params.logo }}
+                {{ if $logo }}
+                  {{ $processedLogo := $logo.Resize "662x webp" }}
+                  <img src="{{ $processedLogo.RelPermalink }}" alt="{{ $.Site.Title }} Logo" width="{{ $processedLogo.Width }}">
+                {{ else }}
+                  <img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo">
+                {{ end }}
                 {{- if not $.IsHome }}
             </a>
             {{- else }}
