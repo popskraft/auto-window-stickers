@@ -123,12 +123,14 @@ assets/images/articles/
 1. **`image_cover`** — обложка статьи (отображается вверху)
 2. **`image_body`** — изображение в теле статьи (вставляется после 2-го блока контента)
 
+Путь в front matter записывается без префикса `assets/`, например `images/articles/3-coverimage.jpg`.
+
 **Пример front matter созданной статьи:**
 ```yaml
 ---
 title: "How to Apply Exterior Window Stickers"
-image_cover: "assets/images/articles/3-coverimage.jpg"
-image_body: "assets/images/articles/7-coverimage.jpg"
+image_cover: "images/articles/3-coverimage.jpg"
+image_body: "images/articles/7-coverimage.jpg"
 image_body_alt: "How to Apply Exterior Window Stickers"
 ---
 ```
@@ -291,11 +293,26 @@ content/states/texas/interior-blank/index.md
 content/states/new-york/exterior-buyguide/index.md
 ```
 
+### Как работает генерация продуктовых страниц
+- Используются данные продуктов из `data/products/*.yaml`, список штатов из `data/content-generator/states.yaml` и пул текстовых блоков из `data/content-generator/content/product/*.yaml`.
+- Для каждого продукта скрипт создаёт страницу в каждом штате, подставляя соответствующие плейсхолдеры (`[[state]]`, `[[product]]`, `[[keyword]]`, `[[saving_number]]`).
+- Front matter формируется программно: заголовок, описание, SEO-заголовок и блоки `savings/benefits/faq/testimonials` собираются из выбранных данных и текущей даты.
+- Контент блоков выбирается случайно (управляет `--seed`), затем через `_process_content_item` выполняются подстановки по плейсхолдерам в заголовках, списках и ответах.
+- Существующие файлы не переописываются; чтобы обновить страницу, удалите файл вручную или включите отдельный режим перезаписи, если он будет реализован.
+
+
 ### Статьи
 ```
 content/articles/exterior-custom/how-to-apply/index.md
 content/articles/interior-blank/benefits-guide/index.md
 ```
+
+### Как работает генерация статей
+- Скрипт читает конфигурацию (`generate-pages.yaml`), данные продуктов из `data/products/*.yaml` и текстовые блоки из `data/content-generator/content/article/*.yaml`.
+- Для каждого продукта перебирается список заголовков, затем случайно выбираются блоки контента, картинки и подстановки по плейсхолдерам (штат, продукт, ключевые фразы).
+- Front matter создаётся на базе `archetypes/article.md`, а переменные (`{{product}}`, `{{state}}` и т. д.) подменяются фактическими значениями.
+- Если запустить скрипт без ограничений (`--limit`), он пройдёт по всем продуктам и сгенерирует статьи для каждого заголовка, пропуская уже существующие файлы.
+- Источники картинок берутся из `assets/images/articles/`; пути в FM записываются как `images/articles/<file>`, а подбор осуществляется в `generate-pages.py`.
 
 ---
 

@@ -21,7 +21,8 @@ seo:
 
 pages:
   layout: "product"                                                        # Hugo layout to use
-  filename_pattern: "states/{state_slug}/{product_key}/index.md"          # Output file path pattern
+  filename_pattern: "states/{state_slug}/{product_key}/index.md"          # Output file path pattern for state pages
+  base_product_pattern: "{category}/{product_key}/index.md"               # Output file path pattern for base product pages
 
 data_sources:
   products_dir: "data/products"                                            # Directory with product YAML files

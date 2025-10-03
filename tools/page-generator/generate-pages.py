@@ -329,7 +329,7 @@ class PageGenerator:
     def _find_article_cover_image(self) -> str:
         """Return random image path from assets/images/articles/ or empty string.
 
-        Returns relative path like 'assets/images/articles/1-coverimage.jpg'.
+        Returns relative path like 'images/articles/1-coverimage.jpg'.
         """
         images_dir = self.base_path / 'assets' / 'images' / 'articles'
         if not images_dir.exists() or not images_dir.is_dir():
@@ -339,12 +339,12 @@ class PageGenerator:
         if not candidates:
             return ""
         choice = random.choice(candidates)
-        return str(Path('assets') / 'images' / 'articles' / choice.name)
+        return (Path('images') / 'articles' / choice.name).as_posix()
 
     def _pick_cover_and_body_images(self):
         """Pick two distinct random images for cover and body. Return (cover, body).
 
-        Paths are relative like 'assets/images/articles/<file>'. Empty strings if none.
+        Paths are relative like 'images/articles/<file>'. Empty strings if none.
         """
         images_dir = self.base_path / 'assets' / 'images' / 'articles'
         exts = {'.jpg', '.jpeg', '.png', '.webp'}
@@ -354,13 +354,13 @@ class PageGenerator:
         if not candidates:
             return "", ""
         if len(candidates) == 1:
-            rel = str(Path('assets') / 'images' / 'articles' / candidates[0].name)
+            rel = (Path('images') / 'articles' / candidates[0].name).as_posix()
             return rel, ""
         cover_p = random.choice(candidates)
         remaining = [p for p in candidates if p.name != cover_p.name]
         body_p = random.choice(remaining)
-        cover = str(Path('assets') / 'images' / 'articles' / cover_p.name)
-        body = str(Path('assets') / 'images' / 'articles' / body_p.name)
+        cover = (Path('images') / 'articles' / cover_p.name).as_posix()
+        body = (Path('images') / 'articles' / body_p.name).as_posix()
         return cover, body
 
     def _render_article_item_md(self, item: dict, product_title: str) -> str:
@@ -423,8 +423,9 @@ class PageGenerator:
             if md:
                 parts.append(md)
             # After second block (index 1), inject body image shortcode
+            # Empty src triggers fallback to .Page.Params.image_body in the shortcode
             if idx == 1:
-                parts.append('{{< figureproc src="/{{< param image_body >}}" alt="{{< param image_body_alt >}}" >}}\n')
+                parts.append('{{< figureproc >}}\n')
         return "\n".join(parts).strip() + "\n"
 
     def _read_archetype_article(self):

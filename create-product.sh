@@ -22,10 +22,10 @@ fi
 PRODUCT_NAME="$1"
 PRODUCT_SLUG=$(echo "$PRODUCT_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
 
-# Define file paths
-CONTENT_DIR="content/$CATEGORY"
+# Define file paths - using bundle structure (folder + index.md)
+CONTENT_DIR="content/$CATEGORY/$CATEGORY-$PRODUCT_SLUG"
 DATA_DIR="data/products"
-CONTENT_FILE="$CONTENT_DIR/$CATEGORY-$PRODUCT_SLUG.md"
+CONTENT_FILE="$CONTENT_DIR/index.md"
 DATA_FILE="$DATA_DIR/$CATEGORY-$PRODUCT_SLUG.yaml"
 
 # Check if files already exist
@@ -43,17 +43,19 @@ fi
 mkdir -p "$CONTENT_DIR"
 mkdir -p "$DATA_DIR"
 
-# Create content file from archetype
+# Create content directory and file from archetype
 echo "Creating content file: $CONTENT_FILE"
-hugo new --kind product "$CATEGORY/$CATEGORY-$PRODUCT_SLUG.md"
+mkdir -p "$CONTENT_DIR"
+hugo new --kind product "$CATEGORY/$CATEGORY-$PRODUCT_SLUG/index.md"
 
 # Create data file by copying and modifying the archetype
 echo "Creating data file: $DATA_FILE"
 cp "archetypes/product-data.yaml" "$DATA_FILE"
 
 # Replace placeholder values in the data file
+CATEGORY_UPPER=$(echo "$CATEGORY" | tr '[:lower:]' '[:upper:]')
 sed -i '' "s/title: \".*\"/title: \"$PRODUCT_NAME\"/" "$DATA_FILE"
-sed -i '' "s|images/CATEGORY|images/${CATEGORY^^}|g" "$DATA_FILE"
+sed -i '' "s|images/CATEGORY|images/$CATEGORY_UPPER|g" "$DATA_FILE"
 
 # Update purchase links with correct product name in URL
 PRODUCT_URL_SLUG=$(echo "$PRODUCT_SLUG" | sed 's/-/-/g')
@@ -65,7 +67,7 @@ echo "Data: $DATA_FILE"
 echo ""
 echo "Next steps:"
 echo "1. Edit $DATA_FILE to update product details"
-echo "2. Add product images to static/images/${CATEGORY^^}/"
+echo "2. Add product images to static/images/$CATEGORY_UPPER/"
 echo "3. Update purchase links with correct product IDs"
 
 exit 0

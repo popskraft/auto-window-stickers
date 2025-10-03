@@ -1,0 +1,4 @@
+{{ $img := resources.Get "images/articles/1-coverimage.jpg" }}
+IMG1: {{ if $img }}✅ Found at {{ $img.RelPermalink }}{{ else }}❌ Not found{{ end }}<br>
+{{ $img2 := resources.Get "assets/images/articles/1-coverimage.jpg" }}  
+IMG2: {{ if $img2 }}✅ Found{{ else }}❌ Not found{{ end }}

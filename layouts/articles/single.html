@@ -1,0 +1,75 @@
+{{ define "main" }}
+
+{{ if .Params.image_cover }}
+<div id="container15" class="single container-component instance-15 style-6 columns">
+  <div class="wrapper">
+    <div class="inner">
+      <div>
+        <div id="image15" class="image-component instance-15 style-3 full">
+          <a href="#home" class="frame">
+            {{ $imagePath := .Params.image_cover }}
+            {{ $trimmedPath := strings.TrimPrefix "assets/" $imagePath }}
+            {{ $image := (.Page.Resources.GetMatch $imagePath) | default (resources.GetMatch $imagePath) | default (resources.GetMatch $trimmedPath) }}
+            {{ with $image }}
+              {{ $filter := images.UnsharpMask .5 .5 0 }}
+              {{ $processed := $image.Filter $filter }}
+              {{ $final := $processed.Fill "700x500 webp picture Center" }}
+              <img 
+                src="{{ $final.RelPermalink }}" 
+                alt="{{ $.Params.image_cover_alt | default $.Title }}" 
+                loading="eager"
+              />
+            {{ else }}
+              <img 
+                src="{{ $imagePath | relURL }}" 
+                alt="{{ $.Params.image_cover_alt | default $.Title }}" 
+                loading="eager"
+              />
+            {{ end }}
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+        {{ with .Params.subtitle }}
+        <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+<div id="container13" class="container-component instance-13 style-2 default">
+  <div class="wrapper">
+    <div class="inner">
+      {{ if not .Params.image_cover }}
+      <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+      {{ with .Params.subtitle }}
+      <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+      {{ end }}
+      {{ end }}
+      
+      <div class="content-body txt">
+      {{ .Content }}
+      </div>
+      
+      {{ if .Params.showCloseButton }}
+      <ul id="buttons14" class="buttons-component instance-14 style-6">
+        <li>
+          <a href="{{ .Site.BaseURL }}" class="n01" role="button">
+            <svg aria-labelledby="buttons14-icon-1-title">
+              <title id="buttons14-icon-1-title">Cancel (Light)</title>
+              <use xlink:href="{{ "/icons.svg#cancel-light" | relURL }}"></use>
+            </svg>
+            <span class="label">Close</span>
+          </a>
+        </li>
+      </ul>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{ end }}

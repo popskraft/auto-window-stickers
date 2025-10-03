@@ -20,37 +20,42 @@
    - assets/images/articles/1.jpg
    - images/articles/1.jpg
 */}}
-{{- $path := strings.TrimSpace $src -}}
+{{- $rawPath := strings.TrimSpace $src -}}
+{{- $path := $rawPath -}}
 {{- if strings.HasPrefix $path "/" -}}
   {{- $path = strings.TrimPrefix $path "/" -}}
 {{- end -}}
-{{- if strings.HasPrefix $path "assets/" -}}
-  {{- $path = strings.TrimPrefix $path "assets/" -}}
-{{- end -}}
+{{- $trimmedPath := strings.TrimPrefix "assets/" $path -}}
 
 {{/* debug logging removed */}}
 
 {{/* Retrieve from Hugo Pipes assets (must be under assets/) */}}
-{{- $img := resources.Get $path -}}
+{{- $img := (.Page.Resources.GetMatch $path) -}}
 {{- if not $img -}}
-  {{/* Try with assets/ prefix as a fallback */}}
-  {{- $altPath := printf "assets/%s" $path -}}
-  {{- $img = resources.Get $altPath -}}
-{{- end -}}
-{{- if and (not $img) (ne $path $src) -}}
-  {{/* As a last resort, try the raw src unmodified */}}
-  {{- $img = resources.Get (strings.TrimSpace $src) -}}
+  {{- $img = .Page.Resources.GetMatch $trimmedPath -}}
 {{- end -}}
 {{- if not $img -}}
-  {{- errorf "figureproc: image not found: %s (normalized: %s) (expected under assets/)" $src $path -}}
+  {{- $img = resources.GetMatch $path -}}
 {{- end -}}
-
-{{/* Ensure the resource is an image before resizing */}}
-{{- if ne $img.MediaType.MainType "image" -}}
-  {{- errorf "figureproc: resource is not an image: %s (media: %s/%s)" $path $img.MediaType.MainType $img.MediaType.SubType -}}
+{{- if not $img -}}
+  {{- $img = resources.GetMatch $trimmedPath -}}
 {{- end -}}
-
-{{/* Process to width=1000 (exact width), auto height, convert to webp. You can tweak quality like "1000x q80 webp" */}}
-{{- $processed := $img.Resize "1000x webp" -}}
-
-<img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" title="{{ $title }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" loading="lazy" decoding="async" class="{{ $class }}">
+{{- if not $img -}}
+  {{- $img = resources.Get $trimmedPath -}}
+{{- end -}}
+{{- if not $img -}}
+  {{- $img = resources.Get $path -}}
+{{- end -}}
+{{- if not $img -}}
+  {{- warnf "figureproc: image not found: %s (normalized: %s) (expected under assets/)" $src $path -}}
+  <img src="{{ $rawPath | relURL }}" alt="{{ $alt }}" title="{{ $title }}" loading="lazy" decoding="async" class="{{ $class }}">
+{{- else -}}
+  {{/* Ensure the resource is an image before resizing */}}
+  {{- if ne $img.MediaType.MainType "image" -}}
+    {{- warnf "figureproc: resource is not an image: %s (media: %s/%s)" $path $img.MediaType.MainType $img.MediaType.SubType -}}
+  {{- else -}}
+    {{/* Process to width=1000 (exact width), auto height, convert to webp. You can tweak quality like "1000x q80 webp" */}}
+    {{- $processed := $img.Resize "1000x webp" -}}
+    <img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" title="{{ $title }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" loading="lazy" decoding="async" class="{{ $class }}">
+  {{- end -}}
+{{- end -}}

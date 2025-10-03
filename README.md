@@ -16,9 +16,11 @@ The commands require Hugo extended v0.140.2 and Node.js ≥16.
 1. Fork or branch from `main`, then clone locally.
 2. Product pages pull data from two sources:
    - YAML in `data/products/<product>.yaml` (shared specs, pricing, gallery).
-   - Markdown in `content/<area>/<product>.md` (page text/front matter).
+   - Markdown in `content/<area>/<product>/index.md` (page text/front matter) - **Page Bundle structure**.
    Update both sides when changing SKUs.
 3. Commit with clear messages, push your branch, open a pull request, and let Netlify run the preview build.
+
+**Note**: Content uses Hugo Page Bundles (folder + index.md). See [Page Bundles Guide](README/MIGRATION-TO-BUNDLES.md) for details.
 
 ## Content generators
 - Create a Python virtualenv (`python3 -m venv .venv`) and install deps: `./.venv/bin/pip install -r tools/page-generator/requirements.txt`.
