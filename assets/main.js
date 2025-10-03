@@ -2721,6 +2721,10 @@
 					dragEnd = null,
 					$slide, intervalId, i;
 		
+				// Target element doesn't exist? Bail.
+					if (!this.$target)
+						return;
+		
 				// Apply classes.
 					this.$target.classList.add('slideshow-background');
 					this.$target.classList.add(this.transition.style);
@@ -2729,6 +2733,7 @@
 					if (this.navigation) {
 		
 						// Next arrow (if allowed).
+						
 							this.$next = document.createElement('div');
 								this.$next.classList.add('nav', 'next');
 								this.$next.addEventListener('click', function(event) {

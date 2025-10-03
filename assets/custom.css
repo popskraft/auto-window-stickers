@@ -1,3 +1,7 @@
+.image-component>.frame>img {
+	height: auto;
+}
+
 /* Layout adjustments for product rows */
 .product-row > .wrapper > .inner > :nth-child(1),
 .product-row > .wrapper > .inner > :nth-child(2) {
