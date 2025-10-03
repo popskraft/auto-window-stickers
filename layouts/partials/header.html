@@ -13,9 +13,15 @@
                 {{ $logo := resources.Get $.Site.Params.logo }}
                 {{ if $logo }}
                   {{ $processedLogo := $logo.Resize "662x webp" }}
-                  <img src="{{ $processedLogo.RelPermalink }}" alt="{{ $.Site.Title }} Logo" width="{{ $processedLogo.Width }}">
+                  <img src="{{ $processedLogo.RelPermalink }}"
+                    alt="{{ $.Site.Title }} Logo" 
+                    width="{{ $processedLogo.Width }}"
+                    height="{{ $processedLogo.Height }}">
                 {{ else }}
-                  <img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo">
+                  <img src="{{ $.Site.Params.logo | relURL }}"
+                    alt="{{ $.Site.Title }} Logo"
+                    width="662"
+                    height="120">
                 {{ end }}
                 {{- if not $.IsHome }}
             </a>

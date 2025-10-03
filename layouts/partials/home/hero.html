@@ -5,155 +5,28 @@
     <div class="inner">
       {{/* --- Exterior Column --- */}}
       {{ with .exterior }}
-      <div>
-        {{ with .button }}<h1 class="text-component instance-63 style-1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.exterior.heading | safeHTML }}</a></h1>{{ end }}
-        {{ with .description }}<p class="text-component instance-120 style-3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
-        {{ with .image }}
-        <div id="image04" class="image-component instance-4 style-2">
-          {{ with $.Params.hero.exterior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
-          {{ $heroImage := resources.Get . }}
-          {{ if $heroImage }}
-            {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
-            <img 
-              src="{{ $processed.RelPermalink }}" 
-              alt="{{ $.Params.hero.exterior.heading | plainify }}" 
-              width="{{ $processed.Width }}"
-              height="{{ $processed.Height }}"
-              loading="eager"
-            >
-          {{ else }}
-            <img 
-              src="/images/placeholder.jpg" 
-              alt="{{ $.Params.hero.exterior.heading | plainify }}"
-              width="900"
-              height="476"
-              loading="eager"
-            >
-          {{ end }}
-          {{ with $.Params.hero.exterior.button }}</a>{{ end }}
-        </div>
-        {{ end }}
-        {{ with .gallery }}
-        <div id="gallery03" class="gallery-component instance-3 style-3 productGallery">
-          <div class="inner">
-            <ul>
-              {{ range $index, $item := . }}
-              <li>
-                <a href="{{ $item.link | default "#" | relURL }}" class="thumbnail n{{ printf "%02d" (add $index 1) }}"><span class="frame">
-                  {{ if $item.image }}
-                    {{ $image := resources.Get $item.image }}
-                    {{ if $image }}
-                      {{ $filter := images.UnsharpMask .5 .5 0 }}
-                      {{ $processed := $image.Filter $filter }}
-                      {{ $final := $processed.Fill "350x350 webp picture Center" }}
-                      <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" width="{{ $final.Width }}" height="{{ $final.Height }}" loading="eager">
-                    {{ else }}
-                      <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" width="350" height="350" loading="eager">
-                    {{ end }}
-                  {{ else }}
-                    <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" width="350" height="350" loading="eager">
-                  {{ end }}
-                </span></a>
-                <div class="caption">
-                  <p>
-                    <a class="no-underline hover:text-[#2ec0ff]" href="{{ $item.link | default "#" | relURL }}">{{ $item.caption }}</a>
-                  </p>
-                </div>
-              </li>
-              {{ end }}
-            </ul>
-          </div>
-        </div>
-        {{ end }}
-        {{ with .button }}
-        <ul id="buttons11" class="buttons-component instance-11 style-2">
-          <li>
-            <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
-              <svg aria-labelledby="buttons11-icon-1-title">
-                  <title id="buttons11-icon-1-title">{{ $.Params.hero.exterior.button.text | plainify }}</title>
-                  <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
-              </svg>
-              <span class="label">{{ .text }}</span>
-            </a>
-          </li>
-        </ul>
-        {{ end }}
-        <hr id="divider02" class="divider-component instance-2 style-3" data-visibility="desktop">
-      </div>
+        {{ partial "home/hero-column.html" (dict 
+          "data" . 
+          "type" "exterior" 
+          "ids" (dict 
+            "image" "image04" 
+            "gallery" "gallery03" 
+            "button" "buttons11"
+          )
+        ) }}
       {{ end }}
+      
       {{/* --- Interior Column --- */}}
       {{ with .interior }}
-      <div>
-        {{ with .button }}<h2 class="text-component instance-64 style-1"><a href="{{ .link | default "#" | relURL }}">{{ $.Params.hero.interior.heading | safeHTML }}</a></h2>{{ end }}
-        {{ with .description }}<p class="text-component instance-121 style-3 lg:min-h-[86px]">{{ . }}</p>{{ end }}
-        {{ with .image }}
-        <div id="image03" class="image-component instance-3 style-2">
-          {{ with $.Params.hero.interior.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
-          {{ $heroImage := resources.Get . }}
-          {{ if $heroImage }}
-            {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
-            <img src="{{ $processed.RelPermalink }}" 
-              alt="{{ $.Params.hero.interior.heading | plainify }}" 
-              width="{{ $processed.Width }}"
-              height="{{ $processed.Height }}"
-              loading="eager">
-          {{ else }}
-            <img src="/images/placeholder.jpg" 
-              alt="{{ $.Params.hero.interior.heading | plainify }}" 
-              width="900"
-              height="476"
-              loading="eager">
-          {{ end }}
-          {{ with $.Params.hero.interior.button }}</a>{{ end }}
-        </div>
-        {{ end }}
-        {{ with .gallery }}
-        <div id="gallery02" class="gallery-component instance-2 style-3 productGallery">
-          <div class="inner">
-            <ul>
-              {{ range $index, $item := . }}
-               <li>
-                <a href="{{ $item.link | default "#" | relURL }}" class="thumbnail n{{ printf "%02d" (add $index 1) }}"><span class="frame">
-                  {{ if $item.image }}
-                    {{ $image := resources.Get $item.image }}
-                    {{ if $image }}
-                      {{ $filter := images.UnsharpMask .5 .5 0 }}
-                      {{ $processed := $image.Filter $filter }}
-                      {{ $final := $processed.Fill "350x350 webp picture Center" }}
-                      <img src="{{ $final.RelPermalink }}" alt="{{ $item.alt }}" loading="eager">
-                    {{ else }}
-                      <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
-                    {{ end }}
-                  {{ else }}
-                    <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" loading="eager">
-                  {{ end }}
-                </span></a>
-                <div class="caption">
-                  <p>
-                    <a class="no-underline hover:text-[#2ec0ff]" href="{{ $item.link | default "#" | relURL }}">{{ $item.caption }}</a>
-                  </p>
-                </div>
-              </li>
-              {{ end }}
-            </ul>
-          </div>
-        </div>
-        {{ end }}
-        {{ with .button }}
-        <ul id="buttons03" class="buttons-component instance-3 style-2">
-           <li>
-            <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
-              <svg aria-labelledby="buttons03-icon-1-title">
-                  <title id="buttons03-icon-1-title">{{ $.Params.hero.interior.button.text | plainify }}</title>
-                  <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
-              </svg>
-              <span class="label">{{ .text }}</span>
-            </a>
-          </li>
-        </ul>
-        {{ end }}
-        <hr class="divider-component instance-3 style-3" data-visibility="desktop">
-      </div>
+        {{ partial "home/hero-column.html" (dict 
+          "data" . 
+          "type" "interior" 
+          "ids" (dict 
+            "image" "image03" 
+            "gallery" "gallery02" 
+            "button" "buttons03"
+          )
+        ) }}
       {{ end }}
     </div>
   </div>

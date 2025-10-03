@@ -1,0 +1,110 @@
+{{/*
+  Reusable hero column partial
+  Expects context with: .data (column data), .type (exterior/interior), .ids (map of element IDs)
+*/}}
+{{ $data := .data }}
+{{ $type := .type }}
+{{ $ids := .ids }}
+{{ $isExterior := eq $type "exterior" }}
+{{ $headingTag := cond $isExterior "h1" "h2" }}
+{{ $instanceClass := cond $isExterior "instance-63" "instance-64" }}
+
+<div>
+  {{/* Heading */}}
+  {{ with $data.button }}
+    {{ printf "<%s class=\"text-component %s style-1\"><a href=\"%s\">%s</a></%s>" $headingTag $instanceClass (.link | default "#" | relURL) ($data.heading | safeHTML) $headingTag | safeHTML }}
+  {{ end }}
+  
+  {{/* Description */}}
+  {{ with $data.description }}
+    <p class="text-component style-3 lg:min-h-[86px]">{{ . }}</p>
+  {{ end }}
+  
+  {{/* Hero Image */}}
+  {{ with $data.image }}
+    <div id="{{ $ids.image }}" class="image-component style-2">
+      {{ with $data.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
+      {{ $heroImage := resources.Get . }}
+      {{ if $heroImage }}
+        {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
+        <img 
+          src="{{ $processed.RelPermalink }}" 
+          alt="{{ $data.heading | plainify }}" 
+          width="{{ $processed.Width }}"
+          height="{{ $processed.Height }}"
+          loading="eager"
+        >
+      {{ else }}
+        <img 
+          src="/images/placeholder.jpg" 
+          alt="{{ $data.heading | plainify }}"
+          width="900"
+          height="476"
+          loading="eager"
+        >
+      {{ end }}
+      {{ with $data.button }}</a>{{ end }}
+    </div>
+  {{ end }}
+  
+  {{/* Gallery */}}
+  {{ with $data.gallery }}
+    <div id="{{ $ids.gallery }}" class="gallery-component style-3 productGallery">
+      <div class="inner">
+        <ul>
+          {{ range $index, $item := . }}
+          <li>
+            <a href="{{ $item.link | default "#" | relURL }}" class="thumbnail n{{ printf "%02d" (add $index 1) }}">
+              <span class="frame">
+                {{ if $item.image }}
+                  {{ $image := resources.Get $item.image }}
+                  {{ if $image }}
+                    {{ $filter := images.UnsharpMask .5 .5 0 }}
+                    {{ $processed := $image.Filter $filter }}
+                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                    <img 
+                      src="{{ $final.RelPermalink }}" 
+                      alt="{{ $item.alt }}" 
+                      width="{{ $final.Width }}" 
+                      height="{{ $final.Height }}" 
+                      loading="eager"
+                    >
+                  {{ else }}
+                    <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" width="350" height="350" loading="eager">
+                  {{ end }}
+                {{ else }}
+                  <img src="/images/placeholder-thumb.jpg" alt="{{ $item.alt }}" width="350" height="350" loading="eager">
+                {{ end }}
+              </span>
+            </a>
+            <div class="caption">
+              <p>
+                <a class="no-underline hover:text-[#2ec0ff]" href="{{ $item.link | default "#" | relURL }}">{{ $item.caption }}</a>
+              </p>
+            </div>
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+  {{ end }}
+  
+  {{/* Button */}}
+  {{ with $data.button }}
+    <ul id="{{ $ids.button }}" class="buttons-component style-2">
+      <li>
+        <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
+          <svg aria-labelledby="{{ $ids.button }}-icon-1-title">
+            <title id="{{ $ids.button }}-icon-1-title">{{ .text | plainify }}</title>
+            <use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
+          </svg>
+          <span class="label">{{ .text }}</span>
+        </a>
+      </li>
+    </ul>
+  {{ end }}
+  
+  {{/* Divider */}}
+  {{ $dividerInstance := cond $isExterior "instance-2" "instance-3" }}
+  <hr {{ if $isExterior }}id="divider02"{{ end }} class="divider-component {{ $dividerInstance }} style-3" data-visibility="desktop">
+</div>
