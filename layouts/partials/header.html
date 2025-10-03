@@ -24,6 +24,7 @@
                     sizes="(max-width: 480px) 150px, (max-width: 980px) 250px, 373px"
                     alt="{{ $.Site.Title }} Logo" 
                     width="{{ $logoLarge.Width }}"
+                    fetchpriority=high
                     height="{{ $logoLarge.Height }}">
                 {{ else }}
                   <img src="{{ $.Site.Params.logo | relURL }}"
