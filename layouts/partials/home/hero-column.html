@@ -41,6 +41,7 @@
           alt="{{ $data.heading | plainify }}" 
           width="{{ $large.Width }}"
           height="{{ $large.Height }}"
+          fetchpriority=high
           loading="eager"
         >
       {{ else }}
@@ -49,6 +50,7 @@
           alt="{{ $data.heading | plainify }}"
           width="900"
           height="476"
+          fetchpriority=high
           loading="eager"
         >
       {{ end }}
@@ -83,7 +85,8 @@
                       sizes="(max-width: 736px) 33vw, 115px"
                       alt="{{ $item.alt }}" 
                       width="{{ $thumb350.Width }}" 
-                      height="{{ $thumb350.Height }}" 
+                      height="{{ $thumb350.Height }}"
+                      fetchpriority=high
                       loading="eager"
                     >
                   {{ else }}
