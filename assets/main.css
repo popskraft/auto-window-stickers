@@ -2515,7 +2515,7 @@ body.is-instant::after {
 }
 
 .container-component.style-2 > .wrapper {
-	max-width: 50rem;
+	max-width: 54rem;
 	width: 100%;
 }
 
@@ -3945,11 +3945,11 @@ body.is-instant::after {
 }
 
 .slideshow-component > .content > .nav.next {
-	right: -2rem;
+	right: 0;
 }
 
 .slideshow-component > .content > .nav.previous {
-	left: -2rem;
+	left: 0;
 	transform: scaleX(-1) !important;
 }
 

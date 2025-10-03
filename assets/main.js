@@ -2721,10 +2721,6 @@
 					dragEnd = null,
 					$slide, intervalId, i;
 		
-				// Target element doesn't exist? Bail.
-					if (!this.$target)
-						return;
-		
 				// Apply classes.
 					this.$target.classList.add('slideshow-background');
 					this.$target.classList.add(this.transition.style);
@@ -2733,7 +2729,6 @@
 					if (this.navigation) {
 		
 						// Next arrow (if allowed).
-						
 							this.$next = document.createElement('div');
 								this.$next.classList.add('nav', 'next');
 								this.$next.addEventListener('click', function(event) {
@@ -3353,13 +3348,10 @@
 	
 	// Initialize "On Visible" animations.
 		onvisible.add('.image-component.style-1', { style: 'bounce-up', speed: 750, intensity: 10, threshold: 1, delay: 125, replay: false });
-		onvisible.add('.text-component.style-3', { style: 'fade-up', speed: 500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('.text-component.style-14', { style: 'fade-up', speed: 1000, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.divider-component.style-6', { style: 'fade-right', speed: 625, intensity: 10, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.text-component.style-1', { style: 'fade-up', speed: 500, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.video-component.style-1', { style: 'pop-in', speed: 750, intensity: 1, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.text-component.style-4', { style: 'fade-up', speed: 500, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.text-component.style-5', { style: 'fade-up', speed: 500, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.text-component.style-6', { style: 'fade-up', speed: 625, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons-component.style-5', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.text-component.style-8', { style: 'fade-up', speed: 1000, intensity: 6, threshold: 1, delay: 0, replay: false });
@@ -3371,9 +3363,7 @@
 		onvisible.add('.image-component.style-2', { style: 'fade-up', speed: 500, intensity: 3, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons-component.style-2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image-component.style-3', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('.image-component.style-5', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
 		onvisible.add('.buttons-component.style-1', { style: 'fade-in', speed: 1625, intensity: 5, threshold: 1, delay: 0, replay: false });
-		onvisible.add('.text-component.style-12', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.list-component.style-3', { style: 'fade-up', speed: 750, intensity: 5, threshold: 2, delay: 0, stagger: 125, staggerSelector: ':scope > ul > li, :scope > ol > li', replay: false });
 		onvisible.add('.text-component.style-11', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.text-component.instance-58', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
