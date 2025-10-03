@@ -1,6 +1,8 @@
 # Auto Window Stickers
 
-Hugo-based marketing site for exterior and interior car window stickers. All extended documentation now lives in `README/`.
+Hugo-based marketing site for exterior and interior car window stickers. 
+
+📚 **[Full Documentation Index](README/INDEX.md)** - See all optimization guides, refactoring docs, and technical references.
 
 ## Run the site locally
 1. Install dependencies once: `npm install`

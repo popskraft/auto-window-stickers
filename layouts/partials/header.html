@@ -12,11 +12,19 @@
                 {{- end }}
                 {{ $logo := resources.Get $.Site.Params.logo }}
                 {{ if $logo }}
-                  {{ $processedLogo := $logo.Resize "662x webp" }}
-                  <img src="{{ $processedLogo.RelPermalink }}"
+                  {{/* Generate responsive logo sizes */}}
+                  {{ $logoSmall := $logo.Resize "200x webp q85" }}
+                  {{ $logoMedium := $logo.Resize "400x webp q85" }}
+                  {{ $logoLarge := $logo.Resize "662x webp q85" }}
+                  <img 
+                    src="{{ $logoLarge.RelPermalink }}"
+                    srcset="{{ $logoSmall.RelPermalink }} 200w,
+                            {{ $logoMedium.RelPermalink }} 400w,
+                            {{ $logoLarge.RelPermalink }} 662w"
+                    sizes="(max-width: 480px) 150px, (max-width: 980px) 250px, 373px"
                     alt="{{ $.Site.Title }} Logo" 
-                    width="{{ $processedLogo.Width }}"
-                    height="{{ $processedLogo.Height }}">
+                    width="{{ $logoLarge.Width }}"
+                    height="{{ $logoLarge.Height }}">
                 {{ else }}
                   <img src="{{ $.Site.Params.logo | relURL }}"
                     alt="{{ $.Site.Title }} Logo"

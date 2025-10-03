@@ -26,12 +26,19 @@
       {{ with $data.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
       {{ $heroImage := resources.Get . }}
       {{ if $heroImage }}
-        {{ $processed := $heroImage.Fill "900x476 webp picture Center" }}
+        {{/* Generate multiple sizes for responsive images */}}
+        {{ $small := $heroImage.Fill "400x212 webp picture Center q85" }}
+        {{ $medium := $heroImage.Fill "700x370 webp picture Center q85" }}
+        {{ $large := $heroImage.Fill "900x476 webp picture Center q85" }}
         <img 
-          src="{{ $processed.RelPermalink }}" 
+          src="{{ $large.RelPermalink }}" 
+          srcset="{{ $small.RelPermalink }} 400w,
+                  {{ $medium.RelPermalink }} 700w,
+                  {{ $large.RelPermalink }} 900w"
+          sizes="(max-width: 736px) 100vw, 50vw"
           alt="{{ $data.heading | plainify }}" 
-          width="{{ $processed.Width }}"
-          height="{{ $processed.Height }}"
+          width="{{ $large.Width }}"
+          height="{{ $large.Height }}"
           loading="eager"
         >
       {{ else }}
@@ -61,12 +68,19 @@
                   {{ if $image }}
                     {{ $filter := images.UnsharpMask .5 .5 0 }}
                     {{ $processed := $image.Filter $filter }}
-                    {{ $final := $processed.Fill "350x350 webp picture Center" }}
+                    {{/* Generate responsive sizes for thumbnails */}}
+                    {{ $thumb120 := $processed.Fill "120x120 webp picture Center q85" }}
+                    {{ $thumb240 := $processed.Fill "240x240 webp picture Center q85" }}
+                    {{ $thumb350 := $processed.Fill "350x350 webp picture Center q85" }}
                     <img 
-                      src="{{ $final.RelPermalink }}" 
+                      src="{{ $thumb350.RelPermalink }}" 
+                      srcset="{{ $thumb120.RelPermalink }} 120w,
+                              {{ $thumb240.RelPermalink }} 240w,
+                              {{ $thumb350.RelPermalink }} 350w"
+                      sizes="(max-width: 736px) 33vw, 115px"
                       alt="{{ $item.alt }}" 
-                      width="{{ $final.Width }}" 
-                      height="{{ $final.Height }}" 
+                      width="{{ $thumb350.Width }}" 
+                      height="{{ $thumb350.Height }}" 
                       loading="eager"
                     >
                   {{ else }}

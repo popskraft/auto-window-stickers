@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="inner">
       <div>
-        <h2 id="text71" class="text-component instance-71 style-1">{{ .Params.about.heading }}</h2>
+        <h2 class="text-component style-1">{{ .Params.about.heading }}</h2>
       </div>
       <div>
-        <p id="text72" class="text-component instance-72 style-6">{{ .Params.about.text | safeHTML }}</p>
+        <p class="text-component style-6">{{ .Params.about.text | safeHTML }}</p>
       </div>
     </div>
   </div>
@@ -18,20 +18,32 @@
         {{ $featureCount := len $column }}
         {{ range $featureIndex, $feature := $column }}
         {{ if $feature.image }}
-        <div id="image{{ add 18 $index }}" class="image-component instance-{{ add 18 $index }} style-6">
+        <div class="image-component style-6">
           <div class="frame">
             {{ $featureImage := resources.Get $feature.image }}
             {{ with $featureImage }}
-              {{ $processed := .Fill "600x390 webp picture Center" }}
-              <img src="{{ $processed.RelPermalink }}" alt="{{ $feature.heading }}" loading="lazy">
+              {{/* Generate responsive sizes for feature images */}}
+              {{ $small := .Fill "350x228 webp picture Center q85" }}
+              {{ $medium := .Fill "500x325 webp picture Center q85" }}
+              {{ $large := .Fill "600x390 webp picture Center q85" }}
+              <img 
+                src="{{ $large.RelPermalink }}" 
+                srcset="{{ $small.RelPermalink }} 350w,
+                        {{ $medium.RelPermalink }} 500w,
+                        {{ $large.RelPermalink }} 600w"
+                sizes="(max-width: 736px) 100vw, 33vw"
+                width="{{ $large.Width }}"
+                height="{{ $large.Height }}"
+                alt="{{ $feature.heading }}" 
+                loading="lazy">
             {{ end }}
           </div>
         </div>
         {{ end }}
-        <h2 id="text{{ add 29 $index }}" class="text-component instance-{{ add 29 $index }} style-2">{{ $feature.heading }}</h2>
-        <p id="text{{ add 30 $index }}" class="text-component instance-{{ add 30 $index }} style-3">{{ $feature.text | safeHTML }}</p>
+        <h2 class="text-component style-2">{{ $feature.heading }}</h2>
+        <p class="text-component style-3">{{ $feature.text | safeHTML }}</p>
         {{ if ne (add $featureIndex 1) $featureCount }}
-        <hr id="divider{{ add 4 $index }}" class="divider-component instance-{{ add 4 $index }} style-1">
+        <hr class="divider-component style-1">
         {{ end }}
         {{ end }}
       </div>
@@ -39,4 +51,4 @@
     </div>
   </div>
 </div>
-<hr id="divider05" class="divider-component instance-5 style-3">
+<hr class="divider-component style-3">
