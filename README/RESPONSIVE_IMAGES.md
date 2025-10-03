@@ -81,6 +81,41 @@ Google PageSpeed Insights показал, что изображения загр
 **Экономия:**
 - Mobile (150px): загружается 200x вместо 662x → **~7 KiB экономии**
 
+### 5. Product Main Image (1086x814)
+**Файл:** `layouts/_default/product.html`
+
+**Было:** Одно изображение 1086x814 (~120 KiB)
+**Стало:** Три варианта
+```html
+<img 
+  srcset="product-600x450.webp 600w,
+          product-800x600.webp 800w,
+          product-1086x814.webp 1086w"
+  sizes="(max-width: 736px) 100vw, 50vw"
+  fetchpriority="high"
+>
+```
+
+**Экономия:**
+- Mobile: загружается 600x450 вместо 1086x814 → **~70 KiB экономии**
+
+### 6. Product Gallery Thumbnails (724x543)
+**Файл:** `layouts/_default/product.html`
+
+**Было:** Одно изображение 724x543 (~50 KiB)
+**Стало:** Три варианта
+```html
+<img 
+  srcset="thumb-400x300.webp 400w,
+          thumb-550x413.webp 550w,
+          thumb-724x543.webp 724w"
+  sizes="(max-width: 736px) 50vw, 25vw"
+>
+```
+
+**Экономия:**
+- Mobile: загружается 400x300 вместо 724x543 → **~30 KiB экономии** × 2 thumbnails = **~60 KiB**
+
 ## Дополнительные оптимизации
 
 ### Качество сжатия
@@ -92,18 +127,27 @@ Google PageSpeed Insights показал, что изображения загр
 **Результат:** Уменьшение размера файлов на ~15-20% без видимой потери качества.
 
 ### Loading атрибуты
-- **Hero images:** `loading="eager"` (приоритетная загрузка для LCP)
+- **Hero images:** `loading="eager"` + `fetchpriority="high"` (приоритетная загрузка для LCP)
+- **Product main images:** `loading="eager"` + `fetchpriority="high"` (критичные для LCP)
 - **Gallery/Features:** `loading="lazy"` (отложенная загрузка)
+
+### Fetchpriority
+Атрибут `fetchpriority="high"` указывает браузеру загружать изображение с высоким приоритетом:
+- Hero images (главная страница)
+- Product main images (страницы продуктов)
+- Logo (header)
 
 ## Итоговая экономия
 
-| Тип изображения | Количество | Экономия на мобильных |
-|----------------|------------|----------------------|
-| Hero images    | 2          | ~120 KiB            |
-| Gallery thumbs | 6          | ~108 KiB            |
-| Feature images | 4          | ~100 KiB            |
-| Logos          | 2          | ~14 KiB             |
-| **ИТОГО**      |            | **~342 KiB**        |
+| Тип изображения        | Количество | Экономия на мобильных |
+|------------------------|------------|----------------------|
+| Hero images            | 2          | ~120 KiB            |
+| Gallery thumbs (home)  | 6          | ~108 KiB            |
+| Feature images         | 4          | ~100 KiB            |
+| Logos                  | 2          | ~14 KiB             |
+| Product main images    | 16         | ~1120 KiB           |
+| Product gallery thumbs | 32         | ~960 KiB            |
+| **ИТОГО**              |            | **~2422 KiB**       |
 
 ## Технические детали
 
@@ -136,11 +180,12 @@ srcset="image-400.webp 400w, image-700.webp 700w, image-900.webp 900w"
 
 ## Результаты
 
-✅ **Processed images:** 145 → 171 (добавлены responsive варианты)
-✅ **Экономия трафика:** ~342 KiB на мобильных устройствах
-✅ **Улучшение LCP:** Faster loading для hero images
-✅ **Улучшение FCP:** Приоритетная загрузка критичных изображений
+✅ **Processed images:** 145 → 255 (добавлены responsive варианты)
+✅ **Экономия трафика:** ~2.4 MB на мобильных устройствах
+✅ **Улучшение LCP:** Faster loading для hero и product images
+✅ **Улучшение FCP:** Приоритетная загрузка критичных изображений (fetchpriority="high")
 ✅ **SEO:** Лучшие показатели PageSpeed Insights
+✅ **Оптимизированы страницы:** Home, Product pages, Features
 
 ## Проверка
 

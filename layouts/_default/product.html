@@ -15,19 +15,35 @@
               {{ if $mainImage }}
                 {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
                 {{ $processed := $mainImage.Filter $filter }}
-                {{ $final := $processed.Fill "1086x814 webp picture Center" }}
-                <img src="{{ $final.RelPermalink }}"
+                {{/* Responsive sizes for product main image */}}
+                {{ $small := $processed.Fill "500x375 webp picture Center q90" }}
+                {{ $large := $processed.Fill "800x600 webp picture Center q90" }}
+                <img 
+                  src="{{ $large.RelPermalink }}"
+                  srcset="{{ $small.RelPermalink }} 500w,
+                          {{ $large.RelPermalink }} 800w"
+                  sizes="(max-width: 736px) 100vw, 50vw"
                   alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
-                  title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+                  title="Buy {{ $product.title | markdownify | plainify }}"
+                  width="{{ $large.Width }}"
+                  height="{{ $large.Height }}"
+                  fetchpriority="high"
+                  loading="eager" />
               {{ else }}
                 <img src="/images/placeholder.jpg" 
                   alt="{{ $product.title | markdownify | plainify }}" 
-                  title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+                  title="Buy {{ $product.title | markdownify | plainify }}"
+                  width="800"
+                  height="600"
+                  loading="eager" />
               {{ end }}
             {{ else }}
               <img src="/images/placeholder.jpg" 
                 alt="{{ $product.title | markdownify | plainify }}" 
-                title="Buy {{ $product.title | markdownify | plainify }}" loading="eager" />
+                title="Buy {{ $product.title | markdownify | plainify }}"
+                width="800"
+                height="600"
+                loading="eager" />
             {{ end }}
           </a>
         </div>
@@ -45,16 +61,31 @@
                       {{ if $thumbImage }}
                         {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
                         {{ $processed := $thumbImage.Filter $filter }}
-                        {{ $final := $processed.Fill "724x543 webp picture Center" }}
-                        <img src="{{ $final.RelPermalink }}"
-                          alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                        {{/* Responsive sizes for gallery thumbnails */}}
+                        {{ $thumbSmall := $processed.Fill "300x225 webp picture Center q90" }}
+                        {{ $thumbLarge := $processed.Fill "500x375 webp picture Center q90" }}
+                        <img 
+                          src="{{ $thumbLarge.RelPermalink }}"
+                          srcset="{{ $thumbSmall.RelPermalink }} 300w,
+                                  {{ $thumbLarge.RelPermalink }} 500w"
+                          sizes="(max-width: 736px) 50vw, 25vw"
+                          alt="{{ or $image.alt $product.title | markdownify | plainify }}"
+                          width="{{ $thumbLarge.Width }}"
+                          height="{{ $thumbLarge.Height }}"
+                          loading="lazy" />
                       {{ else }}
                         <img src="/images/placeholder-thumb.jpg" 
-                          alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                          alt="{{ or $image.alt $product.title | markdownify | plainify }}"
+                          width="500"
+                          height="375"
+                          loading="lazy" />
                       {{ end }}
                     {{ else }}
                       <img src="/images/placeholder-thumb.jpg" 
-                        alt="{{ or $image.alt $product.title | markdownify | plainify }}" loading="lazy" />
+                        alt="{{ or $image.alt $product.title | markdownify | plainify }}"
+                        width="500"
+                        height="375"
+                        loading="lazy" />
                     {{ end }}
                   </span>
                 </a>
