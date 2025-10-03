@@ -17,12 +17,14 @@
   
   {{/* Description */}}
   {{ with $data.description }}
-    <p class="text-component style-3 lg:min-h-[86px]">{{ . }}</p>
+    {{ $descriptionInstance := cond $isExterior "instance-120" "instance-119" }}
+    <p class="text-component {{ $descriptionInstance }} style-3 lg:min-h-[86px]">{{ . }}</p>
   {{ end }}
   
   {{/* Hero Image */}}
   {{ with $data.image }}
-    <div id="{{ $ids.image }}" class="image-component style-2">
+    {{ $imageInstance := cond $isExterior "instance-4" "instance-3" }}
+    <div id="{{ $ids.image }}" class="image-component {{ $imageInstance }} style-2">
       {{ with $data.button }}<a href="{{ .link | default "#" | relURL }}" class="frame">{{ end }}
       {{ $heroImage := resources.Get . }}
       {{ if $heroImage }}
@@ -56,7 +58,8 @@
   
   {{/* Gallery */}}
   {{ with $data.gallery }}
-    <div id="{{ $ids.gallery }}" class="gallery-component style-3 productGallery">
+    {{ $galleryInstance := cond $isExterior "instance-3" "instance-2" }}
+    <div id="{{ $ids.gallery }}" class="gallery-component {{ $galleryInstance }} style-3 productGallery">
       <div class="inner">
         <ul>
           {{ range $index, $item := . }}
@@ -105,7 +108,8 @@
   
   {{/* Button */}}
   {{ with $data.button }}
-    <ul id="{{ $ids.button }}" class="buttons-component style-2">
+    {{ $buttonInstance := cond $isExterior "instance-11" "instance-3" }}
+    <ul id="{{ $ids.button }}" class="buttons-component {{ $buttonInstance }} style-2">
       <li>
         <a href="{{ .link | default "#" | relURL }}" class="n01" role="button">
           <svg aria-labelledby="{{ $ids.button }}-icon-1-title">
@@ -119,6 +123,7 @@
   {{ end }}
   
   {{/* Divider */}}
-  {{ $dividerInstance := cond $isExterior "instance-2" "instance-3" }}
-  <hr {{ if $isExterior }}id="divider02"{{ end }} class="divider-component {{ $dividerInstance }} style-3" data-visibility="desktop">
+  {{ $dividerInstance := cond $isExterior "instance-2" "instance-1" }}
+  {{ $dividerId := cond $isExterior "divider02" "divider01" }}
+  <hr id="{{ $dividerId }}" class="divider-component {{ $dividerInstance }} style-3" data-visibility="desktop">
 </div>
