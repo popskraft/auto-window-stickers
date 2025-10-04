@@ -8,7 +8,7 @@
   <div class="container-component">
     <div class="wrapper">
       <div class="inner">
-        {{ range .Pages }}
+        {{ range where .Site.RegularPages "Section" "articles" }}
           <article class="mb-8">
             <h2 class="text-2xl font-semibold"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
             {{ with .Params.description }}<p class="opacity-80">{{ . }}</p>{{ end }}

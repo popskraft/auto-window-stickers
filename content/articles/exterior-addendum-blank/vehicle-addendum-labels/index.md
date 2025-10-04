@@ -1,7 +1,7 @@
 ---
 title: Vehicle addendum labels
-date: '2025-10-04T02:57:22.724346'
-publishDate: '2025-10-04T03:15:22.724353'
+date: '2025-10-04T03:34:21.520242'
+publishDate: '2025-10-04T03:33:21.520249'
 image_cover: images/articles/8-coverimage.jpg
 image_body: images/articles/1-coverimage.jpg
 image_body_alt: Vehicle addendum labels

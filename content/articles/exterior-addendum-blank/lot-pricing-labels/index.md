@@ -1,7 +1,7 @@
 ---
 title: Lot pricing labels
-date: '2025-10-04T02:57:22.906992'
-publishDate: '2025-10-04T03:10:22.907005'
+date: '2025-10-04T03:34:21.709714'
+publishDate: '2025-10-04T03:33:21.709723'
 image_cover: images/articles/4-coverimage.jpg
 image_body: images/articles/8-coverimage.jpg
 image_body_alt: Lot pricing labels

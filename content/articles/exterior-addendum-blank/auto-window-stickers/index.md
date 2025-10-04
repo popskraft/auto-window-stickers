@@ -1,7 +1,7 @@
 ---
 title: Auto window stickers
-date: '2025-10-04T02:57:22.172019'
-publishDate: '2025-10-04T02:56:22.172028'
+date: '2025-10-04T03:34:20.945932'
+publishDate: '2025-10-04T03:33:20.945942'
 image_cover: images/articles/3-coverimage.jpg
 image_body: images/articles/4-coverimage.jpg
 image_body_alt: Auto window stickers
