@@ -17,6 +17,7 @@
 - [internal-linking.md](internal-linking.md) — link structure expectations for navigation, products, states, and articles.
 - [hreflang-guide.md](hreflang-guide.md) — maintain alternate language and region tags for state pages.
 - [content-strategy-notes.md](content-strategy-notes.md) — working notes for future copy improvements.
+- [site-architecture.md](site-architecture.md) — blueprint for the full-site structure, navigation model, and implementation roadmap.
 
 ## Quick FAQ
 - **Where do I change copy for an existing product page?** Edit the bundle under `content/exterior/` or `content/interior/` and update matching YAML in `data/products/` if shared details change.

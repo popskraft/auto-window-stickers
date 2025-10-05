@@ -14,11 +14,51 @@
 5. Run `npm run dev:all` once to confirm Hugo and Tailwind build correctly.
 
 ## Daily Workflow
-- Start from an updated `main` branch and create a feature branch for your work.
+
+### 1. Create a Feature Branch
+Start from an updated `main` branch:
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/your-feature-name
+```
+
+### 2. Development
 - Use `npm run dev:all` for live reload or `npm run dev` if CSS is already built.
 - Regenerate Tailwind assets with `npm run tailwind:build` before production builds.
 - Verify changes with `npm run build`; Hugo will write the site to `public/`.
-- Commit, push, and open a pull request. Netlify will create a preview build automatically.
+
+### 3. Commit Your Changes
+When satisfied with your work:
+```bash
+# Check what files changed
+git status
+
+# Stage specific files or all changes
+git add path/to/file
+# or
+git add .
+
+# Commit with a descriptive message
+git commit -m "Add feature: brief description of changes"
+```
+
+### 4. Push and Create Pull Request
+```bash
+# Push your branch to GitHub
+git push origin feature/your-feature-name
+
+# Then open a pull request on GitHub
+# Netlify will create a preview build automatically
+```
+
+### 5. After PR Approval
+Once merged, update your local main:
+```bash
+git checkout main
+git pull origin main
+git branch -d feature/your-feature-name  # Delete local branch
+```
 
 ## Directory Reference
 - `archetypes/` — front matter templates used by `hugo new` and helper scripts.
