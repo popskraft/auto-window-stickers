@@ -3,24 +3,6 @@
 {{ $section := .Section }}
 {{ $products := slice }}
 
-{{/* Special handling: the Articles section lists articles, not products */}}
-{{ if eq $section "articles" }}
-  <div class="container-component">
-    <div class="wrapper">
-      <div class="inner">
-        {{ range where .Site.RegularPages "Section" "articles" }}
-          <article class="mb-8">
-            <h2 class="text-2xl font-semibold"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-            {{ with .Params.description }}<p class="opacity-80">{{ . }}</p>{{ end }}
-          </article>
-        {{ end }}
-      </div>
-    </div>
-  </div>
-  {{- /* Do not attempt product card rendering for articles */ -}}
-  {{- return -}}
-{{ end }}
-
 {{ range $page := where .Site.RegularPages "Section" $section }}
   {{ $productID := $page.File.ContentBaseName }}
   {{ if isset site.Data.products $productID }}
@@ -30,15 +12,16 @@
 
 {{ $sortedProducts := slice }}
 {{ range $productID := $products }}
-  {{ $product := index site.Data.products $productID }}
-  {{ $sortedProducts = $sortedProducts | append (dict "id" $productID "weight" (default 999 $product.weight)) }}
+  {{ if isset site.Data.products $productID }}
+    {{ $product := index site.Data.products $productID }}
+    {{ $sortedProducts = $sortedProducts | append (dict "id" $productID "weight" (default 999 $product.weight)) }}
+  {{ end }}
 {{ end }}
 {{ $sortedProducts = sort $sortedProducts "weight" }}
 {{ $products = slice }}
 {{ range $item := $sortedProducts }}
   {{ $products = $products | append $item.id }}
 {{ end }}
-
 	{{ $totalProducts := len $products }}
 {{ $rowCount := div (add $totalProducts 1) 2 }}
 
@@ -50,8 +33,8 @@
 			{{ $product2Index := sub (mul $rowIndex 2) 1 }}
 			
 			{{ if lt $product1Index $totalProducts }}
-			{{ $product1ID := index $products $product1Index }}
-{{ if and $product1ID (index site.Data.products $product1ID) }}
+				{{ $product1ID := index $products $product1Index }}
+{{ if and $product1ID (isset site.Data.products $product1ID) }}
 {{ $product1 := index site.Data.products $product1ID }}
 {{ partial "product-card.html" (dict "product" $product1 "id" $product1ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
 {{ end }}
@@ -59,7 +42,7 @@
 			
 			{{ if lt $product2Index $totalProducts }}
 			{{ $product2ID := index $products $product2Index }}
-{{ if and $product2ID (index site.Data.products $product2ID) }}
+{{ if and $product2ID (isset site.Data.products $product2ID) }}
 {{ $product2 := index site.Data.products $product2ID }}
 {{ partial "product-card.html" (dict "product" $product2 "id" $product2ID "wholesaleUrl" site.Params.wholesaleFormUrl) }}
 {{ end }}

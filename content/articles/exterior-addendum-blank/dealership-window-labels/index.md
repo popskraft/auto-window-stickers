@@ -1,7 +1,8 @@
 ---
+layout: article
 title: Dealership window labels
-date: '2025-10-04T03:34:21.136216'
-publishDate: '2025-10-04T03:33:21.136225'
+publishDate: '2025-10-04T16:07:21.845641+00:00'
+date: '2025-10-04T16:07:21.845641+00:00'
 image_cover: images/articles/1-coverimage.jpg
 image_body: images/articles/8-coverimage.jpg
 image_body_alt: Dealership window labels

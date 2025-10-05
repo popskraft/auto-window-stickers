@@ -1,29 +1,92 @@
 # Auto Window Stickers
 
-Hugo-based marketing site for exterior and interior car window stickers. 
+Hugo-based marketing site for exterior and interior car window stickers.
 
-📚 **[Full Documentation Index](README/INDEX.md)** - See all optimization guides, refactoring docs, and technical references.
+---
 
-## Run the site locally
-1. Install dependencies once: `npm install`
-2. Option A — everything with live CSS: `npm run dev:all`
-3. Option B — Hugo only: `npm run dev`
-4. Production build: `npm run build`
+## 📚 Документация
 
-The commands require Hugo extended v0.140.2 and Node.js ≥16.
+**→ [Полный индекс документации](README/INDEX.md)**
 
-## Editing through GitHub
-1. Fork or branch from `main`, then clone locally.
-2. Product pages pull data from two sources:
-   - YAML in `data/products/<product>.yaml` (shared specs, pricing, gallery).
-   - Markdown in `content/<area>/<product>/index.md` (page text/front matter) - **Page Bundle structure**.
-   Update both sides when changing SKUs.
-3. Commit with clear messages, push your branch, open a pull request, and let Netlify run the preview build.
+### Быстрый доступ к руководствам:
 
-**Note**: Content uses Hugo Page Bundles (folder + index.md). See [Page Bundles Guide](README/MIGRATION-TO-BUNDLES.md) for details.
+- **[HANDBOOK.md](README/HANDBOOK.md)** — общее руководство по проекту
+- **[PUBLISHING-QUICKSTART.md](README/PUBLISHING-QUICKSTART.md)** — автоматическая публикация за 15 минут
+- **[BUNDLES-QUICKSTART.md](README/BUNDLES-QUICKSTART.md)** — миграция на Page Bundles
 
-## Content generators
-- Create a Python virtualenv (`python3 -m venv .venv`) and install deps: `./.venv/bin/pip install -r tools/page-generator/requirements.txt`.
-- Run deterministic dry runs with `npm run generate:pages:dry`; switch to `npm run generate:pages` for full output.
+---
 
-Use the handbook in `README/handbook.md` for detailed structure, automation, and YAML rules.
+## 🚀 Быстрый старт
+
+### Локальная разработка
+
+```bash
+# 1. Установка зависимостей
+npm install
+
+# 2. Запуск dev-сервера с Tailwind
+npm run dev:all
+
+# 3. Открыть: http://localhost:1313
+```
+
+### Генерация контента
+
+```bash
+# Генерация страниц продуктов (700 штук)
+python generate-pages.py --type product
+
+# Тестовый запуск (2 страницы)
+python generate-pages.py --type product --limit 2 --dry-run
+```
+
+### Production сборка
+
+```bash
+npm run build
+# Результат в папке: public/
+```
+
+---
+
+## 🔧 Требования
+
+- **Hugo Extended** v0.140.2+
+- **Node.js** ≥16
+- **Python 3** (для генерации контента)
+
+---
+
+## 📝 Структура контента
+
+Проект использует **Hugo Page Bundles** (папка + index.md):
+
+```
+content/
+├── exterior/
+│   ├── exterior-addendum-blank/
+│   │   └── index.md
+│   └── exterior-window-sticker-custom/
+│       └── index.md
+└── interior/
+    └── interior-addendum-blank/
+        └── index.md
+```
+
+**Данные продуктов:**
+- YAML: `data/products/<product>.yaml` (цены, характеристики, галерея)
+- Markdown: `content/<area>/<product>/index.md` (текст страницы)
+
+---
+
+## 🤝 Workflow разработки
+
+1. Создайте ветку от `main`
+2. Внесите изменения
+3. Закоммитьте с понятным сообщением
+4. Создайте Pull Request
+5. Netlify автоматически создаст preview build
+
+---
+
+**Подробности:** См. [HANDBOOK.md](README/HANDBOOK.md) для детальной информации о структуре, автоматизации и правилах работы с YAML.

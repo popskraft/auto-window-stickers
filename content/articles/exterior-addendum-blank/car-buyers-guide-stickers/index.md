@@ -1,7 +1,8 @@
 ---
+layout: article
 title: Car buyers guide stickers
-date: '2025-10-04T03:34:21.327792'
-publishDate: '2025-10-04T03:33:21.327802'
+publishDate: '2025-10-04T16:37:21.845641+00:00'
+date: '2025-10-04T16:37:21.845641+00:00'
 image_cover: images/articles/4-coverimage.jpg
 image_body: images/articles/8-coverimage.jpg
 image_body_alt: Car buyers guide stickers

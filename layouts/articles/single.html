@@ -9,31 +9,29 @@
           <a href="#home" class="frame">
             {{ $imagePath := .Params.image_cover }}
             {{ $trimmedPath := strings.TrimPrefix "assets/" $imagePath }}
-            {{ $image := (.Page.Resources.GetMatch $imagePath) | default (resources.GetMatch $imagePath) | default (resources.GetMatch $trimmedPath) }}
+            {{ $image := (.Page.Resources.GetMatch $imagePath) | default (resources.GetMatch $imagePath) | default
+            (resources.GetMatch $trimmedPath) }}
             {{ with $image }}
-              {{ $filter := images.UnsharpMask .5 .5 0 }}
-              {{ $processed := $image.Filter $filter }}
-              {{ $final := $processed.Fill "700x500 webp picture Center" }}
-              <img 
-                src="{{ $final.RelPermalink }}" 
-                alt="{{ $.Params.image_cover_alt | default $.Title }}" 
-                loading="eager"
-              />
+            {{ $filter := images.UnsharpMask .5 .5 0 }}
+            {{ $processed := $image.Filter $filter }}
+            {{ $final := $processed.Fill "700x500 webp picture Center" }}
+            <img src="{{ $final.RelPermalink }}" alt="{{ $.Params.image_cover_alt | default $.Title }}"
+              loading="eager" />
             {{ else }}
-              <img 
-                src="{{ $imagePath | relURL }}" 
-                alt="{{ $.Params.image_cover_alt | default $.Title }}" 
-                loading="eager"
-              />
+            <img src="{{ $imagePath | relURL }}" alt="{{ $.Params.image_cover_alt | default $.Title }}"
+              loading="eager" />
             {{ end }}
           </a>
         </div>
       </div>
-      
+
       <div>
-        <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+        {{ with .Parent }}
+        <p class="text-component style-6"><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>
+        {{ end }}
+        <h1 class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
         {{ with .Params.subtitle }}
-        <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+        <h2 class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
         {{ end }}
       </div>
     </div>
@@ -45,16 +43,16 @@
   <div class="wrapper">
     <div class="inner">
       {{ if not .Params.image_cover }}
-      <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+      <h1 class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
       {{ with .Params.subtitle }}
-      <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+      <h2 class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
       {{ end }}
       {{ end }}
-      
+
       <div class="content-body txt">
-      {{ .Content }}
+        {{ .Content }}
       </div>
-      
+
       {{ if .Params.showCloseButton }}
       <ul id="buttons14" class="buttons-component instance-14 style-6">
         <li>
@@ -71,5 +69,40 @@
     </div>
   </div>
 </div>
+
+{{/* Релевантный товар на основе структуры директории или параметра */}}
+{{ $relatedProductID := "" }}
+
+{{/* Вариант 1: Явно указан в front matter */}}
+{{ if .Params.related_product }}
+{{ $relatedProductID = .Params.related_product }}
+{{ else }}
+{{/* Вариант 2: Извлечь из пути статьи (например, /articles/exterior-addendum-blank/...) */}}
+{{ $pathParts := split .File.Dir "/" }}
+{{ if ge (len $pathParts) 2 }}
+{{ $relatedProductID = index $pathParts 1 }}
+{{ end }}
+{{ end }}
+
+{{/* Отобразить товар, если найден */}}
+{{ if $relatedProductID }}
+{{ if isset site.Data.products $relatedProductID }}
+{{ $relatedProduct := index site.Data.products $relatedProductID }}
+{{ if $relatedProduct }}
+{{ $productCategory := cond (hasPrefix $relatedProductID "exterior") "exterior" "interior" }}
+{{ $productURL := printf "/%s/%s/" $productCategory $relatedProductID | relURL }}
+<hr class="divider-component instance-3 style-5" data-visibility="desktop">
+<div class="container-component instance-14 style-10 default">
+  <div class="wrapper">
+    <div class="inner">
+      <h2 class="text-component instance-4 style-14"><a href="{{ $productURL }}" title="{{ $relatedProduct.title | plainify }}">Related Product: {{ $relatedProduct.title | markdownify }}</a></h2>
+    </div>
+  </div>
+</div>
+{{ partial "product-detail-block.html" (dict "Page" (dict "Params" (dict)) "File" (dict "ContentBaseName" $relatedProductID) "Site" .Site) }}
+
+{{ end }}
+{{ end }}
+{{ end }}
 
 {{ end }}

@@ -6,19 +6,17 @@
 
 {{/* Set up SEO title */}}
 {{- $productTitle := "" -}}
+{{- $productDescription := "" -}}
+{{- $productData := dict -}}
 {{- if and $productID (isset site.Data.products $productID) -}}
-  {{- $productTitle = index site.Data.products $productID "title" | default "" -}}
+  {{- $productData = index site.Data.products $productID -}}
+  {{- $productTitle = $productData.title | default "" | markdownify | plainify -}}
+  {{- $productDescription = $productData.description | default "" -}}
 {{- end -}}
 
 {{- $productSeoTitle := cond $productTitle (printf "%s %s" $productTitle .Title) .Title -}}
 {{- $seoTitle := or .Params.seoTitle (printf "%s - %s" (or $productSeoTitle .Title) $siteName) -}}
 {{- $seoTitle = $seoTitle | markdownify | plainify -}}
-
-{{/* Get product description from data file if available */}}
-{{- $productDescription := "" -}}
-{{- if and $productID (isset site.Data.products $productID) -}}
-  {{- $productDescription = index site.Data.products $productID "description" | default "" -}}
-{{- end -}}
 
 {{- $description := or .Params.seoDescription .Params.description $productDescription .Description .Site.Params.description -}}
 {{- $description = $description | markdownify | plainify | truncate 164 -}}
@@ -32,7 +30,10 @@
 	{{- if .Params.noindex }}<meta name="robots" content="noindex">{{- end }}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="{{ $description }}">
-	<link rel="canonical" href="{{ or .Params.seo.canonical .Permalink | safeURL }}">
+	<link rel="canonical" href="{{ or .Params.canonical .Params.seo.canonical .Permalink | safeURL }}">
+	
+	{{/* --- Hreflang Tags for Geo-Targeting --- */}}
+	{{ partial "hreflang.html" . }}
 	
 	{{/* <meta name="color-scheme" content="light only" /> */}}
 	{{/* --- Open Graph Tags --- */}}
@@ -44,11 +45,11 @@
 	
 	{{/* Get product OG image from data file if available */}}
 	{{- $productOgImage := "" -}}
-	{{- if and $productID (isset site.Data.products $productID) -}}
-		{{- if isset (index site.Data.products $productID) "ogImage" -}}
-			{{- $productOgImage = index site.Data.products $productID "ogImage" -}}
-		{{- else if isset (index site.Data.products $productID) "images" -}}
-			{{- $productOgImage = (index (index site.Data.products $productID "images") 0).src -}}
+	{{- if $productData -}}
+		{{- if isset $productData "ogImage" -}}
+			{{- $productOgImage = $productData.ogImage -}}
+		{{- else if isset $productData "images" -}}
+			{{- $productOgImage = (index $productData.images 0).src -}}
 		{{- end -}}
 	{{- end -}}
 	
@@ -105,11 +106,6 @@
 	<link rel="prefetch" href="https://forms.ju.mp/#aws-wholesale">
 	<link rel="dns-prefetch" href="https://forms.ju.mp">
 	<link rel="preconnect" href="https://forms.ju.mp" crossorigin>
-
-	<!-- Preload critical resources -->
-	<link rel="prefetch" href="{{ "/images/og-image.jpg" | relURL }}">
-	<link rel="prefetch" href="{{ "/akdslogo.png" | relURL }}">
-	<link rel="prefetch" href="{{ "/logo.svg" | relURL }}">
 </head>
 {{/* Added body classes similar to old theme for potential compatibility */}}
 

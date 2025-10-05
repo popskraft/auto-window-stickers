@@ -9,13 +9,16 @@ layout: "product"
 date: {{ .Date }}
 # draft: false
 seoTitle: ""  # Composed from: [product title] — [random keyword from keywords-seotitle.yaml] [state name]
+state: ""  # State slug (e.g., "alabama") for schema.org LocalBusiness markup
+slug: ""  # Product key/slug (e.g., "exterior-addendum-blank")
+canonical: ""  # Canonical URL pointing to main product page (e.g., "/exterior/exterior-addendum-blank/")
 
 # Savings block (single item randomly selected from data/content-generator/content/product/savings.yaml)
 savings:
   headline: ""
   subtitle: ""
   summary: ""
-  image_file: ""  # filename from assets/images/products/
+  # image_file: ""  # Optional: filename from assets/images/ (omitted if empty)
 
 # Benefits block (6 items randomly selected from data/content-generator/content/product/benefits.yaml)
 benefits:

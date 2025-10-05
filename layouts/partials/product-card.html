@@ -23,7 +23,7 @@
 				{{ end }}
 				<div role="img" aria-label="{{ or $image.alt $product.title | markdownify | plainify }}" class="{{ if eq $imgIndex 0 }}visible top initial{{ end }}"
 					style="background-image: url(&quot;{{ $processedImg }}&quot;); background-position: center center; background-repeat: no-repeat; background-size: contain;">
-					<a class="absolute h-full w-full left-0 top-0" href="{{ $productID }}"></a>
+					<a class="absolute h-full w-full left-0 top-0" href="/{{ $section }}/{{ $productID }}/"></a>
 				</div>
 				{{ end }}
 			</div>

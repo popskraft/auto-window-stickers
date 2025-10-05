@@ -7,7 +7,7 @@ REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." &>/dev/null && pwd)"
 
 VENV_DIR="${REPO_ROOT}/.venv"
 REQ_FILE="${SCRIPT_DIR}/requirements.txt"
-CONFIG_FILE="${SCRIPT_DIR}/config.yaml"
+CONFIG_FILE="${REPO_ROOT}/config.yaml"
 GENERATOR="${SCRIPT_DIR}/generate-pages.py"
 
 # Use repo venv's python if present, else system python3

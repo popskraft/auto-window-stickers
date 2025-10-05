@@ -23,9 +23,12 @@
       </div>
       
       <div>
-        <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+        {{ with .Parent }}
+        <p class="text-component style-7"><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>
+        {{ end }}
+        <h1 class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
         {{ with .Params.subtitle }}
-        <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+        <h2 class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
         {{ end }}
       </div>
     </div>
@@ -37,9 +40,9 @@
   <div class="wrapper">
     <div class="inner">
       {{ if not .Params.coverImage }}
-      <h1 id="text84" class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
+      <h1 class="text-component instance-84 style-4">{{ .Title | markdownify }}</h1>
       {{ with .Params.subtitle }}
-      <h2 id="text85" class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
+      <h2 class="text-component instance-85 style-5">{{ . | markdownify }}</h2>
       {{ end }}
       {{ end }}
       

@@ -1,0 +1,76 @@
+# GitHub Actions Workflow for Scheduled Netlify Builds
+# Purpose: Trigger Netlify rebuilds to publish Hugo content with future publishDate
+#
+# How it works:
+# 1. Hugo by default excludes pages with future publishDate (buildFuture: false in production)
+# 2. This workflow triggers daily rebuilds on Netlify
+# 3. As time passes, pages with publishDate in the past become visible
+# 4. This enables gradual content rollout without manual intervention
+#
+# Setup Instructions:
+# 1. Create a Build Hook in Netlify:
+#    - Go to: Site settings > Build & deploy > Build hooks
+#    - Click "Add build hook"
+#    - Name: "Scheduled Build" (or any name)
+#    - Branch: main (or your production branch)
+#    - Copy the generated URL (e.g., https://api.netlify.com/build_hooks/abc123...)
+#
+# 2. Add the Build Hook URL as a GitHub Secret:
+#    - Go to: Repository Settings > Secrets and variables > Actions
+#    - Click "New repository secret"
+#    - Name: NETLIFY_BUILD_HOOK_URL
+#    - Value: Paste the build hook URL from step 1
+#    - Click "Add secret"
+#
+# 3. Commit this file to your repository
+#
+# CRON Schedule Explanation:
+# - "0 6 * * *" = Every day at 6:00 AM UTC (adjust timezone as needed)
+# - Format: minute hour day month weekday
+# - Use https://crontab.guru/ to customize the schedule
+#
+# Alternative schedules:
+# - "0 */6 * * *"  = Every 6 hours
+# - "0 0,12 * * *" = Twice daily at midnight and noon UTC
+# - "0 6 * * 1-5"  = Weekdays only at 6 AM UTC
+
+name: Scheduled Netlify Build
+
+on:
+  # Schedule: Run daily at 6:00 AM UTC
+  schedule:
+    - cron: "0 6 * * *"
+  
+  # Allow manual triggering from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  trigger-netlify-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger Netlify Build Hook
+        run: |
+          echo "Triggering Netlify build at $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.NETLIFY_BUILD_HOOK_URL }}")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+          
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "✅ Build triggered successfully"
+          else
+            echo "❌ Build trigger failed"
+            exit 1
+          fi
+      
+      - name: Summary
+        run: |
+          echo "### Scheduled Build Triggered 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "- **Purpose:** Publish Hugo content with past publishDate" >> $GITHUB_STEP_SUMMARY
+          echo "- **Next run:** Check the Actions tab for schedule" >> $GITHUB_STEP_SUMMARY

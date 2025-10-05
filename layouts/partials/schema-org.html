@@ -17,11 +17,13 @@
 {{- if .IsPage -}}
   {{- if eq .Type "product" -}}
     {{- $productId := .File.ContentBaseName -}}
-    {{- $productData := index .Site.Data.products $productId -}}
-    {{- if isset $productData "ogImage" -}}
-      {{- $primaryImage = printf "%s%s" $baseURL $productData.ogImage -}}
-    {{- else if isset $productData "images" -}}
-      {{- $primaryImage = printf "%s%s" $baseURL (index $productData.images 0).src -}}
+    {{- if isset .Site.Data.products $productId -}}
+      {{- $productData := index .Site.Data.products $productId -}}
+      {{- if isset $productData "ogImage" -}}
+        {{- $primaryImage = printf "%s%s" $baseURL $productData.ogImage -}}
+      {{- else if isset $productData "images" -}}
+        {{- $primaryImage = printf "%s%s" $baseURL (index $productData.images 0).src -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -85,7 +87,10 @@
 {{- end -}}
 {{- if or (eq .Type "product") (eq .Layout "product") -}}
 {{- $productId := .File.ContentBaseName -}}
-{{- $productData := index .Site.Data.products $productId -}}
+{{- $productData := dict -}}
+{{- if isset .Site.Data.products $productId -}}
+  {{- $productData = index .Site.Data.products $productId -}}
+{{- end -}}
 {{- $price := $productData.price | default "99.99" -}}
 {{- $priceFormatted := replace $price "$" "" -}}
 {{- $brandName := .Site.Params.company.brandName | default .Site.Params.company.name -}}
@@ -166,6 +171,7 @@
 
 {{- /* State-specific schema for location-based SEO */ -}}
 {{- if .Params.state -}}
+{{- if isset .Site.Data.states .Params.state -}}
 {{- $stateData := index .Site.Data.states .Params.state -}}
 {
 "@type": "LocalBusiness",
@@ -182,6 +188,7 @@
 "telephone": "{{ $phone }}",
 "keywords": "{{ $stateData.seoKeywords | default (printf "%s window stickers, %s car dealership supplies" $stateData.adjective $stateData.name) }}"
 },
+{{- end -}}
 {{- end -}}
 
 {

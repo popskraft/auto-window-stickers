@@ -17,7 +17,7 @@ def main():
     """Wrapper delegating to consolidated generator in tools/page-generator."""
     base = Path(__file__).parent
     wrapper_script = base / "tools" / "page-generator" / "generate-pages.py"
-    wrapper_cfg = base / "tools" / "page-generator" / "config.yaml"
+    wrapper_cfg = base / "config.yaml"
     
     if not wrapper_script.exists():
         print(f"Error: consolidated generator not found at {wrapper_script}")
@@ -25,7 +25,7 @@ def main():
         sys.exit(1)
     
     # Force base-path to the repo root (this file's directory) so relative
-    # paths in the portable config resolve correctly when called via wrapper.
+    # paths in the shared config resolve correctly when called via wrapper.
     args = [
         sys.executable,
         str(wrapper_script),

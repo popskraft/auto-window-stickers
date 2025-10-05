@@ -13,7 +13,7 @@ import sys
 import yaml
 import random
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import re
 
@@ -38,6 +38,8 @@ class PageGenerator:
             random.seed(self.seed)
         # Logging verbosity
         self.verbose = self.config.get('logging', {}).get('verbose', True)
+        # Validate critical config
+        self._validate_config()
         
         # Load data files
         self.products = self._load_products()
@@ -48,6 +50,62 @@ class PageGenerator:
         # Article inputs (lazy-used by article mode)
         self.article_titles = self._load_article_titles()
         self.article_blocks_dir = self._get_article_blocks_dir()
+        # Scheduling controls
+        scheduling_cfg = self.config.get('scheduling', {})
+        self.publish_delay_minutes = max(0, int(scheduling_cfg.get('publish_delay_minutes', 0) or 0))
+        self.content_date_offset_minutes = int(scheduling_cfg.get('content_date_offset_minutes', 0) or 0)
+        self.schedule_articles = bool(scheduling_cfg.get('apply_to_articles', self.publish_delay_minutes > 0))
+        self.schedule_products = bool(scheduling_cfg.get('apply_to_products', False))
+        self._publish_base = None
+        self._publish_counter = 0
+
+    def _validate_config(self):
+        """Validate critical configuration settings and warn about potential issues."""
+        limit = self.config.get('execution', {}).get('limit')
+        if limit and limit < 100:
+            self._log(f"⚠️  WARNING: Generation limit set to {limit}. This is likely for testing.")
+            self._log(f"    For production, set limit to null in config.yaml")
+        
+        scheduling = self.config.get('scheduling', {})
+        delay = scheduling.get('publish_delay_minutes', 0)
+        apply_products = scheduling.get('apply_to_products', False)
+        
+        if apply_products and delay > 0:
+            self._log(f"⚠️  WARNING: Deferred publishing enabled for products ({delay} min intervals)")
+            self._log(f"    Ensure hugo.yaml has 'buildFuture: true' in development")
+            self._log(f"    Production builds with 'buildFuture: false' will hide future-dated pages")
+
+    def _reset_publish_schedule(self):
+        """Reset rolling publish timestamp counter."""
+        self._publish_base = None
+        self._publish_counter = 0
+
+    def _resolve_schedule_start(self):
+        """Return the base datetime to start scheduling from."""
+        start_ts = self.config.get('scheduling', {}).get('start_timestamp')
+        if start_ts:
+            try:
+                return datetime.fromisoformat(start_ts)
+            except Exception:
+                pass
+        if start_ts:
+            self._log(f"Warning: invalid scheduling.start_timestamp '{start_ts}'; falling back to current UTC time.")
+        return datetime.now(timezone.utc)
+
+    def _allocate_publish_and_date(self, use_schedule=True):
+        """Allocate the next publishDate/date pair respecting configured delay."""
+        delay = self.publish_delay_minutes if use_schedule else 0
+        offset = self.content_date_offset_minutes
+        if delay > 0:
+            if self._publish_base is None:
+                self._publish_base = self._resolve_schedule_start()
+                self._publish_counter = 0
+            publish_dt = self._publish_base + timedelta(minutes=delay * self._publish_counter)
+            self._publish_counter += 1
+        else:
+            publish_dt = datetime.now(timezone.utc)
+        date_dt = publish_dt + timedelta(minutes=offset)
+        return publish_dt, date_dt
     
     def _log(self, message: str):
         """Conditional logger honoring logging.verbose"""
@@ -260,26 +318,38 @@ class PageGenerator:
             lambda item: self._process_content_item(item, product_data, state, content_keyword),
         )
         
+        # Determine state slug and key for data lookup
+        state_slug = state.lower().replace(' ', '-')
+        state_key = state_slug  # For data/states lookup
+        
+        # Determine section from product_key
+        section = 'exterior' if product_key.startswith('exterior') else 'interior'
+        
         # Create page front matter
         layout = self.config.get('pages', {}).get('layout', 'product')
+        # Clean product title from markdown formatting for plain text fields
+        product_title_clean = product_data.get('title', '').replace('**', '')
         page_content = {
             'layout': layout,
-            'title': f"{product_data.get('title', '')} in {state}",
+            'title': f"{product_title_clean} in {state}",
             'description': self._substitute_placeholders(
-                f"Details about the {product_data.get('title', '').replace('**', '').lower()} product in {state}.",
+                f"Details about the {product_title_clean.lower()} product in {state}.",
                 product_data, state, content_keyword
             ),
-            'date': datetime.now().isoformat(),
-            'publishDate': (datetime.now() - timedelta(minutes=1)).isoformat(),
             'seoTitle': seo_title,
+            'state': state_key,
+            'slug': product_key,
+            # canonical removed - Hugo will use .Permalink (self-reference) by default
             'savings': {
-                'headline': savings.get('headline', ''),
+                'headline': self._substitute_placeholders(
+                    'Save up to $[[saving_number]] a year',
+                    product_data, state, content_keyword
+                ),
                 'subtitle': savings.get('subtitle', ''),
-                'summary': savings.get('summary', ''),
-                'image_file': f"{product_key}-savings.jpg"
+                'summary': savings.get('summary', '')
             },
             'benefits': {
-                'headline': f"Why Choose {product_data.get('title', '').replace('**', '')} in {state}?",
+                'headline': f"Why Choose {product_title_clean} in {state}?",
                 'items': [{'title': item.get('title', ''), 'summary': item.get('summary', '')} 
                          for item in benefits]
             },
@@ -466,25 +536,41 @@ class PageGenerator:
                 return False
             self._log(f"Skip (exists): {filepath}")
             return False
+
+        publish_dt, date_dt = self._allocate_publish_and_date(use_schedule=self.schedule_articles and self.publish_delay_minutes > 0)
+
         if dry_run:
-            print(f"[DRY RUN] Would create: {filepath}")
+            publish_str = publish_dt.isoformat() if publish_dt.tzinfo else publish_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00')
+            print(f"[DRY RUN] Would create: {filepath} (publish {publish_str})")
             return True
         # Merge archetype front matter
         fm_default, body_tpl = self._read_archetype_article()
-        fm = dict(fm_default)
-        fm['title'] = article_title
-        fm.setdefault('date', datetime.now().isoformat())
-        fm.setdefault('publishDate', (datetime.now() - timedelta(minutes=1)).isoformat())
+        
         # Ensure image_cover and image_body are present; auto-pick distinct images if available
         cover, body_img = self._pick_cover_and_body_images()
-        fm.setdefault('image_cover', cover or "")
+        
+        # Build front matter with dates at the top
+        fm = {
+            'layout': 'article',
+            'title': article_title,
+            'publishDate': publish_dt.isoformat() if publish_dt.tzinfo else publish_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
+            'date': date_dt.isoformat() if date_dt.tzinfo else date_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
+        }
+        
+        # Add images
+        fm['image_cover'] = cover or fm_default.get('image_cover', "")
         # Avoid accidental equality; set only if distinct
         if body_img and body_img != fm.get('image_cover'):
-            fm.setdefault('image_body', body_img)
+            fm['image_body'] = body_img
         else:
-            fm.setdefault('image_body', "")
+            fm['image_body'] = fm_default.get('image_body', "")
         # Set alt text for body image to the page title if not provided
-        fm.setdefault('image_body_alt', fm.get('title', article_title))
+        fm['image_body_alt'] = article_title
+        
+        # Merge remaining fields from archetype (excluding already set fields)
+        for key, value in fm_default.items():
+            if key not in fm:
+                fm[key] = value
         # Ensure directories
         filepath.parent.mkdir(parents=True, exist_ok=True)
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -510,6 +596,9 @@ class PageGenerator:
             self._log("No article titles found; skipping article generation.")
             return
         generated = 0
+        use_schedule = self.schedule_articles and self.publish_delay_minutes > 0
+        if use_schedule:
+            self._reset_publish_schedule()
         for product_key in sorted(self.products.keys()):
             product_data = self.products[product_key]
             product_title = (product_data.get('title') or '').replace('**', '')
@@ -584,15 +673,18 @@ class PageGenerator:
         """
         output_path = self.config.get('execution', {}).get('output_dir', 'content')
         output_dir = self.base_path / output_path
-        
+
         total_combinations = len(self.products) * len(self.states)
         self._log(f"Generating {total_combinations} total combinations...")
-        
+
         if limit:
             self._log(f"Limited to first {limit} pages")
-        
+
         generated_count = 0
-        
+        use_schedule = self.schedule_products and self.publish_delay_minutes > 0
+        if use_schedule:
+            self._reset_publish_schedule()
+
         # Iterate states first, then products (sorted by key) to generate
         # all products for the first state, then move to the next state, etc.
         for state in self.states:
@@ -601,12 +693,35 @@ class PageGenerator:
                 if limit and generated_count >= limit:
                     break
                 
-                # Generate page content
-                page_content = self._generate_page_content(product_key, product_data, state)
-                
-                # Create filename
+                # Create filename and check existence early to avoid unnecessary generation
                 filename = self._create_page_filename(product_key, state)
+                filepath = output_dir / filename
+
+                if filepath.exists():
+                    if dry_run:
+                        print(f"[DRY RUN] Skip (exists): {filepath}")
+                    else:
+                        self._log(f"Skip (exists): {filepath}")
+                    continue
+
+                # Generate page content and assign scheduled timestamps
+                page_content = self._generate_page_content(product_key, product_data, state)
+                publish_dt, date_dt = self._allocate_publish_and_date(use_schedule=use_schedule)
                 
+                # Rebuild dict with dates at the top
+                page_content = {
+                    'layout': page_content['layout'],
+                    'title': page_content['title'],
+                    'description': page_content['description'],
+                    'seoTitle': page_content['seoTitle'],
+                    'publishDate': publish_dt.isoformat() if publish_dt.tzinfo else publish_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
+                    'date': date_dt.isoformat() if date_dt.tzinfo else date_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
+                    'state': page_content.get('state'),
+                    'slug': page_content.get('slug'),
+                    # canonical removed - Hugo will use .Permalink by default
+                    **{k: v for k, v in page_content.items() if k not in ['layout', 'title', 'description', 'seoTitle', 'state', 'slug']}
+                }
+
                 # Write file
                 created = self._write_page_file(page_content, filename, output_dir, dry_run)
                 if created:
@@ -641,6 +756,7 @@ def main():
     parser.add_argument('--limit', type=int, help='Limit number of pages to generate (for testing)')
     parser.add_argument('--dry-run', action='store_true', help='Show what would be generated without creating files')
     parser.add_argument('--base-path', default='.', help='Base path to Hugo site (default: current directory)')
+    parser.add_argument('--publish-delay-minutes', type=int, help='Spacing in minutes between scheduled publish times')
     
     args = parser.parse_args()
     
@@ -657,7 +773,10 @@ def main():
         config.setdefault('execution', {})['dry_run'] = True
     if args.base_path != '.':
         config.setdefault('execution', {})['base_path'] = args.base_path
-    
+    if args.publish_delay_minutes is not None:
+        delay = max(0, args.publish_delay_minutes)
+        config.setdefault('scheduling', {})['publish_delay_minutes'] = delay
+
     # Validate base path
     base_path = Path(config.get('execution', {}).get('base_path', args.base_path))
     if not (base_path / "hugo.yaml").exists() and not (base_path / "config.yaml").exists():

@@ -1,0 +1,57 @@
+{{/* Партиал benefits для страниц продукта */}}
+
+{{ with .Params.benefits }}
+  {{ $hasHeadline := and .headline (ne .headline "") }}
+  {{ $hasSummary := and .summary (ne .summary "") }}
+  
+  {{ if or $hasHeadline $hasSummary }}
+  <div id="container20" class="container-component instance-20 style-9 columns">
+    <div class="wrapper">
+      <div class="inner">
+        {{ if $hasHeadline }}
+        <div>
+          <h2 class="text-component style-1">{{ .headline }}</h2>
+        </div>
+        {{ end }}
+        {{ if $hasSummary }}
+        <div>
+          <p class="text-component style-6">{{ .summary | safeHTML }}</p>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  {{ end }}
+  
+  {{ with .items }}
+  <div id="container09" class="container-component instance-9 style-1 columns">
+    <div class="wrapper">
+      <div class="inner">
+        {{ $itemsCount := len . }}
+        {{ $itemsPerColumn := div (add $itemsCount 2) 3 }}
+        {{ $column := 0 }}
+        {{ $itemInColumn := 0 }}
+        
+        {{ range $index, $item := . }}
+        {{ if eq $itemInColumn 0 }}
+        <div>
+        {{ end }}
+          <h2 class="text-component style-2">{{ $item.title }}</h2>
+          <p class="text-component style-3">{{ $item.summary | safeHTML }}</p>
+          {{ $itemInColumn = add $itemInColumn 1 }}
+          {{ if and (lt $itemInColumn $itemsPerColumn) (ne (add $index 1) $itemsCount) }}
+          <hr class="divider-component style-1">
+          {{ end }}
+        {{ if or (eq $itemInColumn $itemsPerColumn) (eq (add $index 1) $itemsCount) }}
+        </div>
+        {{ $column = add $column 1 }}
+        {{ $itemInColumn = 0 }}
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  {{ end }}
+  
+  <hr class="divider-component style-3">
+{{ end }}

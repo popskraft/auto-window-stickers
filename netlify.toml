@@ -1,5 +1,7 @@
 [build]
   publish = "public"
+  # Production build: Exclude future content (buildFuture: false by default)
+  # This allows gradual content rollout via scheduled builds
   command = "hugo --gc --minify"
 
 [build.environment]

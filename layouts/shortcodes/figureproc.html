@@ -1,61 +1,31 @@
 {{/* layouts/shortcodes/figureproc.html */}}
-{{- $src := .Get "src" -}}
-{{- $alt := .Get "alt" | default "" -}}
-{{- $class := .Get "class" | default "" -}}
-{{- $title := .Get "title" | default "" -}}
+{{- $src := .Get "src" | default .Page.Params.image_body -}}
+{{- $alt := .Get "alt" | default .Page.Params.image_body_alt | default "" -}}
+{{- $id := .Get "id" | default "image09" -}}
+{{- $instance := .Get "instance" | default "9" -}}
+{{- $style := .Get "style" | default "5" -}}
 
-{{/* If src is empty or contains unevaluated template markers, fall back to page params */}}
-{{- if or (not $src) (eq $src "") (strings.Contains $src "{{") -}}
-  {{- with .Page.Params.image_body -}}
-    {{- $src = . -}}
-  {{- end -}}
-  {{- if and (eq $alt "") (.Page.Params.image_body_alt) -}}
-    {{- $alt = .Page.Params.image_body_alt -}}
-  {{- end -}}
-{{- end -}}
+{{- /* Normalize path */ -}}
+{{- $path := strings.TrimSpace $src | strings.TrimPrefix "/" | strings.TrimPrefix "assets/" -}}
 
-{{/* Normalize path to be relative to the assets/ directory.
-   Accept src like:
-   - /assets/images/articles/1.jpg
-   - assets/images/articles/1.jpg
-   - images/articles/1.jpg
-*/}}
-{{- $rawPath := strings.TrimSpace $src -}}
-{{- $path := $rawPath -}}
-{{- if strings.HasPrefix $path "/" -}}
-  {{- $path = strings.TrimPrefix $path "/" -}}
-{{- end -}}
-{{- $trimmedPath := strings.TrimPrefix "assets/" $path -}}
-
-{{/* debug logging removed */}}
-
-{{/* Retrieve from Hugo Pipes assets (must be under assets/) */}}
-{{- $img := (.Page.Resources.GetMatch $path) -}}
-{{- if not $img -}}
-  {{- $img = .Page.Resources.GetMatch $trimmedPath -}}
-{{- end -}}
-{{- if not $img -}}
-  {{- $img = resources.GetMatch $path -}}
-{{- end -}}
-{{- if not $img -}}
-  {{- $img = resources.GetMatch $trimmedPath -}}
-{{- end -}}
-{{- if not $img -}}
-  {{- $img = resources.Get $trimmedPath -}}
-{{- end -}}
+{{- /* Try to find image resource */ -}}
+{{- $img := .Page.Resources.GetMatch $path -}}
 {{- if not $img -}}
   {{- $img = resources.Get $path -}}
 {{- end -}}
+
+<hr class="divider-component instance-6 style-3" data-visibility="desktop">
+
 {{- if not $img -}}
-  {{- warnf "figureproc: image not found: %s (normalized: %s) (expected under assets/)" $src $path -}}
-  <img src="{{ $rawPath | relURL }}" alt="{{ $alt }}" title="{{ $title }}" loading="lazy" decoding="async" class="{{ $class }}">
+  {{- warnf "figureproc: image not found: %s" $src -}}
+  <div id="{{ $id }}" class="image-component instance-{{ $instance }} style-{{ $style }}">
+    <span class="frame"><img src="{{ $src | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async"></span>
+  </div>
+{{- else if ne $img.MediaType.MainType "image" -}}
+  {{- warnf "figureproc: resource is not an image: %s" $path -}}
 {{- else -}}
-  {{/* Ensure the resource is an image before resizing */}}
-  {{- if ne $img.MediaType.MainType "image" -}}
-    {{- warnf "figureproc: resource is not an image: %s (media: %s/%s)" $path $img.MediaType.MainType $img.MediaType.SubType -}}
-  {{- else -}}
-    {{/* Process to width=1000 (exact width), auto height, convert to webp. You can tweak quality like "1000x q80 webp" */}}
-    {{- $processed := $img.Resize "1000x webp" -}}
-    <img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" title="{{ $title }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" loading="lazy" decoding="async" class="{{ $class }}">
-  {{- end -}}
+  {{- $processed := $img.Resize "1000x webp" -}}
+  <div id="{{ $id }}" class="image-component instance-{{ $instance }} style-{{ $style }}">
+    <span class="frame"><img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" loading="lazy" decoding="async"></span>
+  </div>
 {{- end -}}

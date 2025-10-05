@@ -1,0 +1,30 @@
+{{/*
+  Партиал: get-product-data.html
+  Назначение: Получение данных товара из единого источника
+  
+  Использование:
+    {{ $productData := partial "get-product-data.html" . }}
+  
+  Возвращает:
+    - dict с полями:
+      - product: данные товара из site.Data.products
+      - productID: ID товара (имя файла без расширения)
+      - pageParams: параметры страницы
+  
+  Логика приоритета:
+    - Параметры страницы (front matter) имеют приоритет над данными из YAML
+    - Если параметр не указан в front matter, используется значение из YAML
+*/}}
+
+{{ $pageParams := .Page.Params }}
+{{ $productID := .File.ContentBaseName }}
+{{ $product := dict }}
+{{ if isset site.Data.products $productID }}
+  {{ $product = index site.Data.products $productID }}
+{{ end }}
+
+{{ return (dict 
+  "product" $product 
+  "productID" $productID 
+  "pageParams" $pageParams
+) }}

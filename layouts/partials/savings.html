@@ -1,0 +1,76 @@
+{{/* Партиал Savings для страниц продукта */}}
+{{ with .Params.savings }}
+<div id="container06" class="container-component instance-6 style-4 columns">
+	<div class="wrapper">
+		<div class="inner">
+			<div>
+				<h2 class="text-component instance-12 style-4"><span style="color: #00B2FF">{{ .headline | default "Best Deal" }}</span></h2>	
+				{{ if .subtitle }}
+				<h3 class="text-component instance-15 style-5">{{ .subtitle }}</h3>
+				{{ end }}
+				{{ if .summary }}
+				<h3 class="text-component instance-7 style-6">{{ .summary | safeHTML }}</h3>
+				{{ end }}
+				<ul class="buttons-component instance-4 style-5">
+					<li>
+						<a href="{{ "/exterior" | relURL }}" class="n01" role="button">
+							<svg aria-labelledby="buttons04-icon-1-title">
+								<title id="buttons04-icon-1-title">Arrow Right (Light)</title>
+								<use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
+							</svg>
+							<span class="label">Exterior Products</span>
+						</a>
+					</li>
+					<li>
+						<a href="{{ "/interior" | relURL }}" class="n02" role="button">
+							<svg aria-labelledby="buttons04-icon-2-title">
+								<title id="buttons04-icon-2-title">Arrow Right (Light)</title>
+								<use xlink:href="{{ "/icons.svg#arrow-right-light" | relURL }}"></use>
+							</svg>
+							<span class="label">Interior Products</span>
+						</a>
+					</li>
+					<li>
+						<a href="{{ $.Site.Params.wholesaleFormUrl }}" class="n03" role="button">
+							<svg aria-labelledby="buttons04-icon-3-title">
+								<title id="buttons04-icon-3-title">Form</title>
+								<use xlink:href="{{ "/icons.svg#form" | relURL }}"></use>
+							</svg>
+							<span class="label">Wholesale Inquiry</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				{{ $savingsImage := "" }}
+				{{ if and .image_file (ne .image_file "") }}
+					{{/* Если image_file заполнен, используем его напрямую (без папки images) */}}
+					{{ $savingsImage = resources.Get .image_file }}
+				{{ else }}
+					{{/* По умолчанию пытаемся загрузить images/defaults/savings.jpg */}}
+					{{ $savingsImage = resources.Get "images/defaults/savings.jpg" }}
+				{{ end }}
+				
+				{{ if $savingsImage }}
+				<div class="image-component instance-21 style-3 full">
+					{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+					{{ $processed := $savingsImage.Filter $filter }}
+					{{ $small := $processed.Resize "400x webp q95" }}
+					{{ $large := $processed.Resize "900x webp q95" }}
+					<img 
+						src="{{ $large.RelPermalink }}"
+						srcset="{{ $small.RelPermalink }} 400w,
+								{{ $large.RelPermalink }} 900w"
+						sizes="(max-width: 736px) 100vw, 50vw"
+						alt="Savings"
+						title="AK Dealer Services"
+						width="{{ $large.Width }}"
+						height="{{ $large.Height }}"
+						loading="lazy" />
+				</div>
+				{{ end }}
+			</div>
+		</div>
+	</div>
+</div>
+{{ end }}

@@ -5,11 +5,17 @@ title: "Auto Window Stickers"
 languageCode: "en-US"
 description: "Car Window Stickers for auto dealerships"
 
+# Build settings - show future content only in non-production environments
+# NOTE: If using deferred publishing (scheduling.apply_to_products: true in config.yaml),
+# set buildFuture: true in development to preview scheduled content
+buildFuture: false
+buildDrafts: false
+
 # Site Parameters
 params:
   # Global Settings
   ogImage: "/images/og-image.jpg"
-  logo: "logo-blue-asterics.png" # Processed from assets/
+  logo: "images/logo-blue-asterics.png" # Processed from assets/
   favicon: "/favicon-2.png"
   appleTouchIcon: "/apple-touch-icon-2.png"
   wholesaleFormUrl: "https://forms.ju.mp/#aws-wholesale" # Referenced in multiple places
@@ -26,7 +32,7 @@ params:
     name: "AK Dealer Services"
     description: "AK Dealer Services is an authorized distributor of car Window Stickers. You can purchase the product directly from the company's website or contact us by phone or email with inquiries."
     website: "https://akdealerservices.com/"
-    logo: "akdslogo.png"
+    logo: "images/akdslogo.png"
   
   # Contact Information
   contact:
@@ -182,6 +188,13 @@ minify:
 
 # Analytics
 googleAnalytics: "G-3Z75BG9NCE" # Placeholder - replace with actual GA ID when available
+
+# Environment-specific overrides
+environments:
+  development:
+    buildFuture: true
+  production:
+    buildFuture: false
 
 # Security Headers
 server:

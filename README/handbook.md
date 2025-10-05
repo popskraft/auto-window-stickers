@@ -14,7 +14,7 @@ data/products/           # Product YAML (pricing, features, images)
 data/content-generator/  # Content pools, keywords, states list for generators
 layouts/                 # Hugo templates and partials
 static/                  # Passthrough static files (images, video)
-tools/page-generator/    # Portable Python generator + config
+tools/page-generator/    # Portable Python generator (uses shared config)
 README/                  # Documentation (this handbook)
 ```
 
@@ -32,7 +32,7 @@ README/                  # Documentation (this handbook)
 - Activate it (`source .venv/bin/activate`) or call executables directly via `./.venv/bin/...`.
 - Install generator dependencies: `./.venv/bin/pip install -r tools/page-generator/requirements.txt`.
 - Update requirements after pulling changes: rerun the install command if `requirements.txt` changes.
-- Portable workflow: from `tools/page-generator/`, run `./run.sh` (it bootstraps its own `.venv/`).
+- Portable workflow: from `tools/page-generator/`, run `./run.sh` (поднимает свою `.venv/`, но читает корневой `config.yaml`).
 
 ## Content Model
 - **Product data (`data/products/*.yaml`):** authoritative attributes such as `title`, `size`, `price`, `features`, gallery `images`, and `purchase_links`. Reused across every placement of that SKU.
@@ -54,11 +54,12 @@ README/                  # Documentation (this handbook)
 - **Root generator (`generate-pages.py`):** Python 3 script that expands product-state pages using the config in `config.yaml`. Common commands (after virtualenv setup):
   - `npm run generate:pages:dry` (shortcut for `python3 generate-pages.py --dry-run --limit 5`)
   - `npm run generate:pages` (full run; add flags as needed)
-- **Portable copy (`tools/page-generator/`):** contains standalone config, requirements, and `run.sh` helper for isolated environments.
+- **Portable copy (`tools/page-generator/`):** содержит те же генераторы и `requirements`; `run.sh` берёт настройки из корневого `config.yaml`, поэтому конфигурация всегда едина.
 - **Bootstrap scripts:**
   - `create-product.sh "Product Name" [exterior|interior]` → creates Markdown + YAML from archetypes.
   - `product-data-generator.sh "Product Name" [exterior|interior]` → YAML only.
-- **Config highlights (`config.yaml`):** control random seed, limits, output paths, and counts for savings/benefits/faq/testimonials blocks.
+- **Config highlights (`config.yaml`):** control random seed, limits, output paths, and counts for savings/benefits/faq/testimonials blocks. Новая секция `scheduling` задаёт задержку публикации материалов (по умолчанию 60 минут между статьями, применяется только к `type=article`). Параметр можно переписать флагом `--publish-delay-minutes`.
+- Для Netlify настроить Scheduled Deploy 2 раза в сутки: при шаге 60 мин будет автоматически раскрываться до 12 новых статей за один интервал между сборками.
 
 ## YAML Standards & Validation
 - Always use two-space indentation; avoid tabs.

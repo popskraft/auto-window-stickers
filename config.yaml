@@ -7,9 +7,10 @@ execution:
   seed: 42
   
   # Maximum number of pages to generate (null for unlimited)
-  # NOTE: Currently set to 2 for testing. Set to null or remove for production
-  # to generate all product-state combinations (14 products × 50 states = 700 pages)
-  limit: 2
+  # 🧪 TEST PHASE 1: Generate 60 pages for testing
+  # After verification, change to null for remaining 640 pages
+  # Expected total: 14 products × 50 states = 700 pages
+  limit: 60
   
   # Dry run mode - show what would be generated without creating files
   dry_run: false
@@ -55,7 +56,7 @@ pages:
   
   # Directory pattern: {state_slug}/{product_key}/index.md
   # Full path will be: content/{state_slug}/{product_key}/index.md
-  filename_pattern: "{state_slug}/{product_key}/index.md"
+  filename_pattern: "states/{state_slug}/{product_key}/index.md"
   
   # Include generated timestamp in front matter
   include_timestamp: true
@@ -127,3 +128,35 @@ quality:
   
   # Check for placeholder substitution completeness
   check_placeholders: true
+
+# Scheduling defaults for generated content
+# Hugo behavior:
+# - publishDate: Controls when page becomes visible (requires --buildFuture to preview)
+# - date: Used for sorting and display, but doesn't affect visibility
+# - buildFuture: false (production) = hides pages with future publishDate
+# - buildFuture: true (development) = shows all pages regardless of publishDate
+scheduling:
+  # Base timestamp for scheduling (ISO 8601 format with 'Z' suffix for UTC)
+  # 🧪 TEST PHASE 1: Start time for first 60 pages
+  # Set to past date for immediate visibility in production
+  # With 30min intervals: 60 pages will be published over ~30 hours
+  start_timestamp: "2025-10-03T00:00:00Z"
+  
+  # Delay in minutes between each published page (0 = publish immediately)
+  # 🧪 TEST PHASE 1: 30 minutes = 60 pages in 30 hours (~1.25 days)
+  # PHASE 2: Keep same interval for remaining 640 pages
+  # Total time: 700 pages × 30 min = 14.5 days
+  publish_delay_minutes: 30
+  
+  # Offset in minutes between publishDate and date fields
+  # Usually 0 (both fields get same timestamp)
+  # Negative value = date is earlier than publishDate
+  content_date_offset_minutes: 0
+  
+  # Apply scheduling to articles (true = use delayed publishing)
+  apply_to_articles: true
+  
+  # Apply scheduling to product pages
+  # 🧪 TEST PHASE 1: true = enable scheduled publishing for testing
+  # Keep true for PHASE 2 to continue gradual rollout
+  apply_to_products: true

@@ -55,13 +55,38 @@
       <div class="inner">
         <div>
           <div id="image01" class="image-component instance-1">
-            <a href="#home" class="frame"><img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo"></a>
+            <a href="#home" class="frame">
+              {{ $siteLogo := resources.Get $.Site.Params.logo }}
+              {{ if $siteLogo }}
+                {{ $logoResized := $siteLogo.Resize "500x webp q90" }}
+                <img 
+                  src="{{ $logoResized.RelPermalink }}" 
+                  alt="{{ $.Site.Title }} Logo"
+                  width="{{ $logoResized.Width }}"
+                  height="{{ $logoResized.Height }}"
+                  loading="lazy">
+              {{ else }}
+                <img src="{{ $.Site.Params.logo | relURL }}" alt="{{ $.Site.Title }} Logo" width="300" height="54" loading="lazy">
+              {{ end }}
+            </a>
           </div>
         </div>
         <div>
           <div class="image-component instance-28">
             <a href="{{ $.Site.Params.distributor.website }}" class="frame">
-              <img src="{{ $.Site.Params.distributor.logo | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}">
+              {{ $distributorLogo := resources.Get $.Site.Params.distributor.logo }}
+              {{ if $distributorLogo }}
+                {{ $distLogoResized := $distributorLogo.Resize "600x webp q90" }}
+                <img 
+                  src="{{ $distLogoResized.RelPermalink }}" 
+                  alt="{{ $.Site.Params.distributor.name }}" 
+                  title="{{ $.Site.Params.distributor.website }}"
+                  width="{{ $distLogoResized.Width }}"
+                  height="{{ $distLogoResized.Height }}"
+                  loading="lazy">
+              {{ else }}
+                <img src="{{ $.Site.Params.distributor.logo | relURL }}" alt="{{ $.Site.Params.distributor.name }}" title="{{ $.Site.Params.distributor.website }}" width="200" height="50" loading="lazy">
+              {{ end }}
             </a>
           </div>
         </div>

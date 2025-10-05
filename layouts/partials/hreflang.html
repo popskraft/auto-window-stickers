@@ -1,0 +1,34 @@
+{{/*
+  Партиал: hreflang.html
+  Назначение: Генерация hreflang тегов для geo-таргетинга
+  
+  Использование:
+    {{ partial "hreflang.html" . }}
+  
+  Контекст:
+    - Работает только для product страниц с state параметром
+    - Создает связи между всеми state-версиями одного продукта
+    - Формат: hreflang="en-us-{state_code}"
+  
+  Пример вывода:
+    <link rel="alternate" hreflang="en-us-al" href="https://autowindowstickers.com/states/alabama/exterior-addendum-blank/" />
+    <link rel="alternate" hreflang="en-us-ak" href="https://autowindowstickers.com/states/alaska/exterior-addendum-blank/" />
+*/}}
+
+{{- if and (eq .Type "states") .Params.slug .Params.state -}}
+{{- $productSlug := .Params.slug -}}
+{{- $currentState := .Params.state -}}
+{{- $baseURL := .Site.BaseURL -}}
+
+{{- if .Site.Data.states -}}
+  {{- range $stateKey, $stateData := .Site.Data.states -}}
+    {{- $stateCode := $stateData.code | lower -}}
+    {{- $stateSlug := $stateData.slug -}}
+    {{- $url := printf "%sstates/%s/%s/" $baseURL $stateSlug $productSlug -}}
+    <link rel="alternate" hreflang="en-us-{{ $stateCode }}" href="{{ $url }}" />
+  {{- end -}}
+  
+  {{- /* Add x-default pointing to current page or a master page if exists */ -}}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}" />
+{{- end -}}
+{{- end -}}

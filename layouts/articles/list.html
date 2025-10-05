@@ -1,0 +1,69 @@
+{{ define "main" }}
+{{ $section := .Section }}
+{{ $products := slice }}
+<div class="container-component instance-13 style-2 default">
+  <div class="wrapper">
+    <div class="inner">
+
+      <h2 class="text-component instance-51 style-1">{{ .Title }}</h2>
+
+      {{/* Special handling: the Articles section lists articles, not products */}}
+      {{ if eq $section "articles" }}
+      <div class="list-component instance-6 style-3">
+        <ul>
+          {{- /* Group pages by subsection */ -}}
+          {{- $subsections := dict -}}
+          {{- $rootPages := slice -}}
+          
+          {{- range where .Site.RegularPages "Section" "articles" -}}
+            {{- $pathParts := split .File.Dir "/" -}}
+            {{- $depth := len $pathParts -}}
+            
+            {{- if gt $depth 2 -}}
+              {{- /* Page is in a subsection */ -}}
+              {{- $subsectionName := index $pathParts 1 -}}
+              {{- $existing := index $subsections $subsectionName -}}
+              {{- if $existing -}}
+                {{- $updated := $existing | append . -}}
+                {{- $subsections = merge $subsections (dict $subsectionName $updated) -}}
+              {{- else -}}
+                {{- $subsections = merge $subsections (dict $subsectionName (slice .)) -}}
+              {{- end -}}
+            {{- else -}}
+              {{- /* Page is in root of articles section */ -}}
+              {{- $rootPages = $rootPages | append . -}}
+            {{- end -}}
+          {{- end -}}
+          
+          {{- /* Render subsections with grouped articles */ -}}
+          {{- range $subsectionName, $pages := $subsections -}}
+          <li>
+            <p>
+              <strong>{{ humanize $subsectionName }}:</strong>
+              <br>
+              {{- range $pages -}}
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a><br>
+              {{- end -}}
+            </p>
+          </li>
+          {{- end -}}
+          
+          {{- /* Render root pages */ -}}
+          {{- range $rootPages -}}
+          <li>
+            <p>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </p>
+          </li>
+          {{- end -}}
+        </ul>
+      </div>
+      {{- /* Do not attempt product card rendering for articles */ -}}
+      {{- return -}}
+      {{ end }}
+
+    </div>
+  </div>
+</div>
+
+{{ end }}

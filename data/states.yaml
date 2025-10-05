@@ -1,0 +1,252 @@
+# US States data for hreflang and geo-targeting
+# Format: state_key: {name, code, slug}
+
+alabama:
+  name: "Alabama"
+  code: "AL"
+  slug: "alabama"
+
+alaska:
+  name: "Alaska"
+  code: "AK"
+  slug: "alaska"
+
+arizona:
+  name: "Arizona"
+  code: "AZ"
+  slug: "arizona"
+
+arkansas:
+  name: "Arkansas"
+  code: "AR"
+  slug: "arkansas"
+
+california:
+  name: "California"
+  code: "CA"
+  slug: "california"
+
+colorado:
+  name: "Colorado"
+  code: "CO"
+  slug: "colorado"
+
+connecticut:
+  name: "Connecticut"
+  code: "CT"
+  slug: "connecticut"
+
+delaware:
+  name: "Delaware"
+  code: "DE"
+  slug: "delaware"
+
+florida:
+  name: "Florida"
+  code: "FL"
+  slug: "florida"
+
+georgia:
+  name: "Georgia"
+  code: "GA"
+  slug: "georgia"
+
+hawaii:
+  name: "Hawaii"
+  code: "HI"
+  slug: "hawaii"
+
+idaho:
+  name: "Idaho"
+  code: "ID"
+  slug: "idaho"
+
+illinois:
+  name: "Illinois"
+  code: "IL"
+  slug: "illinois"
+
+indiana:
+  name: "Indiana"
+  code: "IN"
+  slug: "indiana"
+
+iowa:
+  name: "Iowa"
+  code: "IA"
+  slug: "iowa"
+
+kansas:
+  name: "Kansas"
+  code: "KS"
+  slug: "kansas"
+
+kentucky:
+  name: "Kentucky"
+  code: "KY"
+  slug: "kentucky"
+
+louisiana:
+  name: "Louisiana"
+  code: "LA"
+  slug: "louisiana"
+
+maine:
+  name: "Maine"
+  code: "ME"
+  slug: "maine"
+
+maryland:
+  name: "Maryland"
+  code: "MD"
+  slug: "maryland"
+
+massachusetts:
+  name: "Massachusetts"
+  code: "MA"
+  slug: "massachusetts"
+
+michigan:
+  name: "Michigan"
+  code: "MI"
+  slug: "michigan"
+
+minnesota:
+  name: "Minnesota"
+  code: "MN"
+  slug: "minnesota"
+
+mississippi:
+  name: "Mississippi"
+  code: "MS"
+  slug: "mississippi"
+
+missouri:
+  name: "Missouri"
+  code: "MO"
+  slug: "missouri"
+
+montana:
+  name: "Montana"
+  code: "MT"
+  slug: "montana"
+
+nebraska:
+  name: "Nebraska"
+  code: "NE"
+  slug: "nebraska"
+
+nevada:
+  name: "Nevada"
+  code: "NV"
+  slug: "nevada"
+
+newhampshire:
+  name: "New Hampshire"
+  code: "NH"
+  slug: "new-hampshire"
+
+newjersey:
+  name: "New Jersey"
+  code: "NJ"
+  slug: "new-jersey"
+
+newmexico:
+  name: "New Mexico"
+  code: "NM"
+  slug: "new-mexico"
+
+newyork:
+  name: "New York"
+  code: "NY"
+  slug: "new-york"
+
+northcarolina:
+  name: "North Carolina"
+  code: "NC"
+  slug: "north-carolina"
+
+northdakota:
+  name: "North Dakota"
+  code: "ND"
+  slug: "north-dakota"
+
+ohio:
+  name: "Ohio"
+  code: "OH"
+  slug: "ohio"
+
+oklahoma:
+  name: "Oklahoma"
+  code: "OK"
+  slug: "oklahoma"
+
+oregon:
+  name: "Oregon"
+  code: "OR"
+  slug: "oregon"
+
+pennsylvania:
+  name: "Pennsylvania"
+  code: "PA"
+  slug: "pennsylvania"
+
+rhodeisland:
+  name: "Rhode Island"
+  code: "RI"
+  slug: "rhode-island"
+
+southcarolina:
+  name: "South Carolina"
+  code: "SC"
+  slug: "south-carolina"
+
+southdakota:
+  name: "South Dakota"
+  code: "SD"
+  slug: "south-dakota"
+
+tennessee:
+  name: "Tennessee"
+  code: "TN"
+  slug: "tennessee"
+
+texas:
+  name: "Texas"
+  code: "TX"
+  slug: "texas"
+
+utah:
+  name: "Utah"
+  code: "UT"
+  slug: "utah"
+
+vermont:
+  name: "Vermont"
+  code: "VT"
+  slug: "vermont"
+
+virginia:
+  name: "Virginia"
+  code: "VA"
+  slug: "virginia"
+
+washington:
+  name: "Washington"
+  code: "WA"
+  slug: "washington"
+
+westvirginia:
+  name: "West Virginia"
+  code: "WV"
+  slug: "west-virginia"
+
+wisconsin:
+  name: "Wisconsin"
+  code: "WI"
+  slug: "wisconsin"
+
+wyoming:
+  name: "Wyoming"
+  code: "WY"
+  slug: "wyoming"

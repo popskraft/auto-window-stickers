@@ -1,0 +1,34 @@
+{{/* Партиал FAQ для страниц продукта - использует формат faq.items[] */}}
+{{ with .Params.faq }}
+{{ if .items }}
+<div id="container01" class="container-component instance-1 style-10 default">
+  <div class="wrapper">
+    <div class="inner">
+      <hr id="divider18" class="divider-component instance-18 style-3" data-visibility="desktop">
+      <h2 id="text121" class="text-component instance-121 style-1">{{ or .headline "FAQ" }}</h2>
+
+    </div>
+  </div>
+</div>
+<div id="faqBody" class="container-component instance-11 style-12 default">
+  <div class="wrapper">
+    <div class="inner">
+      {{ $textCounter := 126 }}
+      {{ $dividerCounter := 24 }}
+      {{ range $item := .items }}
+      <h3 id="text{{ $textCounter }}" class="text-component instance-{{ $textCounter }} style-2"><span
+          style="color: #2EC0FF">Q.</span> {{ $item.question }}</h3>
+      {{ $textCounter = add $textCounter 1 }}
+      <p id="text{{ $textCounter }}" class="text-component instance-{{ $textCounter }} style-3 collapse-target"><span
+          class="p">{{ $item.answer | safeHTML }}</span></p>
+      {{ $textCounter = add $textCounter 1 }}
+      <hr id="divider{{ $dividerCounter }}" class="divider-component instance-{{ $dividerCounter }} style-8 full"
+        style="opacity: 1; transform: none;">
+      {{ $dividerCounter = add $dividerCounter 1 }}
+      {{ end }}
+      <hr id="divider16" class="divider-component instance-16 style-3">
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}
