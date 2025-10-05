@@ -6,6 +6,7 @@ seoTitle: Exterior Addendum Custom — buyers guide outside mount Alabama
 publishDate: '2025-10-05T05:07:26.765396+00:00'
 date: '2025-10-05T05:07:26.765396+00:00'
 state: alabama
+product_key: exterior-addendum-custom
 savings:
   headline: Save up to $3500 a year
   subtitle: Special offer for car dealerships!

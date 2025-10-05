@@ -337,6 +337,7 @@ class PageGenerator:
                 product_data, state, content_keyword
             ),
             'seoTitle': seo_title,
+            'product_key': product_key,  # Add product_key for template to load product data
             'state': state_key,
             # canonical removed - Hugo will use .Permalink (self-reference) by default
             'savings': {

@@ -8,6 +8,7 @@ seoTitle: Exterior Buyers Guide - As Is - P/A - No Lines — waterproof window s
 publishDate: '2025-10-05T05:37:26.765396+00:00'
 date: '2025-10-05T05:37:26.765396+00:00'
 state: alabama
+product_key: exterior-buyers-guide-asis
 savings:
   headline: Save up to $3500 a year
   subtitle: The best value for your dealership!

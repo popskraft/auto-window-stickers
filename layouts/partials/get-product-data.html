@@ -17,7 +17,27 @@
 */}}
 
 {{ $pageParams := .Page.Params }}
-{{ $productID := .File.ContentBaseName }}
+{{ $productID := "" }}
+
+{{/* Determine product ID - prefer product_key from front matter */}}
+{{ if isset $pageParams "product_key" }}
+  {{/* Use product_key from front matter (for state pages) */}}
+  {{ $productID = $pageParams.product_key }}
+{{ else if eq .File.ContentBaseName "index" }}
+  {{/* For bundle pages without product_key, extract from folder name */}}
+  {{ $folderName := path.Base .File.Dir }}
+  {{ $parts := split $folderName "-" }}
+  {{ if ge (len $parts) 2 }}
+    {{/* Join all parts except the first (state) */}}
+    {{ $productID = delimit (after 1 $parts) "-" }}
+  {{ else }}
+    {{ $productID = $folderName }}
+  {{ end }}
+{{ else }}
+  {{/* For direct product pages, use filename */}}
+  {{ $productID = .File.ContentBaseName }}
+{{ end }}
+
 {{ $product := dict }}
 {{ if isset site.Data.products $productID }}
   {{ $product = index site.Data.products $productID }}
