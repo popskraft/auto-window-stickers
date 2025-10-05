@@ -1,8 +1,8 @@
 ---
 layout: article
 title: Warranty disclosure stickers
-publishDate: '2025-10-05T08:30:00+00:00'
-date: '2025-10-05T08:30:00+00:00'
+publishDate: '2025-10-05T07:00:00+00:00'
+date: '2025-10-05T07:00:00+00:00'
 image_cover: images/articles/2-coverimage.jpg
 image_body: images/articles/4-coverimage.jpg
 image_body_alt: Warranty disclosure stickers

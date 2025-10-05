@@ -138,10 +138,10 @@ quality:
 # - buildFuture: true (development) = shows all pages regardless of publishDate
 scheduling:
   # Base timestamp for scheduling (ISO 8601 format with timezone)
-  # 🧪 TEST: Start time for 10 test articles
-  # Starting at 06:30 UTC (07:30 local time +01:00)
+  # 🧪 TEST: Start time for 10 test articles (moved to past for immediate visibility)
+  # Starting at 05:00 UTC (06:00 local time +01:00)
   # With 15min intervals: 10 articles will be published over 2.5 hours
-  start_timestamp: "2025-10-05T06:30:00+00:00"
+  start_timestamp: "2025-10-05T05:00:00+00:00"
   
   # Delay in minutes between each published page (0 = publish immediately)
   # 🧪 TEST: 15 minutes = 10 articles in 2.5 hours

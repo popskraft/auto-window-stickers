@@ -1,8 +1,8 @@
 ---
 layout: article
 title: Dealership price stickers
-publishDate: '2025-10-05T08:15:00+00:00'
-date: '2025-10-05T08:15:00+00:00'
+publishDate: '2025-10-05T06:45:00+00:00'
+date: '2025-10-05T06:45:00+00:00'
 image_cover: images/articles/2-coverimage.jpg
 image_body: images/articles/6-coverimage.jpg
 image_body_alt: Dealership price stickers
