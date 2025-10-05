@@ -54,9 +54,10 @@ pages:
   # Layout to use for generated pages
   layout: "product"
   
-  # Directory pattern: {state_slug}/{product_key}/index.md
-  # Full path will be: content/{state_slug}/{product_key}/index.md
-  filename_pattern: "states/{state_slug}/{product_key}/index.md"
+  # Directory pattern: states/{state_slug}-{product_key}/index.md
+  # Full path will be: content/<filename_pattern>
+  # Placeholders: {state_slug}, {state_name}, {state}, {product_key}, {product_slug}, {product_title}
+  filename_pattern: "states/{state_slug}-{product_key}/index.md"
   
   # Include generated timestamp in front matter
   include_timestamp: true
@@ -69,9 +70,10 @@ articles:
   # Layout to use for generated articles
   layout: "article"
   
-  # Directory pattern: articles/{article_name}/index.md
-  # Full path will be: content/articles/{article_name}/index.md
-  filename_pattern: "articles/{article_name}/index.md"
+  # Directory pattern: articles/{product_slug}-{article_slug}/index.md
+  # Full path will be: content/<filename_pattern>
+  # Placeholders: {product_slug}, {product_title}, {product_key}, {article_slug}, {article_title}, {article_name}
+  filename_pattern: "articles/{product_slug}-{article_slug}/index.md"
   
   # Article content pools directory
   content_pools_dir: "data/content-generator/content/article"

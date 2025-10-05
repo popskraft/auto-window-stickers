@@ -3,11 +3,10 @@ layout: product
 title: Exterior Addendum Blank in Alabama
 description: Details about the exterior addendum blank product in Alabama.
 seoTitle: Exterior Addendum Blank — buyers guide window sticker Alabama
-publishDate: '2025-10-04T15:37:38.097471+00:00'
-date: '2025-10-04T15:37:38.097471+00:00'
+publishDate: '2025-10-05T04:37:26.765396+00:00'
+date: '2025-10-05T04:37:26.765396+00:00'
 state: alabama
 slug: exterior-addendum-blank
-canonical: /exterior/exterior-addendum-blank/
 savings:
   headline: Save up to $3500 a year
   subtitle: Exclusive deals you won’t find anywhere else!
@@ -83,4 +82,4 @@ testimonials:
     author: Joe S.
 ---
 
-<!-- Generated page for Exterior **Addendum Blank** in Alabama -->
+<!-- Generated page for Exterior Addendum Blank in Alabama -->

@@ -5,11 +5,10 @@ description: Details about the exterior buyers guide - as is - p/a - no lines pr
   in Alabama.
 seoTitle: Exterior Buyers Guide - As Is - P/A - No Lines — waterproof window sticker
   Alabama
-publishDate: '2025-10-04T16:37:38.097471+00:00'
-date: '2025-10-04T16:37:38.097471+00:00'
+publishDate: '2025-10-05T05:37:26.765396+00:00'
+date: '2025-10-05T05:37:26.765396+00:00'
 state: alabama
 slug: exterior-buyers-guide-asis
-canonical: /exterior/exterior-buyers-guide-asis/
 savings:
   headline: Save up to $3500 a year
   subtitle: The best value for your dealership!
@@ -93,4 +92,4 @@ testimonials:
     author: Crystal, Floor Manager
 ---
 
-<!-- Generated page for Exterior **Buyers Guide - As Is - P/A - No Lines** in Alabama -->
+<!-- Generated page for Exterior Buyers Guide - As Is - P/A - No Lines in Alabama -->

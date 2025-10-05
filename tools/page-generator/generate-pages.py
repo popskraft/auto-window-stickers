@@ -523,11 +523,29 @@ class PageGenerator:
             body = text
         return fm, body
 
-    def _write_article_file(self, product_title: str, article_title: str, content_md: str, dry_run=False):
-        """Write a single article to content/articles/<product>/<article>/index.md merging archetype."""
+    def _write_article_file(self, product_key: str, product_title: str, article_title: str, content_md: str, dry_run=False):
+        """Write a single article using the configured filename pattern and merge archetype content."""
         product_slug = self._slugify(product_title)
         article_slug = self._slugify(article_title)
-        rel = Path('articles') / product_slug / article_slug / 'index.md'
+        pattern = self.config.get('articles', {}).get(
+            'filename_pattern', 'articles/{product_slug}-{article_slug}/index.md'
+        )
+        placeholders = {
+            'product_key': product_key,
+            'product_slug': product_slug,
+            'product_title': product_title,
+            'article_slug': article_slug,
+            'article_name': article_slug,
+            'article_title': article_title,
+        }
+        try:
+            rel_str = pattern.format(**placeholders)
+        except KeyError as exc:
+            missing = exc.args[0]
+            raise ValueError(
+                f"Unknown placeholder '{{{missing}}}' in articles.filename_pattern"
+            ) from exc
+        rel = Path(rel_str)
         output_dir = self.base_path / self.config.get('execution', {}).get('output_dir', 'content')
         filepath = output_dir / rel
         if filepath.exists():
@@ -608,21 +626,35 @@ class PageGenerator:
                     self._log("Generation complete!")
                     return
                 md = self._assemble_article_markdown(product_data)
-                created = self._write_article_file(product_title, article_title, md, dry_run=dry_run)
+                created = self._write_article_file(product_key, product_title, article_title, md, dry_run=dry_run)
                 if created:
                     generated += 1
         self._log(f"Generation complete! Created {generated} articles")
     
     def _create_page_filename(self, product_key, state):
-        """Generate directory path and filename for the page using config pages.filename_pattern"""
-        # Convert state to slug
-        state_slug = state.lower().replace(' ', '-')
-        pattern = self.config.get('pages', {}).get('filename_pattern', '{state_slug}/{product_key}/index.md')
+        """Generate relative path for a product/state page from the configured filename pattern."""
+        state_name = state
+        state_slug = self._slugify(state) or state.lower().replace(' ', '-')
+        product_data = self.products.get(product_key, {}) or {}
+        product_title = (product_data.get('title') or '').replace('**', '')
+        product_slug = self._slugify(product_title) or self._slugify(product_key) or product_key
+        pattern = self.config.get('pages', {}).get(
+            'filename_pattern', 'states/{state_slug}-{product_key}/index.md'
+        )
+        placeholders = {
+            'state': state_name,
+            'state_name': state_name,
+            'state_slug': state_slug,
+            'product_key': product_key,
+            'product_slug': product_slug,
+            'product_title': product_title,
+        }
         try:
-            return pattern.format(state_slug=state_slug, product_key=product_key)
-        except Exception:
-            # Fallback to default if pattern has unexpected placeholders
-            return f"{state_slug}/{product_key}/index.md"
+            rel_str = pattern.format(**placeholders)
+        except KeyError as exc:
+            missing = exc.args[0]
+            raise ValueError(f"Unknown placeholder '{{{missing}}}' in pages.filename_pattern") from exc
+        return Path(rel_str)
     
     def _write_page_file(self, content, filename, output_dir, dry_run=False):
         """Write page content to markdown file.
