@@ -156,7 +156,7 @@ scheduling:
   # Delay in minutes between each published page (0 = publish immediately)
   # 🧪 TEST: 15 minutes = 10 articles in 2.5 hours
   # For products: use 30 minutes
-  publish_delay_minutes: 15
+  publish_delay_minutes: 10
   
   # Offset in minutes between publishDate and date fields
   # Usually 0 (both fields get same timestamp)
