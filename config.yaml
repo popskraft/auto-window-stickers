@@ -68,6 +68,11 @@ pages:
   
   # Add generation comment to markdown files
   add_generation_comment: true
+  
+  # Include slug in front matter (false = use folder name for URL)
+  # When false, Hugo uses the folder name (e.g., alabama-exterior-addendum-blank) for the URL
+  # When true, Hugo uses the slug field (e.g., exterior-addendum-blank) for the URL
+  include_slug: false
 
 # Article generation settings (for future use)
 articles:

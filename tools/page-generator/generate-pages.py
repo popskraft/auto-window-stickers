@@ -338,7 +338,6 @@ class PageGenerator:
             ),
             'seoTitle': seo_title,
             'state': state_key,
-            'slug': product_key,
             # canonical removed - Hugo will use .Permalink (self-reference) by default
             'savings': {
                 'headline': self._substitute_placeholders(
@@ -741,7 +740,10 @@ class PageGenerator:
                 publish_dt, date_dt = self._allocate_publish_and_date(use_schedule=use_schedule)
                 
                 # Rebuild dict with dates at the top
-                page_content = {
+                # Build front matter, optionally including slug based on config
+                include_slug = self.config.get('pages', {}).get('include_slug', False)
+                
+                front_matter = {
                     'layout': page_content['layout'],
                     'title': page_content['title'],
                     'description': page_content['description'],
@@ -749,16 +751,18 @@ class PageGenerator:
                     'publishDate': publish_dt.isoformat() if publish_dt.tzinfo else publish_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
                     'date': date_dt.isoformat() if date_dt.tzinfo else date_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00'),
                     'state': page_content.get('state'),
-                    'slug': page_content.get('slug'),
                     # canonical removed - Hugo will use .Permalink by default
                     **{k: v for k, v in page_content.items() if k not in ['layout', 'title', 'description', 'seoTitle', 'state', 'slug']}
                 }
+                
+                # Add slug only if configured
+                if include_slug and 'slug' in page_content:
+                    front_matter['slug'] = page_content['slug']
 
                 # Write file
-                created = self._write_page_file(page_content, filename, output_dir, dry_run)
+                created = self._write_page_file(front_matter, filename, output_dir, dry_run)
                 if created:
                     generated_count += 1
-                
                 progress_interval = self.config.get('logging', {}).get('progress_interval', 50)
                 if progress_interval and generated_count % progress_interval == 0:
                     self._log(f"Progress: {generated_count}/{total_combinations if not limit else limit}")
