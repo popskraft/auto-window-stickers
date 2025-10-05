@@ -31,3 +31,43 @@
 - After major content imports, crawl the site (Screaming Frog or similar) to confirm there are no orphaned pages.
 - When editors add manual overrides, keep related product arrays in front matter documented in pull requests.
 - Review anchor text variety quarterly and swap repeated links where needed.
+
+graph TD
+  Home["Главная"] --> NavHome["Хедер/футер: Exterior, Interior, States"]
+  NavHome --> Exterior["Категория Exterior"]
+  NavHome --> Interior["Категория Interior"]
+  NavHome --> StatesIndex["Директория States"]
+  NavHome --> Contacts["Контакты + опт-форма"]
+
+  Exterior --> TopProducts["Топ-продукты"]
+  Interior --> TopProducts
+  Exterior --> CategoryCallout["Callout → States"]
+  Interior --> CategoryCallout
+  CategoryCallout --> StatesIndex
+  Exterior --> ArticlesFAQ["Релевантные статьи/FAQ"]
+  Interior --> ArticlesFAQ
+
+  Product["Карточка продукта"] --> CategoryReturn["Ссылка назад на категорию"]
+  Product --> RelatedProducts["Релевантные SKU"]
+  Product --> ProductArticles["Статьи/гайды по теме"]
+  Product --> StatesGuides["Соотв. state guide"]
+  Product --> Wholesale["Опт-форма"]
+  ProductArticles --> Wholesale
+
+  StatePage["State страница"] --> BundleLink["Линк на продуктовый бандл"]
+  StatePage --> ParentState["Линк на индекс штата"]
+  StatePage --> StatePagePeers["2–3 других state page"]
+  StatePage --> Authorities["Внешние DMV/FTC (умеренно)"]
+
+  Article["Статья"] --> PrimaryProduct["Основной продукт"]
+  Article --> RelevantState["Релевантный state guide"]
+  Article --> BodyLinks["Контекстные ссылки на FAQ/продукты"]
+  Article --> WholesaleCall["CTA: опт-форма"]
+  Article --> HighValue["Высокоценный state или продукт"]
+
+  Contacts -.-> Wholesale
+  StatesIndex --> StatePage
+  TopProducts --> Product
+  RelatedProducts --> Product
+  StatePagePeers --> StatePage
+
