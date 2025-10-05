@@ -1,8 +1,8 @@
 ---
 layout: article
 title: Auto sales compliance stickers
-publishDate: '2025-10-05T06:00:00+00:00'
-date: '2025-10-05T06:00:00+00:00'
+publishDate: '2025-10-05T10:14:00+00:00'
+date: '2025-10-05T10:14:00+00:00'
 image_cover: images/articles/7-coverimage.jpg
 image_body: images/articles/2-coverimage.jpg
 image_body_alt: Auto sales compliance stickers
