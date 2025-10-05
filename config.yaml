@@ -1,5 +1,10 @@
 # Configuration file for generate-pages.py script
 # Hugo Auto Window Stickers Page Generation Settings
+#
+# ⚙️ RELATED SETTINGS:
+# - GitHub Actions cron schedule: .github/workflows/scheduled-build.yml (line 43)
+#   Current: "*/30 * * * *" (every 30 minutes for testing)
+#   Production: "0 6 * * *" (daily at 6 AM UTC)
 
 # Script execution settings
 execution:
@@ -136,6 +141,11 @@ quality:
 # - date: Used for sorting and display, but doesn't affect visibility
 # - buildFuture: false (production) = hides pages with future publishDate
 # - buildFuture: true (development) = shows all pages regardless of publishDate
+#
+# 📅 COORDINATION WITH GITHUB ACTIONS:
+# - GitHub Actions cron (.github/workflows/scheduled-build.yml) triggers Netlify builds
+# - Recommended: Set cron interval >= publish_delay_minutes for smooth rollout
+# - Example: publish_delay_minutes=30 → cron="*/30 * * * *" or "0 */1 * * *"
 scheduling:
   # Base timestamp for scheduling (ISO 8601 format with timezone)
   # 🧪 TEST: Start time for 10 test articles (moved to past for immediate visibility)

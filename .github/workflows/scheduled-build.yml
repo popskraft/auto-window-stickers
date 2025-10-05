@@ -39,6 +39,15 @@ name: Scheduled Netlify Build
 on:
   # Schedule: Run every 30 minutes for testing scheduled article publishing
   # TODO: After testing, change back to daily: "0 6 * * *"
+  # NOTE: Cron schedule cannot be moved to config.yaml (GitHub Actions limitation)
+  # See config.yaml scheduling section for coordination recommendations
+  #
+  # Common intervals in minutes:
+  # - "*/15 * * * *"  = Every 15 minutes
+  # - "*/30 * * * *"  = Every 30 minutes (current)
+  # - "*/60 * * * *"  = Every 60 minutes (1 hour)
+  # - "0 */6 * * *"   = Every 6 hours (360 minutes)
+  # - "0 */12 * * *"  = Every 12 hours (720 minutes)
   schedule:
     - cron: "*/30 * * * *"
   

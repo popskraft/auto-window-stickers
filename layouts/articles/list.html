@@ -10,31 +10,40 @@
       {{/* Special handling: the Articles section lists articles, not products */}}
       {{ if eq $section "articles" }}
       <div class="list-component instance-6 style-3">
-        <ul>
-          {{- /* Group pages by subsection */ -}}
-          {{- $subsections := dict -}}
-          {{- $rootPages := slice -}}
-          
-          {{- range where .Site.RegularPages "Section" "articles" -}}
-            {{- $pathParts := split .File.Dir "/" -}}
-            {{- $depth := len $pathParts -}}
-            
-            {{- if gt $depth 2 -}}
-              {{- /* Page is in a subsection */ -}}
-              {{- $subsectionName := index $pathParts 1 -}}
-              {{- $existing := index $subsections $subsectionName -}}
-              {{- if $existing -}}
-                {{- $updated := $existing | append . -}}
-                {{- $subsections = merge $subsections (dict $subsectionName $updated) -}}
-              {{- else -}}
-                {{- $subsections = merge $subsections (dict $subsectionName (slice .)) -}}
-              {{- end -}}
+        {{- /* Collect root-level articles separately from subsections */ -}}
+        {{- $subsections := dict -}}
+        {{- $rootPages := slice -}}
+
+        {{- range where .Site.RegularPages "Section" "articles" -}}
+          {{- $pathParts := split (trim .File.Dir "/") "/" -}}
+          {{- $depth := len $pathParts -}}
+
+          {{- if ge $depth 3 -}}
+            {{- /* Page is in a subsection */ -}}
+            {{- $subsectionName := index $pathParts 1 -}}
+            {{- $existing := index $subsections $subsectionName -}}
+            {{- if $existing -}}
+              {{- $updated := $existing | append . -}}
+              {{- $subsections = merge $subsections (dict $subsectionName $updated) -}}
             {{- else -}}
-              {{- /* Page is in root of articles section */ -}}
-              {{- $rootPages = $rootPages | append . -}}
+              {{- $subsections = merge $subsections (dict $subsectionName (slice .)) -}}
             {{- end -}}
+          {{- else -}}
+            {{- /* Page is in root of articles section */ -}}
+            {{- $rootPages = $rootPages | append . -}}
           {{- end -}}
-          
+        {{- end -}}
+
+        <ul>
+          {{- /* Render root pages as list items */ -}}
+          {{- range $rootPages -}}
+          <li>
+            <p>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </p>
+          </li>
+          {{- end -}}
+
           {{- /* Render subsections with grouped articles */ -}}
           {{- range $subsectionName, $pages := $subsections -}}
           <li>
@@ -44,15 +53,6 @@
               {{- range $pages -}}
               <a href="{{ .RelPermalink }}">{{ .Title }}</a><br>
               {{- end -}}
-            </p>
-          </li>
-          {{- end -}}
-          
-          {{- /* Render root pages */ -}}
-          {{- range $rootPages -}}
-          <li>
-            <p>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             </p>
           </li>
           {{- end -}}
