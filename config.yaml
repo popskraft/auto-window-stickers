@@ -7,10 +7,9 @@ execution:
   seed: 42
   
   # Maximum number of pages to generate (null for unlimited)
-  # 🧪 TEST PHASE 1: Generate 60 pages for testing
-  # After verification, change to null for remaining 640 pages
-  # Expected total: 14 products × 50 states = 700 pages
-  limit: 60
+  # 🧪 TEST: Generate 10 articles for scheduled publishing test
+  # For products: set to 60 or null
+  limit: 10
   
   # Dry run mode - show what would be generated without creating files
   dry_run: false
@@ -138,17 +137,16 @@ quality:
 # - buildFuture: false (production) = hides pages with future publishDate
 # - buildFuture: true (development) = shows all pages regardless of publishDate
 scheduling:
-  # Base timestamp for scheduling (ISO 8601 format with 'Z' suffix for UTC)
-  # 🧪 TEST PHASE 1: Start time for first 60 pages
-  # Set to past date for immediate visibility in production
-  # With 30min intervals: 60 pages will be published over ~30 hours
-  start_timestamp: "2025-10-03T00:00:00Z"
+  # Base timestamp for scheduling (ISO 8601 format with timezone)
+  # 🧪 TEST: Start time for 10 test articles
+  # Starting at 06:30 UTC (07:30 local time +01:00)
+  # With 15min intervals: 10 articles will be published over 2.5 hours
+  start_timestamp: "2025-10-05T06:30:00+00:00"
   
   # Delay in minutes between each published page (0 = publish immediately)
-  # 🧪 TEST PHASE 1: 30 minutes = 60 pages in 30 hours (~1.25 days)
-  # PHASE 2: Keep same interval for remaining 640 pages
-  # Total time: 700 pages × 30 min = 14.5 days
-  publish_delay_minutes: 30
+  # 🧪 TEST: 15 minutes = 10 articles in 2.5 hours
+  # For products: use 30 minutes
+  publish_delay_minutes: 15
   
   # Offset in minutes between publishDate and date fields
   # Usually 0 (both fields get same timestamp)
@@ -156,6 +154,7 @@ scheduling:
   content_date_offset_minutes: 0
   
   # Apply scheduling to articles (true = use delayed publishing)
+  # 🧪 TEST: Enabled for testing scheduled article publishing
   apply_to_articles: true
   
   # Apply scheduling to product pages
