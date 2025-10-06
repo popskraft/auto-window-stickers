@@ -1,4 +1,7 @@
 {{/* Партиал Savings для страниц продукта */}}
+{{ $productData := partial "get-product-data.html" . }}
+{{ $product := $productData.product }}
+
 {{ with .Params.savings }}
 <div id="container06" class="container-component instance-6 style-4 columns">
 	<div class="wrapper">
@@ -53,20 +56,22 @@
 				
 				{{ if $savingsImage }}
 				<div class="image-component instance-21 style-3 full">
-					{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-					{{ $processed := $savingsImage.Filter $filter }}
-					{{ $small := $processed.Resize "400x webp q95" }}
-					{{ $large := $processed.Resize "900x webp q95" }}
-					<img 
-						src="{{ $large.RelPermalink }}"
-						srcset="{{ $small.RelPermalink }} 400w,
-								{{ $large.RelPermalink }} 900w"
-						sizes="(max-width: 736px) 100vw, 50vw"
-						alt="Savings"
-						title="AK Dealer Services"
-						width="{{ $large.Width }}"
-						height="{{ $large.Height }}"
-						loading="lazy" />
+					<a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
+						{{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+						{{ $processed := $savingsImage.Filter $filter }}
+						{{ $small := $processed.Resize "400x webp q95" }}
+						{{ $large := $processed.Resize "900x webp q95" }}
+						<img 
+							src="{{ $large.RelPermalink }}"
+							srcset="{{ $small.RelPermalink }} 400w,
+									{{ $large.RelPermalink }} 900w"
+							sizes="(max-width: 736px) 100vw, 50vw"
+							alt="Savings"
+							title="AK Dealer Services"
+							width="{{ $large.Width }}"
+							height="{{ $large.Height }}"
+							loading="lazy" />
+					</a>
 				</div>
 				{{ end }}
 			</div>
