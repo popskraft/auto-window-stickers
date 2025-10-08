@@ -1,23 +1,32 @@
 {{/*
-  Партиал: product-detail-block.html
-  Назначение: Полный блок отображения товара с изображениями и информацией
-  
-  Использование:
-    {{ partial "product-detail-block.html" . }}
-  
-  Контекст:
-    - Принимает стандартный контекст страницы (.)
-    - Автоматически получает данные товара через get-product-data.html
-  
-  Регионы:
-    - Левая колонка: основное изображение и галерея миниатюр
-    - Правая колонка: информация о товаре, цена, кнопки покупки
+Партиал: product-detail-block.html
+Назначение: Полный блок отображения товара с изображениями и информацией
+
+Использование:
+{{ partial "product-detail-block.html" . }}
+
+Контекст:
+- Принимает стандартный контекст страницы (.)
+- Автоматически получает данные товара через get-product-data.html
+
+Регионы:
+- Левая колонка: основное изображение и галерея миниатюр
+- Правая колонка: информация о товаре, цена, кнопки покупки
 */}}
 
 {{ $productData := partial "get-product-data.html" . }}
 {{ $product := $productData.product }}
 {{ $productID := $productData.productID }}
 {{ $pageParams := $productData.pageParams }}
+{{ $categoryPrefix := cond (hasPrefix $productID "exterior") "exterior" "interior" }}
+{{ $rawRelated := slice }}
+{{ range $id, $data := site.Data.products }}
+{{ if and (hasPrefix $id $categoryPrefix) (ne $id $productID) }}
+{{ $rawRelated = $rawRelated | append (dict "id" $id "weight" (default 999 $data.weight) "product" $data) }}
+{{ end }}
+{{ end }}
+{{ $relatedProducts := sort $rawRelated "weight" }}
+{{ $relatedProducts = first 6 $relatedProducts }}
 
 <div id="container12" class="container-component instance-12 style-3 columns">
   <div class="wrapper">
@@ -26,39 +35,25 @@
         <div id="image11" class="image-component instance-11 style-5">
           <a href="{{ with index $product.purchase_links 0 }}{{ .url }}{{ end }}" class="frame">
             {{ if and $product.images (index $product.images 0) (index $product.images 0).src }}
-              {{ $mainImage := resources.Get (index $product.images 0).src }}
-              {{ if $mainImage }}
-                {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-                {{ $processed := $mainImage.Filter $filter }}
-                {{/* Responsive sizes for product main image */}}
-                {{ $small := $processed.Fill "500x375 webp picture Center q90" }}
-                {{ $large := $processed.Fill "800x600 webp picture Center q90" }}
-                <img 
-                  src="{{ $large.RelPermalink }}"
-                  srcset="{{ $small.RelPermalink }} 500w,
-                          {{ $large.RelPermalink }} 800w"
-                  sizes="(max-width: 736px) 100vw, 50vw"
-                  alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
-                  title="Buy {{ $product.title | markdownify | plainify }}"
-                  width="{{ $large.Width }}"
-                  height="{{ $large.Height }}"
-                  fetchpriority="high"
-                  loading="eager" />
-              {{ else }}
-                <img src="/images/placeholder.jpg" 
-                  alt="{{ $product.title | markdownify | plainify }}" 
-                  title="Buy {{ $product.title | markdownify | plainify }}"
-                  width="800"
-                  height="600"
-                  loading="eager" />
-              {{ end }}
+            {{ $mainImage := resources.Get (index $product.images 0).src }}
+            {{ if $mainImage }}
+            {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+            {{ $processed := $mainImage.Filter $filter }}
+            {{/* Responsive sizes for product main image */}}
+            {{ $small := $processed.Fill "500x375 webp picture Center q90" }}
+            {{ $large := $processed.Fill "800x600 webp picture Center q90" }}
+            <img src="{{ $large.RelPermalink }}" srcset="{{ $small.RelPermalink }} 500w,
+                          {{ $large.RelPermalink }} 800w" sizes="(max-width: 736px) 100vw, 50vw"
+              alt="{{ or (index $product.images 0).alt $product.title | markdownify | plainify }}"
+              title="Buy {{ $product.title | markdownify | plainify }}" width="{{ $large.Width }}"
+              height="{{ $large.Height }}" fetchpriority="high" loading="eager" />
             {{ else }}
-              <img src="/images/placeholder.jpg" 
-                alt="{{ $product.title | markdownify | plainify }}" 
-                title="Buy {{ $product.title | markdownify | plainify }}"
-                width="800"
-                height="600"
-                loading="eager" />
+            <img src="/images/placeholder.jpg" alt="{{ $product.title | markdownify | plainify }}"
+              title="Buy {{ $product.title | markdownify | plainify }}" width="800" height="600" loading="eager" />
+            {{ end }}
+            {{ else }}
+            <img src="/images/placeholder.jpg" alt="{{ $product.title | markdownify | plainify }}"
+              title="Buy {{ $product.title | markdownify | plainify }}" width="800" height="600" loading="eager" />
             {{ end }}
           </a>
         </div>
@@ -70,65 +65,49 @@
               <li>
                 {{ if eq $index 1 }}
                 <span class="thumbnail n0{{ $index }}">
-                {{ else }}
-                <a href="#exterior" class="thumbnail n0{{ $index }}">
-                {{ end }}
-                  <span class="frame">
-                    {{ if $image.src }}
+                  {{ else }}
+                  <span href="#exterior" class="thumbnail n0{{ $index }}">
+                    {{ end }}
+                    <span class="frame">
+                      {{ if $image.src }}
                       {{ $thumbImage := resources.Get $image.src }}
                       {{ if $thumbImage }}
-                        {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
-                        {{ $processed := $thumbImage.Filter $filter }}
-                        {{/* Responsive sizes for gallery thumbnails */}}
-                        {{ $thumbSmall := $processed.Fill "300x225 webp picture Center q90" }}
-                        {{ $thumbLarge := $processed.Fill "500x375 webp picture Center q90" }}
-                        <img 
-                          src="{{ $thumbLarge.RelPermalink }}"
-                          srcset="{{ $thumbSmall.RelPermalink }} 300w,
-                                  {{ $thumbLarge.RelPermalink }} 500w"
-                          sizes="(max-width: 736px) 50vw, 25vw"
-                          alt="{{ or $image.alt $product.title | markdownify | plainify }}"
-                          title="{{ or $image.alt $product.title | markdownify | plainify }}"
-                          width="{{ $thumbLarge.Width }}"
-                          height="{{ $thumbLarge.Height }}"
-                          loading="lazy" />
-                      {{ else }}
-                        <img src="/images/placeholder-thumb.jpg" 
-                          alt="{{ or $image.alt $product.title | markdownify | plainify }}"
-                          title="{{ or $image.alt $product.title | markdownify | plainify }}"
-                          width="500"
-                          height="375"
-                          loading="lazy" />
-                      {{ end }}
-                    {{ else }}
-                      <img src="/images/placeholder-thumb.jpg" 
+                      {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+                      {{ $processed := $thumbImage.Filter $filter }}
+                      {{/* Responsive sizes for gallery thumbnails */}}
+                      {{ $thumbSmall := $processed.Fill "300x225 webp picture Center q90" }}
+                      {{ $thumbLarge := $processed.Fill "500x375 webp picture Center q90" }}
+                      <img src="{{ $thumbLarge.RelPermalink }}" srcset="{{ $thumbSmall.RelPermalink }} 300w, {{ $thumbLarge.RelPermalink }} 500w" sizes="(max-width: 736px) 50vw, 25vw"
                         alt="{{ or $image.alt $product.title | markdownify | plainify }}"
                         title="{{ or $image.alt $product.title | markdownify | plainify }}"
-                        width="500"
-                        height="375"
-                        loading="lazy" />
-                    {{ end }}
+                        width="{{ $thumbLarge.Width }}" height="{{ $thumbLarge.Height }}" loading="lazy" />
+                      {{ end }}
+                      {{ end }}
                   </span>
-                {{ if eq $index 1 }}
+                  {{ if eq $index 1 }}
                 </span>
                 {{ else }}
-                </a>
-                {{ end }}
-              </li>
+              </span>
               {{ end }}
-              {{ end }}
+            </li>
+            {{ end }}
+            {{ end }}
             </ul>
           </div>
         </div>
-        <hr id="divider20" class="divider-component instance-20 style-3">
+        <hr class="divider-component instance-20 style-3">
       </div>
       <div>
+        <hr class="divider-component instance-6 style-3">
         <p id="text61" class="text-component instance-61 style-3">
-          <a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
+          <a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL
+            }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
         </p>
         <p id="text27" class="text-component instance-27 style-12">{{ or $pageParams.size $product.size }}</p>
-        <h2 id="text52" class="text-component instance-52 style-5">{{ or $pageParams.title $product.title | markdownify }}</h2>
-        <p id="text53" class="text-component instance-53 style-3">{{ or $pageParams.description $product.description | markdownify }}</p>
+        <h2 id="text52" class="text-component instance-52 style-5">{{ or $pageParams.title $product.title | markdownify
+          }}</h2>
+        <p id="text53" class="text-component instance-53 style-3">{{ or $pageParams.description $product.description |
+          markdownify }}</p>
         <div id="list03" class="list-component instance-3 style-2">
           <ul>
             {{ range or $pageParams.features $product.features }}
@@ -150,7 +129,8 @@
                 <title id="buttons16-icon-{{ add $index 1 }}-title">Cart</title>
                 <use xlink:href="{{ "/icons.svg#cart" | relURL }}"></use>
               </svg>
-              <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end }}</span>
+              <span class="label">{{ if $link.name }}{{ $link.name }}{{ else }}{{ index $defaultButtons $index }}{{ end
+                }}</span>
             </a>
           </li>
           {{ end }}
@@ -166,10 +146,96 @@
           </li>
         </ul>
         <p id="text02" class="text-component instance-2 style-3">
-          <a href="{{ with $product.purchase_links }}{{ with index . 0 }}{{ .url }}{{ end }}{{ end }}">{{ $product.best_price_note | default "Best Price for AK Dealer Services" }}</a>
+          <a href="{{ with $product.purchase_links }}{{ with index . 0 }}{{ .url }}{{ end }}{{ end }}">{{
+            $product.best_price_note | default "Best Price for AK Dealer Services" }}</a>
         </p>
-        <hr id="divider28" class="divider-component instance-28 style-3">
+        <hr class="divider-component instance-28 style-3">
       </div>
     </div>
   </div>
 </div>
+
+{{ if gt (len $relatedProducts) 0 }}
+<hr class="divider-component instance-7 style-3">
+
+<div class="container-component instance-14 style-10 default">
+  <div class="wrapper">
+    <div class="inner">
+      <hr class="divider-component instance-3 style-3" data-visibility="desktop">
+      <h2 class="text-component instance-4 style-2">Products in the {{ if eq $categoryPrefix "exterior" }}Exterior{{
+        else }}Interior{{ end }} category</h2>
+    </div>
+  </div>
+</div>
+
+<div class="container-component instance-3 style-1 default">
+  <div class="wrapper">
+    <div class="inner">
+      <div class="gallery-component instance-1 style-6">
+        <div class="inner">
+          <ul>
+            {{ range $index, $item := $relatedProducts }}
+            {{ $productMeta := $item.product }}
+            {{ $itemID := $item.id }}
+            {{ $itemSection := cond (hasPrefix $itemID "exterior") "exterior" "interior" }}
+            {{ $productURL := "" }}
+            {{ with site.GetPage (printf "%s/%s" $itemSection $itemID) }}
+            {{ $productURL = .RelPermalink }}
+            {{ else }}
+            {{ $productURL = (printf "/%s/%s/" $itemSection $itemID) | relURL }}
+            {{ end }}
+            {{ $itemTitleHTML := $productMeta.title | markdownify }}
+            {{ $itemTitlePlain := $itemTitleHTML | plainify }}
+            {{ $imageAlt := $itemTitlePlain }}
+            {{ $imageSmall := "" }}
+            {{ $imageLarge := "" }}
+            {{ $imageWidth := 500 }}
+            {{ $imageHeight := 375 }}
+            {{ with index $productMeta.images 0 }}
+            {{ if .alt }}
+            {{ $imageAlt = .alt }}
+            {{ end }}
+            {{ if .src }}
+            {{ $resource := resources.Get .src }}
+            {{ if $resource }}
+            {{ $filter := images.UnsharpMask 0.5 0.5 0 }}
+            {{ $processed := $resource.Filter $filter }}
+            {{ $small := $processed.Fill "300x225 webp picture Center q90" }}
+            {{ $large := $processed.Fill "500x375 webp picture Center q90" }}
+            {{ $imageSmall = $small.RelPermalink }}
+            {{ $imageLarge = $large.RelPermalink }}
+            {{ $imageWidth = $large.Width }}
+            {{ $imageHeight = $large.Height }}
+            {{ else }}
+            {{ $imageSmall = ("/images/placeholder-thumb.jpg" | relURL) }}
+            {{ $imageLarge = $imageSmall }}
+            {{ end }}
+            {{ end }}
+            {{ end }}
+            {{ if not $imageLarge }}
+            {{ $imageSmall = ("/images/placeholder-thumb.jpg" | relURL) }}
+            {{ $imageLarge = $imageSmall }}
+            {{ end }}
+            <li>
+              <a href="{{ $productURL }}" class="thumbnail n0{{ add $index 1 }}">
+                <span class="frame">
+                  <img src="{{ $imageLarge }}" srcset="{{ $imageSmall }} 300w, {{ $imageLarge }} 500w"
+                    sizes="(max-width: 736px) 50vw, 25vw" alt="{{ $imageAlt }}" width="{{ $imageWidth }}"
+                    height="{{ $imageHeight }}" loading="lazy">
+                </span>
+              </a>
+              <div class="caption">
+                <p>
+                  <a title="{{ $itemTitlePlain }}" class="no-underline" href="{{ $productURL }}">{{ $itemTitleHTML }}{{
+                    if $productMeta.size }} – {{ $productMeta.size }}{{ end }}</a>
+                </p>
+              </div>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

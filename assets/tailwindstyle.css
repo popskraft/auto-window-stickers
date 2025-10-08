@@ -4,12 +4,12 @@
   visibility: visible
 }
 
-.collapse {
-  visibility: collapse
-}
-
 .absolute {
   position: absolute
+}
+
+.sticky {
+  position: sticky
 }
 
 .left-0 {
@@ -40,8 +40,8 @@
   width: 100%
 }
 
-.justify-center {
-  justify-content: center
+.transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
 .truncate {
