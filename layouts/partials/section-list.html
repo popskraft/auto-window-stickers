@@ -1,0 +1,57 @@
+{{- /* 
+  Партиал для отображения списка страниц секции с группировкой по подразделам
+  Параметры:
+    - section: название секции для фильтрации страниц
+*/ -}}
+
+{{- $section := .section -}}
+
+<div class="list-component instance-6 style-3">
+  {{- /* Collect root-level pages separately from subsections */ -}}
+  {{- $subsections := dict -}}
+  {{- $rootPages := slice -}}
+
+  {{- range where .context.Site.RegularPages "Section" $section -}}
+    {{- $pathParts := split (trim .File.Dir "/") "/" -}}
+    {{- $depth := len $pathParts -}}
+
+    {{- if ge $depth 3 -}}
+      {{- /* Page is in a subsection */ -}}
+      {{- $subsectionName := index $pathParts 1 -}}
+      {{- $existing := index $subsections $subsectionName -}}
+      {{- if $existing -}}
+        {{- $updated := $existing | append . -}}
+        {{- $subsections = merge $subsections (dict $subsectionName $updated) -}}
+      {{- else -}}
+        {{- $subsections = merge $subsections (dict $subsectionName (slice .)) -}}
+      {{- end -}}
+    {{- else -}}
+      {{- /* Page is in root of section */ -}}
+      {{- $rootPages = $rootPages | append . -}}
+    {{- end -}}
+  {{- end -}}
+
+  <ul>
+    {{- /* Render root pages as list items */ -}}
+    {{- range $rootPages -}}
+    <li>
+      <p>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </p>
+    </li>
+    {{- end -}}
+
+    {{- /* Render subsections with grouped pages */ -}}
+    {{- range $subsectionName, $pages := $subsections -}}
+    <li>
+      <p>
+        <strong>{{ humanize $subsectionName }}:</strong>
+        <br>
+        {{- range $pages -}}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a><br>
+        {{- end -}}
+      </p>
+    </li>
+    {{- end -}}
+  </ul>
+</div>

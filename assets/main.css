@@ -3836,6 +3836,64 @@ body.is-instant::after {
 	z-index: 1;
 }
 
+.gallery-component.style-6 {
+	text-align: center;
+}
+
+.gallery-component.style-6:not(:first-child) {
+	margin-top: 1rem !important;
+}
+
+.gallery-component.style-6:not(:last-child) {
+	margin-bottom: 1rem !important;
+}
+
+.gallery-component.style-6 > .inner {
+	max-width: 100%;
+}
+
+.gallery-component.style-6 ul {
+	justify-content: center;
+	gap: 2rem;
+}
+
+.gallery-component.style-6 ul > li {
+	border-radius: 0.5rem;
+	display: inline-block;
+}
+
+.gallery-component.style-6 ul > li > .thumbnail > .frame {
+	border-radius: 0.5rem;
+	border-color: #DDDDDD;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.gallery-component.style-6 ul > li > .caption > p {
+	padding-bottom: 0rem;
+	padding-top: 0.5rem;
+	color: #444444;
+	font-family: 'Wix Madefor Display', sans-serif;
+	font-size: 0.625em;
+	line-height: 1.375;
+	font-weight: 400;
+}
+
+.gallery-component.style-6 ul > li > .thumbnail {
+	display: block;
+	transition: transform 0.25s ease, z-index 0.25s ease;
+}
+
+.gallery-component.style-6 ul > li > .thumbnail > .frame > img {
+	height: auto;
+	max-height: 9rem;
+}
+
+.gallery-component.style-6 ul > li > .thumbnail:hover {
+	transform: scale(0.9575);
+	z-index: 1;
+}
+
 .gallery-component.style-3 {
 	text-align: center;
 }
@@ -6367,6 +6425,47 @@ body.is-instant::after {
 		display: block;
 	}
 	
+	.gallery-component.style-6:not(:first-child) {
+		margin-top: 0.75rem !important;
+	}
+	
+	.gallery-component.style-6:not(:last-child) {
+		margin-bottom: 0.75rem !important;
+	}
+	
+	.gallery-component.style-6 ul > li > .caption > p {
+		letter-spacing: 0rem;
+		font-size: 0.625em;
+		line-height: 1.375;
+	}
+	
+	.gallery-component.style-6 ul > li > .thumbnail > .frame > img {
+		max-height: none;
+		display: block;
+		height: auto;
+		width: 100% !important;
+	}
+	
+	.gallery-component.style-6 > .inner {
+		width: 100%;
+	}
+	
+	.gallery-component.style-6 ul {
+		flex-direction: column;
+	}
+	
+	.gallery-component.style-6 ul > li {
+		width: 100%;
+	}
+	
+	.gallery-component.style-6 ul > li > .thumbnail {
+		display: block;
+	}
+	
+	.gallery-component.style-6 ul > li > .thumbnail > .frame {
+		display: block;
+	}
+	
 	.gallery-component.style-3 ul > li > .caption > p {
 		letter-spacing: 0rem;
 		font-size: 0.625em;
@@ -6755,6 +6854,14 @@ body.is-instant::after {
 	
 	.gallery-component.style-4 ul {
 		gap: 1.125rem;
+	}
+	
+	.gallery-component.style-6 ul > li > .caption > p {
+		font-size: 0.625em;
+	}
+	
+	.gallery-component.style-6 ul {
+		gap: 1.5rem;
 	}
 	
 	.gallery-component.style-3 ul > li > .caption > p {

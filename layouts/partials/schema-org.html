@@ -1,350 +1,692 @@
 <script type="application/ld+json">
-{{- $baseURL := .Site.BaseURL -}}
-{{- $permalink := .Permalink -}}
-{{- $siteTitle := .Site.Title -}}
-{{- $siteDesc := .Site.Params.description -}}
-{{- $langCode := .Site.LanguageCode -}}
-{{- $siteLogo := .Site.Params.schema.seo.logo | default .Site.Params.logo | absURL -}}
-{{- $companyName := .Site.Params.company.name | default $siteTitle -}}
-{{- $phone := .Site.Params.contact.phone -}}
-{{- $tagline := .Site.Params.company.tagline | default .Site.Params.tagline -}}
-{{- $ogImage := .Site.Params.schema.seo.ogImage | default .Site.Params.ogImage | absURL -}}
-{{- $pageTitle := cond .IsHome $siteTitle (cond (ne .Title "") (printf "%s | %s" .Title $siteTitle) $siteTitle) -}}
-{{- $pageDesc := cond (ne .Description "") .Description $siteDesc -}}
-
-{{- /* Determine primary image */ -}}
-{{- $primaryImage := $ogImage -}}
-{{- if .IsPage -}}
-  {{- if eq .Type "product" -}}
-    {{- $productId := .File.ContentBaseName -}}
-    {{- if isset .Site.Data.products $productId -}}
-      {{- $productData := index .Site.Data.products $productId -}}
-      {{- if isset $productData "ogImage" -}}
-        {{- $primaryImage = printf "%s%s" $baseURL $productData.ogImage -}}
-      {{- else if isset $productData "images" -}}
-        {{- $primaryImage = printf "%s%s" $baseURL (index $productData.images 0).src -}}
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
-{
-"@context": "https://schema.org",
-"@graph": [
-{
-"@type": "WebPage",
-"@id": "{{ $permalink }}#webpage",
-"name": "{{ $pageTitle | markdownify | plainify | safeJS }}",
-"url": "{{ $permalink }}",
-"isPartOf": {
-"@id": "{{ $baseURL }}#website"
-},
-"primaryImageOfPage": {
-"@id": "{{ $permalink }}#primaryimage"
-},
-"breadcrumb": {
-"@id": "{{ $permalink }}#breadcrumb"
-},
-"inLanguage": "{{ $langCode }}",
-"potentialAction": {
-"@type": "ReadAction",
-"target": [
-"{{ $permalink }}"
-]
-},
-"video": {
-"@id": "{{ $permalink }}#aboutvideo"
-}
-},
-{{- if .IsHome -}}
-{
-"@type": "VideoObject",
-"@id": "{{ $permalink }}#aboutvideo",
-"name": "{{ $siteTitle }} - About Video",
-"description": "{{ with .Params.about.video.description }}{{ . }}{{ else }}{{ .Site.Params.schema.video.default.description }}{{ end }}",
-"thumbnailUrl": "{{ $baseURL }}{{ .Params.about.video.poster | default .Site.Params.schema.video.default.poster }}",
-"contentUrl": "{{ $baseURL }}{{ .Params.about.video.src | default .Site.Params.schema.video.default.src }}",
-"uploadDate": "{{ now.Format "2006-01-02T15:04:05Z07:00" }}",
-"duration": "{{ with .Params.about.video.duration }}{{ . }}{{ else }}{{ .Site.Params.schema.video.default.duration }}{{ end }}",
-"embedUrl": "{{ $baseURL }}#about"
-},
-{
-"@type": "WebSite",
-"@id": "{{ $baseURL }}#website",
-"url": "{{ $baseURL }}",
-"name": "{{ $siteTitle | plainify | safeJS }}",
-"description": "{{ $siteDesc | plainify | safeJS }}",
-"publisher": {
-"@id": "{{ $baseURL }}#organization"
-},
-"potentialAction": {
-"@type": "SearchAction",
-"target": "{{ $baseURL }}search?q={search_term_string}",
-"query-input": "required name=search_term_string"
-},
-"inLanguage": "{{ $langCode }}"
-},
-{{- end -}}
-{{- if or (eq .Type "product") (eq .Layout "product") -}}
-{{- $productId := .File.ContentBaseName -}}
-{{- $productData := dict -}}
-{{- if isset .Site.Data.products $productId -}}
-  {{- $productData = index .Site.Data.products $productId -}}
-{{- end -}}
-{{- $price := $productData.price | default "99.99" -}}
-{{- $priceFormatted := replace $price "$" "" -}}
-{{- $brandName := .Site.Params.company.brandName | default .Site.Params.company.name -}}
-{{- $images := slice -}}
-{{- if isset $productData "images" -}}
-  {{- range $productData.images -}}
-    {{- $images = $images | append (printf "%s%s" $baseURL .src) -}}
-  {{- end -}}
-{{- else -}}
-  {{- $images = $images | append (printf "%s%s" $baseURL "/images/placeholder.jpg") -}}
-{{- end -}}
-{
-"@type": "Product",
-"@id": "{{ $permalink }}#product",
-"name": "{{ with .Title }}{{ . | markdownify | plainify | safeJS }}{{ else }}{{ $productData.title | markdownify | plainify | safeJS }}{{ end }}",
-"description": "{{ with .Description }}{{ . | markdownify | plainify | safeJS }}{{ else }}{{ $productData.description | markdownify | plainify | safeJS }}{{ end }}",
-"brand": {
-  "@type": "Brand",
-  "name": "{{ $brandName }}"
-},
-"sku": "{{ $productData.SKU | default $productData.sku | default $productId }}",
-"image": [
-  {{- if gt (len $images) 0 -}}
-    {{- range $index, $img := $images -}}
-    "{{ $img }}"{{ if lt (add $index 1) (len $images) }},{{ end }}
-    {{- end -}}
+{{- $site := .Site -}}
+{{- $baseURL := $site.BaseURL -}}
+{{- $pageURL := .Permalink -}}
+{{- $lang := $site.LanguageCode | default "en-US" -}}
+{{- $siteTitle := $site.Title | markdownify | plainify -}}
+{{- $siteDesc := $site.Params.description | markdownify | plainify -}}
+{{- $company := $site.Params.company -}}
+{{- $companyName := $company.name | default $siteTitle -}}
+{{- $tagline := $company.tagline | default $site.Params.tagline -}}
+{{- $contact := $site.Params.contact -}}
+{{- $phoneRaw := $contact.phone | default "" -}}
+{{- $phoneDigits := cond (ne $phoneRaw "") (replaceRE "[^0-9]" "" $phoneRaw) "" -}}
+{{- $phoneE164 := "" -}}
+{{- if gt (len $phoneDigits) 0 -}}
+  {{- if and (eq (len $phoneDigits) 11) (hasPrefix $phoneDigits "1") -}}
+    {{- $area := substr $phoneDigits 1 3 -}}
+    {{- $prefix := substr $phoneDigits 4 3 -}}
+    {{- $line := substr $phoneDigits 7 -}}
+    {{- $phoneE164 = printf "+1-%s-%s-%s" $area $prefix $line -}}
+  {{- else if eq (len $phoneDigits) 10 -}}
+    {{- $area := substr $phoneDigits 0 3 -}}
+    {{- $prefix := substr $phoneDigits 3 3 -}}
+    {{- $line := substr $phoneDigits 6 -}}
+    {{- $phoneE164 = printf "+1-%s-%s-%s" $area $prefix $line -}}
   {{- else -}}
-    "{{ $baseURL }}/images/placeholder.jpg"
+    {{- $phoneE164 = printf "+%s" $phoneDigits -}}
   {{- end -}}
-],
-"offers": {
-"@type": "Offer",
-"url": "{{ $permalink }}",
-"priceCurrency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}",
-"price": "{{ $priceFormatted }}",
-"priceValidUntil": "{{ .Site.Params.schema.priceValidUntil | default (now.AddDate 1 0 0 | time.Format "2006-01-02") }}",
-"itemCondition": "{{ .Site.Params.schema.itemCondition | default "https://schema.org/NewCondition" }}",
-"availability": "{{ .Site.Params.schema.availability | default "https://schema.org/InStock" }}",
-"seller": {
-  "@id": "{{ $baseURL }}#organization"
-},
-"priceSpecification": {
-  "@type": "PriceSpecification",
-  "price": "{{ $priceFormatted }}",
-  "priceCurrency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}",
-  "valueAddedTaxIncluded": "false"
-},
-"shippingDetails": {
-  "@type": "OfferShippingDetails",
-  "shippingRate": {
-    "@type": "MonetaryAmount",
-    "value": "{{ with $productData.shipping }}{{ .rate }}{{ else }}{{ .Site.Params.schema.shipping.baseRate | default "n/a" }}{{ end }}",
-    "currency": "{{ .Site.Params.schema.shipping.currency | default "USD" }}"
-  },
-  "shippingDestination": {
-    "@type": "DefinedRegion",
-    "addressCountry": "{{ .Site.Params.schema.shipping.destination.country | default "US" }}"
-  },
-  "deliveryTime": {
-    "@type": "ShippingDeliveryTime",
-    "handlingTime": {
-      "@type": "QuantitativeValue",
-      "minValue": {{ .Site.Params.schema.shipping.delivery.handling.minDays | default 0 }},
-      "maxValue": {{ .Site.Params.schema.shipping.delivery.handling.maxDays | default 1 }},
-      "unitCode": "DAY"
-    },
-    "transitTime": {
-      "@type": "QuantitativeValue",
-      "minValue": {{ .Site.Params.schema.shipping.delivery.transit.minDays | default 1 }},
-      "maxValue": {{ .Site.Params.schema.shipping.delivery.transit.maxDays | default 5 }},
-      "unitCode": "DAY"
-    }
-  }
-}
-}
-},
+{{- end -}}
+{{- $contactTelephone := cond (ne $phoneE164 "") $phoneE164 $phoneRaw -}}
+{{- $address := $site.Params.address -}}
+{{- $schemaParams := $site.Params.schema -}}
+{{- $pageSEOdesc := or .Params.seoDescription .Params.description .Description $siteDesc -}}
+{{- $pageDesc := $pageSEOdesc | markdownify | plainify -}}
+{{- $seoTitle := or .Params.seoTitle .Title $siteTitle -}}
+{{- $pageTitle := cond .IsHome $siteTitle ($seoTitle | markdownify | plainify) -}}
+{{- $defaultLogo := $schemaParams.seo.logo | default $site.Params.logo | default "/images/logo.svg" -}}
+{{- $siteLogo := cond (ne $defaultLogo "") ($defaultLogo | absURL) "" -}}
+{{- $defaultPrimaryImage := $schemaParams.seo.ogImage | default $site.Params.ogImage | default "/images/og-image.jpg" -}}
+{{- $primaryImage := cond (ne $defaultPrimaryImage "") ($defaultPrimaryImage | absURL) "" -}}
+{{- $graph := slice -}}
+{{- $pageHasPart := slice -}}
+{{- $distributor := $site.Params.distributor -}}
+{{- $currentYear := now.UTC | time.Format "2006" -}}
+{{- $companyLegalName := $company.legalName | default $companyName -}}
+{{- $companyAlternate := "" -}}
+{{- with $company.alternateName -}}
+  {{- $companyAlternate = . -}}
+{{- else -}}
+  {{- with $distributor.name -}}
+    {{- $companyAlternate = . -}}
+  {{- end -}}
 {{- end -}}
 
-{{- /* State-specific schema for location-based SEO */ -}}
-{{- if .Params.state -}}
-{{- if isset .Site.Data.states .Params.state -}}
-{{- $stateData := index .Site.Data.states .Params.state -}}
-{
-"@type": "LocalBusiness",
-"@id": "{{ $permalink }}#localbusiness",
-"name": "{{ $siteTitle }} - {{ $stateData.name }}",
-"url": "{{ $permalink }}",
-"description": "{{ $siteTitle }} serving {{ $stateData.name }} car dealerships",
-"areaServed": {
-  "@type": "State",
-  "name": "{{ $stateData.name }}"
-},
-"priceRange": "$$$",
-"hasMap": "https://www.google.com/maps?q={{ $stateData.name | urlize }}",
-"telephone": "{{ $phone }}",
-"keywords": "{{ $stateData.seoKeywords | default (printf "%s window stickers, %s car dealership supplies" $stateData.adjective $stateData.name) }}"
-},
-{{- end -}}
-{{- end -}}
-
-{
-"@type": "Organization",
-"@id": "{{ $baseURL }}#organization",
-"name": "{{ $companyName }}",
-"url": "{{ $baseURL }}",
-"logo": {
-"@id": "{{ $baseURL }}#logo"
-},
-"contactPoint": {
-"@type": "ContactPoint",
-"telephone": "{{ $phone }}",
-"contactType": "Customer Service",
-"areaServed": "US",
-"availableLanguage": "English"
-},
-"address": {
-"@type": "PostalAddress",
-"streetAddress": "{{ .Site.Params.address.street }}",
-"addressLocality": "{{ .Site.Params.address.city }}",
-"addressRegion": "{{ .Site.Params.address.state }}",
-"postalCode": "{{ .Site.Params.address.zip }}",
-"addressCountry": "{{ .Site.Params.address.country }}"
-},
-"sameAs": [
-{{- with .Site.Params.social -}}
-  {{- with .facebook -}}"{{ . }}"{{- if or .twitter .instagram .linkedin .youtube -}},{{- end -}}{{- end -}}
-  {{- with .twitter -}}"{{ . }}"{{- if or .instagram .linkedin .youtube -}},{{- end -}}{{- end -}}
-  {{- with .instagram -}}"{{ . }}"{{- if or .linkedin .youtube -}},{{- end -}}{{- end -}}
-  {{- with .linkedin -}}"{{ . }}"{{- if .youtube -}},{{- end -}}{{- end -}}
-  {{- with .youtube -}}"{{ . }}"{{- end -}}
-{{- end -}}
-],
-"slogan": "{{ $tagline | safeJS }}"
-},
-{
-"@type": "WebSite",
-"@id": "{{ $baseURL }}#website",
-"url": "{{ $baseURL }}",
-"name": "{{ $siteTitle | plainify | safeJS }}",
-"description": "{{ $siteDesc | plainify | safeJS }}",
-"publisher": {
-"@id": "{{ $baseURL }}#organization"
-},
-"inLanguage": "{{ $langCode }}"
-},
-{{- if and .Params.faq -}}
-{
-"@type": "FAQPage",
-"@id": "{{ $permalink }}#faqpage",
-"mainEntity": [
-{{- /* Handle standard FAQ structure with direct questions array */ -}}
-{{- if and (isset .Params.faq "questions") (reflect.IsSlice .Params.faq.questions) -}}
-  {{- $questionCount := len .Params.faq.questions -}}
-  {{- range $index, $question := .Params.faq.questions -}}
-    {{- if and (isset $question "question") (isset $question "answer") -}}
-    {
-    "@type": "Question",
-    "name": {{ $question.question | plainify | jsonify }},
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": {{ $question.answer | plainify | jsonify }}
-    }
-    }{{ if lt (add $index 1) $questionCount }},{{ end }}
-    {{- end -}}
+{{- $siteLogoMeta := dict "url" $siteLogo "contentUrl" $siteLogo -}}
+{{- if ne $siteLogo "" -}}
+  {{- $logoRel := $siteLogo -}}
+  {{- if hasPrefix $logoRel $baseURL -}}
+    {{- $logoRel = strings.TrimPrefix $baseURL $logoRel -}}
   {{- end -}}
-{{- /* Handle home page FAQ structure with categories */ -}}
-{{- else if and (isset .Params.faq "categories") (reflect.IsSlice .Params.faq.categories) -}}
-  {{- $allQuestions := slice -}}
-  {{- range $catIndex, $category := .Params.faq.categories -}}
-    {{- if and (isset $category "questions") (reflect.IsSlice $category.questions) -}}
-      {{- range $category.questions -}}
-        {{- $allQuestions = $allQuestions | append . -}}
+  {{- $logoRel = strings.TrimPrefix "/" $logoRel -}}
+  {{- $logoExt := path.Ext $logoRel | lower -}}
+  {{- if and (ne $logoRel "") (ne $logoExt ".svg") -}}
+    {{- $logoStatic := printf "static/%s" $logoRel -}}
+    {{- if fileExists $logoStatic -}}
+      {{- with imageConfig $logoStatic -}}
+        {{- $siteLogoMeta = merge $siteLogoMeta (dict "width" .Width "height" .Height) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- $questionCount := len $allQuestions -}}
-  {{- range $index, $question := $allQuestions -}}
-    {{- if and (isset $question "question") (isset $question "answer") -}}
-    {
-    "@type": "Question",
-    "name": {{ $question.question | plainify | jsonify }},
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": {{ $question.answer | plainify | jsonify }}
-    }
-    }{{ if lt (add $index 1) $questionCount }},{{ end }}
+{{- end -}}
+{{- $isProductPage := or (eq .Type "product") (eq .Layout "product") -}}
+{{- $isArticlePage := or (eq .Type "article") (eq .Layout "article") -}}
+
+{{- /* Resolve product data when applicable */ -}}
+{{- $productKey := "" -}}
+{{- $productData := dict -}}
+{{- if $isProductPage -}}
+  {{- with .Params.product_key -}}
+    {{- $productKey = . -}}
+  {{- end -}}
+  {{- if not $productKey -}}
+    {{- with .File }}
+      {{- $filePath := .Path -}}
+      {{- range $key, $_ := $site.Data.products -}}
+        {{- if and (eq $productKey "") (in $filePath $key) -}}
+          {{- $productKey = $key -}}
+        {{- end -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
-{{- /* Handle simple FAQ array structure */ -}}
-{{- else if reflect.IsSlice .Params.faq -}}
-  {{- $questionCount := len .Params.faq -}}
-  {{- range $index, $question := .Params.faq -}}
-    {{- if and (isset $question "question") (isset $question "answer") -}}
-    {
-    "@type": "Question",
-    "name": {{ $question.question | plainify | jsonify }},
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": {{ $question.answer | plainify | jsonify }}
-    }
-    }{{ if lt (add $index 1) $questionCount }},{{ end }}
+  {{- if and $productKey (isset $site.Data.products $productKey) -}}
+    {{- $productData = index $site.Data.products $productKey -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Prefer product-specific images when present */ -}}
+{{- if $isProductPage -}}
+  {{- if and (isset $productData "ogImage") (ne $productData.ogImage "") -}}
+    {{- $primaryImage = $productData.ogImage | absURL -}}
+  {{- else if and (isset $productData "images") (gt (len $productData.images) 0) -}}
+    {{- $firstImage := index $productData.images 0 -}}
+    {{- with $firstImage.src -}}
+      {{- if ne . "" -}}
+        {{- $primaryImage = . | absURL -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
-]
-},
+
+{{- /* Article cover image override */ -}}
+{{- if $isArticlePage -}}
+  {{- with .Params.image_cover -}}
+    {{- $coverPath := . -}}
+    {{- $resource := $.Page.Resources.GetMatch $coverPath | default (resources.GetMatch $coverPath) -}}
+    {{- if $resource -}}
+      {{- $primaryImage = $resource.Permalink -}}
+    {{- else if ne $coverPath "" -}}
+      {{- $primaryImage = $coverPath | absURL -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
-{
-"@type": "ImageObject",
-"@id": "{{ $permalink }}#primaryimage",
-"url": "{{ $primaryImage }}",
-"contentUrl": "{{ $primaryImage }}",
-"caption": "{{ $pageTitle | markdownify | plainify | safeJS }}"
-},
-{
-"@type": "BreadcrumbList",
-"@id": "{{ $permalink }}#breadcrumb",
-"itemListElement": [
-{
-"@type": "ListItem",
-"position": 1,
-"name": "Home",
-"item": "{{ $baseURL }}"
-}
-{{- if ne $permalink $baseURL -}}
-,{
-"@type": "ListItem",
-"position": 2,
-{{- if .Section -}}
-"name": "{{ humanize .Section | title }}",
-"item": "{{ $baseURL }}{{ .Section }}/"
-}
-{{- if ne .Section .Type -}}
-,{
-"@type": "ListItem",
-"position": 3,
-"name": "{{ .Title | markdownify | plainify }}",
-"item": "{{ $permalink }}"
-}
+
+{{- if not $primaryImage -}}
+  {{- $primaryImage = (printf "%simages/og-image.jpg" $baseURL) -}}
 {{- end -}}
-{{- else -}}
-"name": "{{ .Title | markdownify | plainify }}",
-"item": "{{ $permalink }}"
-}
+
+{{- /* Build primary image metadata after resolving overrides */ -}}
+{{- $primaryImageMeta := dict "url" $primaryImage "contentUrl" $primaryImage "representativeOfPage" true -}}
+{{- if ne $primaryImage "" -}}
+  {{- $primaryRel := $primaryImage -}}
+  {{- if hasPrefix $primaryRel $baseURL -}}
+    {{- $primaryRel = strings.TrimPrefix $baseURL $primaryRel -}}
+  {{- end -}}
+  {{- $primaryRel = strings.TrimPrefix "/" $primaryRel -}}
+  {{- if ne $primaryRel "" -}}
+    {{- $primaryStatic := printf "static/%s" $primaryRel -}}
+    {{- if fileExists $primaryStatic -}}
+      {{- with imageConfig $primaryStatic -}}
+        {{- $primaryImageMeta = merge $primaryImageMeta (dict "width" .Width "height" .Height) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
+
+{{- /* Published / modified dates */ -}}
+{{- $published := .PublishDate -}}
+{{- if or (not $published) ($published.IsZero) -}}
+  {{- with .Params.publishDate -}}
+    {{- $published = time . -}}
+  {{- end -}}
 {{- end -}}
-]
-},
-{
-"@type": "ImageObject",
-"@id": "{{ $baseURL }}#logo",
-"url": "{{ $siteLogo }}",
-"contentUrl": "{{ $siteLogo }}"
-}
-]
-}
+{{- if or (not $published) ($published.IsZero) -}}
+  {{- $published = .Date -}}
+{{- end -}}
+{{- $modified := .Lastmod -}}
+{{- if or (not $modified) ($modified.IsZero) -}}
+  {{- $modified = $published -}}
+{{- end -}}
+{{- $publishedISO := "" -}}
+{{- if and $published (not $published.IsZero) -}}
+  {{- $publishedISO = $published | time.Format "2006-01-02T15:04:05Z07:00" -}}
+{{- end -}}
+{{- $modifiedISO := "" -}}
+{{- if and $modified (not $modified.IsZero) -}}
+  {{- $modifiedISO = $modified | time.Format "2006-01-02T15:04:05Z07:00" -}}
+{{- end -}}
+
+{{- /* Build FAQ collection */ -}}
+{{- $faqQuestions := slice -}}
+{{- with .Params.faq -}}
+  {{- if reflect.IsMap . -}}
+    {{- if and (isset . "questions") (reflect.IsSlice .questions) -}}
+      {{- range .questions -}}
+        {{- $questionText := "" -}}
+        {{- $answerText := "" -}}
+        {{- with .question -}}
+          {{- $questionText = . | markdownify | plainify -}}
+        {{- end -}}
+        {{- with .answer -}}
+          {{- $answerContent := replace (replace (replace . "<br />" "\n") "<br/>" "\n") "<br>" "\n" -}}
+          {{- $answerText = $answerContent | markdownify | plainify -}}
+        {{- end -}}
+        {{- if and (ne $questionText "") (ne $answerText "") -}}
+          {{- $faqQuestions = $faqQuestions | append (dict "@type" "Question" "name" $questionText "acceptedAnswer" (dict "@type" "Answer" "text" $answerText)) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if and (isset . "categories") (reflect.IsSlice .categories) -}}
+      {{- range .categories -}}
+        {{- if and (isset . "questions") (reflect.IsSlice .questions) -}}
+          {{- range .questions -}}
+            {{- $questionText := "" -}}
+            {{- $answerText := "" -}}
+            {{- with .question -}}
+              {{- $questionText = . | markdownify | plainify -}}
+            {{- end -}}
+            {{- with .answer -}}
+              {{- $answerContent := replace (replace (replace . "<br />" "\n") "<br/>" "\n") "<br>" "\n" -}}
+              {{- $answerText = $answerContent | markdownify | plainify -}}
+            {{- end -}}
+            {{- if and (ne $questionText "") (ne $answerText "") -}}
+              {{- $faqQuestions = $faqQuestions | append (dict "@type" "Question" "name" $questionText "acceptedAnswer" (dict "@type" "Answer" "text" $answerText)) -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if and (isset . "items") (reflect.IsSlice .items) -}}
+      {{- range .items -}}
+        {{- $questionText := "" -}}
+        {{- $answerText := "" -}}
+        {{- with .question -}}
+          {{- $questionText = . | markdownify | plainify -}}
+        {{- end -}}
+        {{- with .answer -}}
+          {{- $answerContent := replace (replace (replace . "<br />" "\n") "<br/>" "\n") "<br>" "\n" -}}
+          {{- $answerText = $answerContent | markdownify | plainify -}}
+        {{- end -}}
+        {{- if and (ne $questionText "") (ne $answerText "") -}}
+          {{- $faqQuestions = $faqQuestions | append (dict "@type" "Question" "name" $questionText "acceptedAnswer" (dict "@type" "Answer" "text" $answerText)) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else if reflect.IsSlice . -}}
+    {{- range . -}}
+      {{- $questionText := "" -}}
+      {{- $answerText := "" -}}
+      {{- with .question -}}
+        {{- $questionText = . | markdownify | plainify -}}
+      {{- end -}}
+      {{- with .answer -}}
+        {{- $answerContent := replace (replace (replace . "<br />" "\n") "<br/>" "\n") "<br>" "\n" -}}
+        {{- $answerText = $answerContent | markdownify | plainify -}}
+      {{- end -}}
+      {{- if and (ne $questionText "") (ne $answerText "") -}}
+        {{- $faqQuestions = $faqQuestions | append (dict "@type" "Question" "name" $questionText "acceptedAnswer" (dict "@type" "Answer" "text" $answerText)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if gt (len $faqQuestions) 0 -}}
+  {{- $pageHasPart = $pageHasPart | append (dict "@id" (printf "%s#faq" $pageURL)) -}}
+{{- end -}}
+
+{{- /* Breadcrumb items */ -}}
+{{- $breadcrumbItems := slice (dict "@type" "ListItem" "position" 1 "name" "Home" "item" $baseURL) -}}
+{{- if and (not .IsHome) (not .IsSection) -}}
+  {{- with .Section -}}
+    {{- if ne . "" -}}
+      {{- $sectionPage := $.Site.GetPage (printf "/%s" .) -}}
+      {{- $sectionTitle := cond $sectionPage ($sectionPage.Title | markdownify | plainify) (humanize . | title) -}}
+      {{- $sectionURL := cond $sectionPage $sectionPage.Permalink (printf "%s%s/" $baseURL .) -}}
+      {{- $breadcrumbItems = $breadcrumbItems | append (dict "@type" "ListItem" "position" 2 "name" $sectionTitle "item" $sectionURL) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $breadcrumbItems = $breadcrumbItems | append (dict "@type" "ListItem" "position" (add (len $breadcrumbItems) 1) "name" $pageTitle "item" $pageURL) -}}
+{{- else if and (not .IsHome) .IsSection -}}
+  {{- $breadcrumbItems = $breadcrumbItems | append (dict "@type" "ListItem" "position" 2 "name" $pageTitle "item" $pageURL) -}}
+{{- end -}}
+
+{{- /* WebPage type composition */ -}}
+{{- $pageTypeList := slice "WebPage" -}}
+{{- if .IsHome -}}
+  {{- $pageTypeList = $pageTypeList | append "CollectionPage" -}}
+{{- end -}}
+{{- if $isProductPage -}}
+  {{- $pageTypeList = $pageTypeList | append "ProductPage" -}}
+{{- end -}}
+{{- $webPageType := index $pageTypeList 0 -}}
+{{- if gt (len $pageTypeList) 1 -}}
+  {{- $webPageType = $pageTypeList -}}
+{{- end -}}
+
+{{- /* Video node for homepage */ -}}
+{{- $videoId := "" -}}
+{{- if .IsHome -}}
+  {{- $videoSrc := "" -}}
+  {{- $videoPoster := "" -}}
+  {{- $videoDescription := "" -}}
+  {{- $videoDuration := "" -}}
+  {{- with .Params.about }}
+    {{- with .video }}
+      {{- $videoSrc = .src | default $videoSrc -}}
+      {{- $videoPoster = .poster | default $videoPoster -}}
+      {{- $videoDescription = .description | default $videoDescription -}}
+      {{- $videoDuration = .duration | default $videoDuration -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if eq $videoSrc "" -}}
+    {{- with $schemaParams.video.default -}}
+      {{- $videoSrc = .src | default $videoSrc -}}
+      {{- $videoPoster = .poster | default $videoPoster -}}
+      {{- $videoDescription = .description | default $videoDescription -}}
+      {{- $videoDuration = .duration | default $videoDuration -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if ne $videoSrc "" -}}
+    {{- $videoId = printf "%s#hero-video" $pageURL -}}
+    {{- $videoContentURL := $videoSrc | absURL -}}
+    {{- $videoPosterURL := cond (ne $videoPoster "") ($videoPoster | absURL) "" -}}
+    {{- $videoPosterMeta := dict -}}
+    {{- if ne $videoPosterURL "" -}}
+      {{- $videoPosterMeta = dict "@type" "ImageObject" "url" $videoPosterURL "contentUrl" $videoPosterURL -}}
+      {{- $posterRel := $videoPosterURL -}}
+      {{- if hasPrefix $posterRel $baseURL -}}
+        {{- $posterRel = strings.TrimPrefix $baseURL $posterRel -}}
+      {{- end -}}
+      {{- $posterRel = strings.TrimPrefix "/" $posterRel -}}
+      {{- if ne $posterRel "" -}}
+        {{- $posterStatic := printf "static/%s" $posterRel -}}
+        {{- if fileExists $posterStatic -}}
+          {{- with imageConfig $posterStatic -}}
+            {{- $videoPosterMeta = merge $videoPosterMeta (dict "width" .Width "height" .Height) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $videoExt := lower (path.Ext $videoSrc) -}}
+    {{- $encodingFormat := "" -}}
+    {{- if eq $videoExt ".mp4" -}}
+      {{- $encodingFormat = "video/mp4" -}}
+    {{- else if eq $videoExt ".webm" -}}
+      {{- $encodingFormat = "video/webm" -}}
+    {{- else if eq $videoExt ".mov" -}}
+      {{- $encodingFormat = "video/quicktime" -}}
+    {{- end -}}
+    {{- $videoNode := dict
+          "@type" "VideoObject"
+          "@id" $videoId
+          "name" (printf "%s Overview" $siteTitle)
+          "contentUrl" $videoContentURL
+          "uploadDate" (now.UTC | time.Format "2006-01-02T15:04:05Z")
+          "url" $pageURL
+          "embedUrl" (printf "%s#hero-video" $pageURL)
+        -}}
+    {{- if ne $videoDescription "" -}}
+      {{- $videoNode = merge $videoNode (dict "description" $videoDescription) -}}
+    {{- else -}}
+      {{- $videoNode = merge $videoNode (dict "description" $siteDesc) -}}
+    {{- end -}}
+    {{- if ne $videoDuration "" -}}
+      {{- $videoNode = merge $videoNode (dict "duration" $videoDuration) -}}
+    {{- end -}}
+    {{- if ne $encodingFormat "" -}}
+      {{- $videoNode = merge $videoNode (dict "encodingFormat" $encodingFormat) -}}
+    {{- end -}}
+    {{- if gt (len $videoPosterMeta) 0 -}}
+      {{- $videoNode = merge $videoNode (dict "thumbnail" $videoPosterMeta "thumbnailUrl" (slice (index $videoPosterMeta "url"))) -}}
+    {{- else if ne $videoPosterURL "" -}}
+      {{- $videoNode = merge $videoNode (dict "thumbnailUrl" (slice $videoPosterURL)) -}}
+    {{- end -}}
+    {{- $graph = $graph | append $videoNode -}}
+    {{- $pageHasPart = $pageHasPart | append (dict "@id" $videoId) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Determine main entity for the page */ -}}
+{{- $pageMainEntityID := printf "%s#organization" $baseURL -}}
+{{- if $isProductPage -}}
+  {{- $pageMainEntityID = printf "%s#product" $pageURL -}}
+{{- else if $isArticlePage -}}
+  {{- $pageMainEntityID = printf "%s#article" $pageURL -}}
+{{- end -}}
+
+{{- /* WebPage node */ -}}
+{{- $webPage := dict
+    "@type" $webPageType
+    "@id" (printf "%s#webpage" $pageURL)
+    "url" $pageURL
+    "name" $pageTitle
+    "description" $pageDesc
+    "isPartOf" (dict "@id" (printf "%s#website" $baseURL))
+    "primaryImageOfPage" (dict "@id" (printf "%s#primaryimage" $pageURL))
+    "breadcrumb" (dict "@id" (printf "%s#breadcrumb" $pageURL))
+    "inLanguage" $lang
+    "publisher" (dict "@id" (printf "%s#organization" $baseURL))
+    "potentialAction" (dict "@type" "ReadAction" "target" (slice $pageURL))
+    "mainEntity" (dict "@id" $pageMainEntityID)
+    "image" (slice $primaryImage)
+  -}}
+{{- if ne $videoId "" -}}
+  {{- $webPage = merge $webPage (dict "video" (dict "@id" $videoId)) -}}
+{{- end -}}
+{{- if ne $publishedISO "" -}}
+  {{- $webPage = merge $webPage (dict "datePublished" $publishedISO) -}}
+{{- end -}}
+{{- if ne $modifiedISO "" -}}
+  {{- $webPage = merge $webPage (dict "dateModified" $modifiedISO) -}}
+{{- end -}}
+{{- $webPage = merge $webPage (dict "about" (dict "@id" (printf "%s#organization" $baseURL))) -}}
+{{- if gt (len $pageHasPart) 0 -}}
+  {{- $webPage = merge $webPage (dict "hasPart" $pageHasPart) -}}
+{{- end -}}
+{{- if $isProductPage -}}
+  {{- $webPage = merge $webPage (dict "about" (dict "@id" (printf "%s#product" $pageURL))) -}}
+{{- else if $isArticlePage -}}
+  {{- $webPage = merge $webPage (dict "about" (dict "@id" (printf "%s#article" $pageURL))) -}}
+{{- end -}}
+{{- $graph = $graph | append $webPage -}}
+
+{{- /* BreadcrumbList */ -}}
+{{- if gt (len $breadcrumbItems) 0 -}}
+  {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "@id" (printf "%s#breadcrumb" $pageURL) "itemListElement" $breadcrumbItems) -}}
+{{- end -}}
+
+{{- /* WebSite node */ -}}
+{{- $websiteNode := dict
+    "@type" "WebSite"
+    "@id" (printf "%s#website" $baseURL)
+    "url" $baseURL
+    "name" $siteTitle
+    "description" $siteDesc
+    "publisher" (dict "@id" (printf "%s#organization" $baseURL))
+    "inLanguage" $lang
+  -}}
+{{- $websiteNode = merge $websiteNode (dict "measurementSystem" "https://schema.org/USCustomary") -}}
+{{- $searchEntryPoint := dict "@type" "EntryPoint" "urlTemplate" (printf "%ssearch?q={search_term_string}" $baseURL) -}}
+{{- $searchAction := dict "@type" "SearchAction" "target" $searchEntryPoint "query-input" "required name=search_term_string" -}}
+{{- $websiteNode = merge $websiteNode (dict "potentialAction" $searchAction) -}}
+{{- $graph = $graph | append $websiteNode -}}
+
+{{- /* Organization node */ -}}
+{{- $organization := dict
+    "@type" "Organization"
+    "@id" (printf "%s#organization" $baseURL)
+    "name" $companyName
+    "legalName" $companyLegalName
+    "url" $baseURL
+    "description" $siteDesc
+    "logo" (dict "@id" (printf "%s#logo" $baseURL))
+    "copyrightYear" $currentYear
+  -}}
+{{- if and $companyAlternate (ne $companyAlternate $companyName) -}}
+  {{- $organization = merge $organization (dict "alternateName" ($companyAlternate | markdownify | plainify)) -}}
+{{- end -}}
+{{- if $tagline -}}
+  {{- $organization = merge $organization (dict "slogan" ($tagline | markdownify | plainify)) -}}
+{{- end -}}
+{{- $contactEmail := $contact.email | default "" -}}
+{{- if or $contact.phone $contactEmail -}}
+  {{- $contactPoint := dict "@type" "ContactPoint" "contactType" "Customer Service" "areaServed" "US" "availableLanguage" "English" -}}
+  {{- if $contactTelephone -}}
+    {{- $contactPoint = merge $contactPoint (dict "telephone" $contactTelephone) -}}
+  {{- end -}}
+  {{- if $contactEmail -}}
+    {{- $contactPoint = merge $contactPoint (dict "email" $contactEmail) -}}
+  {{- end -}}
+  {{- $organization = merge $organization (dict "contactPoint" (slice $contactPoint)) -}}
+{{- end -}}
+{{- if $contactEmail -}}
+  {{- $organization = merge $organization (dict "email" $contactEmail) -}}
+{{- end -}}
+{{- if $address -}}
+  {{- $orgAddress := dict "@type" "PostalAddress" -}}
+  {{- with $address.street -}}
+    {{- $orgAddress = merge $orgAddress (dict "streetAddress" .) -}}
+  {{- end -}}
+  {{- with $address.city -}}
+    {{- $orgAddress = merge $orgAddress (dict "addressLocality" .) -}}
+  {{- end -}}
+  {{- with $address.state -}}
+    {{- $orgAddress = merge $orgAddress (dict "addressRegion" .) -}}
+  {{- end -}}
+  {{- with $address.zip -}}
+    {{- $orgAddress = merge $orgAddress (dict "postalCode" .) -}}
+  {{- end -}}
+  {{- with $address.country -}}
+    {{- $orgAddress = merge $orgAddress (dict "addressCountry" .) -}}
+  {{- end -}}
+  {{- if gt (len $orgAddress) 1 -}}
+    {{- $organization = merge $organization (dict "address" $orgAddress) -}}
+  {{- end -}}
+{{- end -}}
+{{- $sameAs := slice -}}
+{{- with $site.Params.social -}}
+  {{- with .facebook -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+  {{- with .twitter -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+  {{- with .instagram -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+  {{- with .linkedin -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+  {{- with .youtube -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $sameAs) 0 -}}
+  {{- $organization = merge $organization (dict "sameAs" $sameAs) -}}
+{{- end -}}
+{{- $graph = $graph | append $organization -}}
+
+{{- /* Logo ImageObject */ -}}
+{{- if $siteLogo -}}
+  {{- $logoObject := merge (dict "@type" "ImageObject" "@id" (printf "%s#logo" $baseURL)) $siteLogoMeta -}}
+  {{- $graph = $graph | append $logoObject -}}
+{{- end -}}
+
+{{- /* Primary image object */ -}}
+{{- if $primaryImage -}}
+  {{- $primaryObject := merge (dict "@type" "ImageObject" "@id" (printf "%s#primaryimage" $pageURL) "caption" $pageTitle) $primaryImageMeta -}}
+  {{- $graph = $graph | append $primaryObject -}}
+{{- end -}}
+
+{{- /* FAQPage node */ -}}
+{{- if gt (len $faqQuestions) 0 -}}
+  {{- $graph = $graph | append (dict "@type" "FAQPage" "@id" (printf "%s#faq" $pageURL) "mainEntity" $faqQuestions "mainEntityOfPage" (dict "@id" (printf "%s#webpage" $pageURL))) -}}
+{{- end -}}
+
+{{- /* Product node */ -}}
+{{- if $isProductPage -}}
+  {{- $productName := or (.Title | markdownify | plainify) ($productData.title | markdownify | plainify) -}}
+  {{- $productDescription := or (.Params.description | markdownify | plainify) ($productData.description | markdownify | plainify) $pageDesc -}}
+  {{- $brandName := $company.brandName | default $companyName -}}
+  {{- $productImages := slice -}}
+  {{- if and (isset $productData "images") (gt (len $productData.images) 0) -}}
+    {{- range $productData.images -}}
+      {{- with .src -}}
+        {{- if ne . "" -}}
+          {{- $productImages = $productImages | append (. | absURL) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if eq (len $productImages) 0 -}}
+    {{- $productImages = $productImages | append $primaryImage -}}
+  {{- end -}}
+  {{- $productNode := dict
+        "@type" "Product"
+        "@id" (printf "%s#product" $pageURL)
+        "name" $productName
+        "description" $productDescription
+        "sku" ($productData.SKU | default $productData.sku | default $productKey)
+        "brand" (dict "@type" "Brand" "name" $brandName)
+        "url" $pageURL
+        "image" $productImages
+        "mainEntityOfPage" (dict "@id" (printf "%s#webpage" $pageURL))
+      -}}
+  {{- $offersCurrency := $schemaParams.shipping.currency | default "USD" -}}
+  {{- $priceValue := cond (isset $productData "price") $productData.price nil -}}
+  {{- if or $priceValue (isset $schemaParams "availability") -}}
+    {{- $offer := dict
+          "@type" "Offer"
+          "url" $pageURL
+          "priceCurrency" $offersCurrency
+          "seller" (dict "@id" (printf "%s#organization" $baseURL))
+        -}}
+    {{- if $priceValue -}}
+      {{- $offer = merge $offer (dict "price" $priceValue) -}}
+    {{- end -}}
+    {{- with $schemaParams.priceValidUntil -}}
+      {{- $offer = merge $offer (dict "priceValidUntil" .) -}}
+    {{- end -}}
+    {{- with $schemaParams.itemCondition -}}
+      {{- $offer = merge $offer (dict "itemCondition" .) -}}
+    {{- end -}}
+    {{- with $schemaParams.availability -}}
+      {{- $offer = merge $offer (dict "availability" .) -}}
+    {{- end -}}
+    {{- $shippingDetails := dict "@type" "OfferShippingDetails" -}}
+    {{- with $schemaParams.shipping -}}
+      {{- if or .baseRate .destination .delivery -}}
+        {{- with .baseRate -}}
+          {{- $shippingRate := dict "@type" "MonetaryAmount" "value" . "currency" $offersCurrency -}}
+          {{- $shippingDetails = merge $shippingDetails (dict "shippingRate" $shippingRate) -}}
+        {{- end -}}
+        {{- with .destination.country -}}
+          {{- $shippingDetails = merge $shippingDetails (dict "shippingDestination" (dict "@type" "DefinedRegion" "addressCountry" .)) -}}
+        {{- end -}}
+        {{- with .delivery -}}
+          {{- $deliveryTime := dict "@type" "ShippingDeliveryTime" -}}
+          {{- with .handling -}}
+            {{- $deliveryTime = merge $deliveryTime (dict "handlingTime" (dict "@type" "QuantitativeValue" "minValue" (.minDays | default 0) "maxValue" (.maxDays | default 1) "unitCode" "DAY")) -}}
+          {{- end -}}
+          {{- with .transit -}}
+            {{- $deliveryTime = merge $deliveryTime (dict "transitTime" (dict "@type" "QuantitativeValue" "minValue" (.minDays | default 1) "maxValue" (.maxDays | default 5) "unitCode" "DAY")) -}}
+          {{- end -}}
+          {{- if gt (len $deliveryTime) 1 -}}
+            {{- $shippingDetails = merge $shippingDetails (dict "deliveryTime" $deliveryTime) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if gt (len $shippingDetails) 1 -}}
+      {{- $offer = merge $offer (dict "shippingDetails" $shippingDetails) -}}
+    {{- end -}}
+    {{- with $schemaParams.returnPolicy -}}
+      {{- if .description -}}
+        {{- $offer = merge $offer (dict "hasMerchantReturnPolicy" (dict "@type" "MerchantReturnPolicy" "name" "Return policy" "description" .description)) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $productNode = merge $productNode (dict "offers" $offer) -}}
+  {{- end -}}
+  {{- with $schemaParams.aggregateRating -}}
+    {{- if and .ratingValue .reviewCount -}}
+      {{- $productNode = merge $productNode (dict "aggregateRating" (dict "@type" "AggregateRating" "ratingValue" .ratingValue "reviewCount" .reviewCount)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $graph = $graph | append $productNode -}}
+{{- end -}}
+
+{{- /* Article/BlogPosting node */ -}}
+{{- if $isArticlePage -}}
+  {{- $articleHeadline := .Title | markdownify | plainify -}}
+  {{- $articleDescription := or (.Params.description | markdownify | plainify) (.Summary | markdownify | plainify) $pageDesc -}}
+  {{- $articleNode := dict
+        "@type" "BlogPosting"
+        "@id" (printf "%s#article" $pageURL)
+        "headline" $articleHeadline
+        "description" $articleDescription
+        "url" $pageURL
+        "isPartOf" (dict "@id" (printf "%s#website" $baseURL))
+        "publisher" (dict "@id" (printf "%s#organization" $baseURL))
+        "mainEntityOfPage" (dict "@id" (printf "%s#webpage" $pageURL))
+        "inLanguage" $lang
+        "image" (slice $primaryImage)
+      -}}
+  {{- if ne $publishedISO "" -}}
+    {{- $articleNode = merge $articleNode (dict "datePublished" $publishedISO) -}}
+  {{- end -}}
+  {{- if ne $modifiedISO "" -}}
+    {{- $articleNode = merge $articleNode (dict "dateModified" $modifiedISO) -}}
+  {{- end -}}
+  {{- with .Params.subtitle -}}
+    {{- $articleNode = merge $articleNode (dict "alternativeHeadline" (. | markdownify | plainify)) -}}
+  {{- end -}}
+  {{- with .Params.tags -}}
+    {{- $articleNode = merge $articleNode (dict "keywords" (delimit . ", ")) -}}
+  {{- end -}}
+  {{- if gt .WordCount 0 -}}
+    {{- $articleNode = merge $articleNode (dict "wordCount" .WordCount) -}}
+  {{- end -}}
+  {{- $authors := slice -}}
+  {{- with .Params.authors -}}
+    {{- range . -}}
+      {{- if reflect.IsMap . -}}
+        {{- $name := .name | default .Name -}}
+        {{- if $name -}}
+          {{- $authors = $authors | append (dict "@type" "Person" "name" ($name | markdownify | plainify)) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- $authors = $authors | append (dict "@type" "Person" "name" (. | markdownify | plainify)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if and (eq (len $authors) 0) .Params.author -}}
+    {{- if reflect.IsMap .Params.author -}}
+      {{- $name := .Params.author.name | default .Params.author.Name -}}
+      {{- if $name -}}
+        {{- $authors = $authors | append (dict "@type" "Person" "name" ($name | markdownify | plainify)) -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $authors = $authors | append (dict "@type" "Person" "name" (.Params.author | markdownify | plainify)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if gt (len $authors) 0 -}}
+    {{- $articleNode = merge $articleNode (dict "author" $authors) -}}
+  {{- else -}}
+    {{- $articleNode = merge $articleNode (dict "author" (slice (dict "@type" "Organization" "name" $companyName))) -}}
+  {{- end -}}
+  {{- $graph = $graph | append $articleNode -}}
+{{- end -}}
+
+{{- /* LocalBusiness node for state-specific product pages */ -}}
+{{- with .Params.state -}}
+  {{- $stateKey := lower . -}}
+  {{- if isset $site.Data.states $stateKey -}}
+    {{- $stateData := index $site.Data.states $stateKey -}}
+    {{- $stateName := $stateData.name | default (title $stateKey) -}}
+    {{- $localBusiness := dict
+          "@type" "LocalBusiness"
+          "@id" (printf "%s#localbusiness" $pageURL)
+          "name" (printf "%s (%s)" $companyName $stateName)
+          "url" $pageURL
+          "description" (printf "%s serving dealerships in %s" $companyName $stateName)
+          "telephone" $contactTelephone
+          "priceRange" "$$"
+          "areaServed" (dict "@type" "State" "name" $stateName "addressRegion" ($stateData.code | default (upper (substr $stateKey 0 2))))
+        -}}
+    {{- $graph = $graph | append $localBusiness -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $structured := dict "@context" "https://schema.org" "@graph" $graph -}}
+{{- $structured | jsonify | safeJS -}}
 </script>

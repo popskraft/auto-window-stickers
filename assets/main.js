@@ -3359,11 +3359,11 @@
 		onvisible.add('.text-component.style-2', { style: 'fade-up', speed: 750, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.divider-component.style-1', { style: 'fade-right', speed: 1250, intensity: 10, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.gallery-component.style-4', { style: 'zoom-in', speed: 750, intensity: 0, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope ul > li', replay: false });
+		onvisible.add('.gallery-component.style-6', { style: 'zoom-in', speed: 750, intensity: 0, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope ul > li', replay: false });
 		onvisible.add('.container-component.style-12 > .wrapper > .inner', { style: 'fade-up', speed: 625, intensity: 9, threshold: 1, delay: 250, replay: false });
 		onvisible.add('.image-component.style-2', { style: 'fade-up', speed: 500, intensity: 3, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.buttons-component.style-2', { style: 'pop-in', speed: 750, intensity: 5, threshold: 1, delay: 0, stagger: 125, staggerSelector: ':scope > li', replay: false });
 		onvisible.add('.image-component.style-3', { style: 'pop-in', speed: 750, intensity: 1, threshold: 2, delay: 0, replay: false });
-		onvisible.add('.list-component.style-3', { style: 'fade-up', speed: 750, intensity: 5, threshold: 2, delay: 0, stagger: 125, staggerSelector: ':scope > ul > li, :scope > ol > li', replay: false });
 		onvisible.add('.text-component.style-7', { style: 'fade-up', speed: 1500, intensity: 5, threshold: 1, delay: 125, replay: false });
 		onvisible.add('.text-component.style-9', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });
 		onvisible.add('.text-component.style-11', { style: 'fade-up', speed: 1000, intensity: 5, threshold: 1, delay: 0, replay: false });

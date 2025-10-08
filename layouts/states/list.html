@@ -1,16 +1,14 @@
 {{ define "main" }}
 {{ $section := .Section }}
-{{ $products := slice }}
 <div class="container-component instance-13 style-2 default">
   <div class="wrapper">
     <div class="inner">
 
       <h2 class="text-component instance-51 style-1">{{ .Title }}</h2>
 
-      {{/* Special handling: the Articles section lists articles, not products */}}
-      {{ if eq $section "articles" }}
-      {{- partial "section-list.html" (dict "section" "articles" "context" .) -}}
-      {{- /* Do not attempt product card rendering for articles */ -}}
+      {{/* States section lists state-specific products */}}
+      {{ if eq $section "states" }}
+      {{- partial "section-list.html" (dict "section" "states" "context" .) -}}
       {{- return -}}
       {{ end }}
 
