@@ -162,8 +162,38 @@ summaryLength: 30
 
 sitemap:
   changefreq: monthly
-  priority: 0.9
+  priority: 0.7
   filename: sitemap.xml
+
+cascade:
+  - _target:
+      kind: home
+    sitemap:
+      priority: 1.0
+  - _target:
+      kind: section
+      path: "/states"
+    sitemap:
+      priority: 0.6
+  - _target:
+      kind: section
+    sitemap:
+      priority: 0.9
+  - _target:
+      kind: page
+      path: "/states/**"
+    sitemap:
+      priority: 0.8
+  - _target:
+      kind: page
+      path: "/exterior/**"
+    sitemap:
+      priority: 0.8
+  - _target:
+      kind: page
+      path: "/interior/**"
+    sitemap:
+      priority: 0.8
 
 imaging:
   resampleFilter: "Lanczos"

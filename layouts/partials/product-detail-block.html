@@ -104,8 +104,8 @@
             }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
         </p>
         <p id="text27" class="text-component instance-27 style-12">{{ or $pageParams.size $product.size }}</p>
-        <h2 id="text52" class="text-component instance-52 style-5">{{ or $pageParams.title $product.title | markdownify
-          }}</h2>
+        <h1 id="text52" class="text-component instance-52 style-5">{{ or $pageParams.title $product.title | markdownify
+          }}</h1>
         <p id="text53" class="text-component instance-53 style-3">{{ or $pageParams.description $product.description |
           markdownify }}</p>
         <div id="list03" class="list-component instance-3 style-2">
@@ -117,7 +117,7 @@
             {{ end }}
           </ul>
         </div>
-        <h1 id="text54" class="text-component instance-54 style-11">${{ $product.price }}</h1>
+        <h2 id="text54" class="text-component instance-54 style-11">${{ $product.price }}</h2>
         <p id="text58" class="text-component instance-58 style-3"><strong>{{ $product.price_note }}</strong></p>
         <ul id="buttons16" class="buttons-component instance-16 style-5">
           {{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" }}
