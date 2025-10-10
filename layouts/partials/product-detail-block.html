@@ -117,7 +117,7 @@
             {{ end }}
           </ul>
         </div>
-        <h2 id="text54" class="text-component instance-54 style-11">${{ $product.price }}</h2>
+        <div id="text54" class="text-component instance-54 style-11">${{ $product.price }}</div>
         <p id="text58" class="text-component instance-58 style-3"><strong>{{ $product.price_note }}</strong></p>
         <ul id="buttons16" class="buttons-component instance-16 style-5">
           {{ $defaultButtons := slice "Buy on AK Dealer Services" "Buy on Amazon" }}
@@ -162,8 +162,8 @@
   <div class="wrapper">
     <div class="inner">
       <hr class="divider-component instance-3 style-3" data-visibility="desktop">
-      <h2 class="text-component instance-4 style-2">Products in the {{ if eq $categoryPrefix "exterior" }}Exterior{{
-        else }}Interior{{ end }} category</h2>
+      <div class="text-component instance-4 style-2">Products in the {{ if eq $categoryPrefix "exterior" }}Exterior{{
+        else }}Interior{{ end }} category</div>
     </div>
   </div>
 </div>
