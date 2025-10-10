@@ -100,7 +100,7 @@
       <div>
         <hr class="divider-component instance-6 style-3">
         <p id="text61" class="text-component instance-61 style-3">
-          <a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior" | relURL }}{{ else }}{{ "/interior" | relURL
+          <a href="{{ if hasPrefix $productID "exterior" }}{{ "/exterior/" | relURL }}{{ else }}{{ "/interior/" | relURL
             }}{{ end }}">{{ if hasPrefix $productID "exterior" }}Exterior{{ else }}Interior{{ end }} products</a>
         </p>
         <p id="text27" class="text-component instance-27 style-12">{{ or $pageParams.size $product.size }}</p>
